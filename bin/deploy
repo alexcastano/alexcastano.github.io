@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+set -e # halt script on error
+
+cd _site
+rm -rf .git
+git init
+git add .
+git -c user.name="Deploy bot" -c user.email="alexcastanodev@gmail.com" commit -m "Deployment"
+git remote add origin "https://$PRIVATE_TOKEN@github.com/alexcastano/alexcastano.github.io.git"
+git push -u --force origin master

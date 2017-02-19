@@ -9,7 +9,7 @@ env:
 
 deploy:
   provider: script
-  script: bundle exec dpl --provider=pages --github-token=$PRIVATE_TOKEN --target-branch=master --local-dir=_site/ --email=alexcastanodev@gmail.com --name="Deployment bot"
+  script: ./bin/deploy
   on:
     branch: source
 

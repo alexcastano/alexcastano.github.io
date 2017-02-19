@@ -5,4 +5,3 @@ gem "minimal-mistakes-jekyll"
 gem "jekyll-archives"
 
 gem "html-proofer"
-gem "dpl"
