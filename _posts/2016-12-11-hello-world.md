@@ -2,6 +2,7 @@
 title: Hello World
 header:
   teaser: /assets/images/sunrise.jpg
+tags: blog
 
 ---
 

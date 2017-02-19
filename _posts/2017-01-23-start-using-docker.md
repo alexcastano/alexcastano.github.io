@@ -1,5 +1,6 @@
 ---
 title: Start using Docker
+tags: docker
 
 ---
 
