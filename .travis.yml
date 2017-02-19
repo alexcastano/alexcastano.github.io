@@ -16,5 +16,6 @@ deploy:
   email: alexcastanodev@gmail.com
   name: Deployment bot
 
+  skip_cleanup: true
   on:
     branch: source
