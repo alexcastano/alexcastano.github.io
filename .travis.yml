@@ -1,16 +1,20 @@
 language: ruby
-
-before_script: ./bin/build
-script: ./bin/test
-
 env:
   global:
   - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
 
+before_script: ./bin/build
+script: ./bin/test
+
+
 deploy:
-  provider: script
-  script: ./bin/deploy
+  provider: pages
+  github-token: $PRIVATE_TOKEN
+  target-branch: master
+  local-dir: _site
+  project-name: blog
+  email: alexcastanodev@gmail.com
+  name: Deployment bot
+
   on:
     branch: source
-
-sudo: false
