@@ -1,6 +1,6 @@
 ---
 title: Github Pages with Jekyll Plugins and Theme
-tags: blog 'continuous integration'
+tags: [blog, continuous integration]
 
 ---
 
