@@ -29,7 +29,7 @@ Moreover, we will have several advantages:
 
 ### Previous steps
 
-Before going on remember to uninstall your current database if you have already installed:
+Before going on, remember to uninstall your current database if you have already installed:
 
 ```
 # pacman -Rns postgres
