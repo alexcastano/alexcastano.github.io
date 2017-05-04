@@ -58,7 +58,7 @@ In addition to the rules above we added:
 As Julien says in the comments, we can simply use:
 
 ```ruby
-fullname.parameterize('_')
+fullname.parameterize(separator: '_')
 ```
 
 And we'll get the same result with less code!
