@@ -3,8 +3,9 @@ title: Username generation in Ruby on Rails
 tags: [ruby on rails]
 header:
   overlay_image: /assets/images/name_label.jpg
-  caption: "Photo credit: [**Ryan McGuire**](http://gratisography.com/)"
+  caption: 'Photo credit: [**Ryan McGuire**](http://gratisography.com/){:target="_blank", rel="nofollow"}'
   overlay_filter: 0.5
+last_modified_at: 04/05/2017
 
 ---
 
@@ -53,6 +54,14 @@ In addition to the rules above we added:
 
   * Avoid username which starts with or ends with an underscore.
   * We don't want two underscores together; it can be confusing to type.
+
+As Julien says in the comments, we can simply use:
+
+```ruby
+fullname.parameterize('_')
+```
+
+And we'll get the same result with less code!
 
 ## Avoid username duplications in the database
 
