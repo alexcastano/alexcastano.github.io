@@ -1,7 +1,9 @@
 ---
 title: The hidden cost of the invisible queries in Rails
+description: Rails queries are awesome, but there are some drawbacks we should avoid to get the best performance
 tags: [ruby on rails]
 header:
+  image: /assets/images/hidden_cat.jpg
   overlay_image: /assets/images/hidden_cat.jpg
   caption: 'Photo credit: [**mn-que**](http://es.freeimages.com/photo/cat-1378752){:target="_blank", rel="nofollow"}'
   overlay_filter: 0.5
