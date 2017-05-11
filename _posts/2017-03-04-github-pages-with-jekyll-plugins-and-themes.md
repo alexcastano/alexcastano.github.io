@@ -1,6 +1,11 @@
 ---
 title: Github Pages with Jekyll Plugins and Theme
 tags: [blog, continuous integration]
+header:
+  overlay_image: /assets/images/octojekyll.png
+  overlay_filter: 0.5
+redirect_from:
+  - /gitlab-with-jekyll-plugins-and-themes/
 
 ---
 

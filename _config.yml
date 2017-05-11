@@ -190,6 +190,7 @@ gems:
   - jekyll-feed
   - jemoji
   - jekyll-archives
+  - jekyll-redirect-from
 
 # mimic GitHub Pages with --safe
 whitelist:
@@ -199,6 +200,7 @@ whitelist:
   - jekyll-feed
   - jemoji
   - jekyll-archives
+  - jekyll-redirect-from
 
 
 # Archives
