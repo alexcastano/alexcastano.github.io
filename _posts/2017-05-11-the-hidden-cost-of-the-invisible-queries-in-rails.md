@@ -7,6 +7,7 @@ header:
   overlay_image: /assets/images/hidden_cat.jpg
   caption: 'Photo credit: [**mn-que**](http://es.freeimages.com/photo/cat-1378752){:target="_blank", rel="nofollow"}'
   overlay_filter: 0.5
+last_modified_at: 13/05/2017
 
 ---
 
@@ -246,6 +247,21 @@ With 100.000.000 rows the difference will be huge.
 If someone knows the reason,
 please leave a comment about this.
 Thank you.
+
+
+#### Exists? method is good (Updated)
+
+KD made a comment to add that the method `exists?` works as expected.
+
+```ruby
+2.2.4 :007 >User.exists?
+User Exists (3.0ms) SELECT 1 AS one FROM "users" LIMIT 1
+=> true
+```
+
+It uses the `limit 1`, so it is efficient.
+Nevertheless, this method won't help us
+when we want to know if there are 2, 3, 4 or more rows in the database.
 
 ## From wave-particle duality to relation-array duality on Rails
 
