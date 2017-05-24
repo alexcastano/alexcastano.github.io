@@ -2,6 +2,8 @@
 title: Username generation in Ruby on Rails
 tags: [ruby on rails, ruby]
 header:
+  teaser: /assets/images/name_label.jpg
+  image: /assets/images/name_label.jpg
   overlay_image: /assets/images/name_label.jpg
   caption: 'Photo credit: [**Ryan McGuire**](http://gratisography.com/){:target="_blank", rel="nofollow"}'
   overlay_filter: 0.5
