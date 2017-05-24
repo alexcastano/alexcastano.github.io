@@ -1,7 +1,7 @@
 ---
 title: The hidden cost of the invisible queries in Rails
 description: Rails queries are awesome, but there are some drawbacks we should avoid to get the best performance
-tags: [ruby on rails]
+tags: [ruby on rails, ruby]
 header:
   image: /assets/images/hidden_cat.jpg
   overlay_image: /assets/images/hidden_cat.jpg
