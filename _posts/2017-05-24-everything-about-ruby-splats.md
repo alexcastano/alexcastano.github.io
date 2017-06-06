@@ -7,6 +7,7 @@ header:
   overlay_image: /assets/images/splat_bazinga.jpg
   caption: 'Photo credit: [Ryan McGuire](http://gratisography.com/){:target="_blank", rel="nofollow"}'
   overlay_filter: 0.5
+last_modified_at: 06/06/2017
 
 ---
 
@@ -68,7 +69,8 @@ after discovering this code
 and now I want to share with you.
 
 First I'll explain the simple splat in detail,
-including an unexpected benchmark result.
+~~including an unexpected benchmark result~~
+**updated: thanks to some comments I realized that the benchmark was not doing what I expected**.
 I will continue with every case that has come to my mind with the double splat
 and the keyword arguments,
 to see later why they aren't the same as a hash argument.
@@ -200,60 +202,42 @@ puts "best: #{best} ; rest: #{rest} ; last: #{last}"
 # first: archlinux ; rest: [:elementaryos, :gentoo, :centos] ; last: ubuntu
 ```
 
-It may surprise you, like it did to me,
-that this way could be a very performant way to get data from an array.
-Here is a benchmark:
+**Updated: In a previous version of the article,
+I showed a _"wrong"_ benchmark.
+Splat is not very performant technique.
+See comments for more information.**
+
+An astute reader may have realized that
+it is not exactly the same as using `first` and `last` methods,
+or `[1]`, `[2]`, `[-1]`, `[-2]`, etc.
+For example:
 
 ```ruby
-require 'benchmark/ips'
+first, *, last = [:a]
+first
+=> :a
+last
+=> nil
 
-array = [1..1_000_000].to_a
-
-Benchmark.ips do |t|
-  t.report("splat") { first, *, last = array }
-  t.report("first") { first, last = array.first, array.last }
-  t.compare!
-end
-# Warming up --------------------------------------
-#                splat   279.035k i/100ms
-#                first   255.169k i/100ms
-# Calculating -------------------------------------
-#                splat      6.977M (± 3.9%) i/s -     34.879M in   5.007614s
-#                first      5.526M (± 4.3%) i/s -     27.813M in   5.043826s
-#
-# Comparison:
-#                splat:  6976888.2 i/s
-#                first:  5525992.2 i/s - 1.26x  slower
+first = [:a].first
+first
+=> :a
+last = [:a].last
+last
+=> :a
 ```
 
-> Using the splat is faster than calling `first` and `last` methods!
+> `first` and `last` are not always the same that using splats!
 
-{% include figure image_path="/assets/images/red_splat.jpg" alt="Boom"
-caption="Fast splat by [SidewaysSarah](https://www.flickr.com/photos/97699489@N00/5196260104/){:target='_blank', rel='nofollow'}" %}
-
-It is important to use the anonymous splat because if not
-the results will be almost identical:
-
-```ruby
-Benchmark.ips do |t|
-  # Giving to the splat a name the performance goes down
-  t.report("splat") { first, *unused, last = array }
-  t.report("first") { first, last = array.first, array.last }
-  t.compare!
-end
-# Warming up --------------------------------------
-#                splat   251.018k i/100ms
-#                first   252.530k i/100ms
-# Calculating -------------------------------------
-#                splat      5.628M (± 4.2%) i/s -     28.114M in   5.004803s
-#                first      5.569M (± 3.7%) i/s -     28.031M in   5.041013s
-#
-# Comparison:
-#                splat:  5628028.9 i/s
-#                first:  5568622.5 i/s - same-ish: difference falls within error
-```
+Sometimes using splats is cleaner and better to show your real intentions.
+Just remember to no name the splat variable,
+like the above example,
+for better performance if you don't need it.
 
 ### Flatten arrays with splats
+
+{% include figure image_path="/assets/images/red_splat.jpg" alt="Boom"
+caption="Flatten splat by [SidewaysSarah](https://www.flickr.com/photos/97699489@N00/5196260104/){:target='_blank', rel='nofollow'}" %}
 
 I think this example is self-explanatory:
 
@@ -627,11 +611,11 @@ This causes strange message errors when the arguments are not expected,
 but you can also use it to take advantage of it:
 
 ```ruby
-def no_using_double_splat(*args, hash_args={})
+def using_double_splat(*args, **hash_args)
   hash_args
 end
 
-def using_double_splat(*args, **hash_args)
+def no_using_double_splat(*args, hash_args={})
   hash_args
 end
 
