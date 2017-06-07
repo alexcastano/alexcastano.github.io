@@ -615,7 +615,7 @@ def using_double_splat(*args, **hash_args)
   hash_args
 end
 
-def no_using_double_splat(*args, hash_args={})
+def no_using_double_splat(*args, hash_args)
   hash_args
 end
 
