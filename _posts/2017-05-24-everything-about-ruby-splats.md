@@ -3,6 +3,7 @@ title: Everything you should know about Ruby Splats
 description: Even though splats in Ruby are common, there are some complex edge cases that can be misleading. Let's see them together.
 tags: [ruby]
 header:
+  teaser: /assets/images/splat_bazinga.jpg
   image: /assets/images/splat_bazinga.jpg
   overlay_image: /assets/images/splat_bazinga.jpg
   caption: 'Photo credit: [Ryan McGuire](http://gratisography.com/){:target="_blank", rel="nofollow"}'
