@@ -82,7 +82,7 @@ and I discovered the Open Source and Linux World.
 I remember compiling the kernel bazillion times
 until I got my pre-802.11b wireless card finally working.
 
-I studied Computer Engineering at [Seville University](https://us.es){:rel="nofollow"}
+I studied Computer Engineering at [Seville University](https://www.informatica.us.es/){:rel="nofollow"}
 and where I was working for many years on [OpenGnSys](http://www.opengnsys.es/){:rel="nofollow"},
 a free software to restore and deploy the computer of our installations
 and other Spanish Universities.
