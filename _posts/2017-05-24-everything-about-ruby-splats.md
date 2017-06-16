@@ -1,6 +1,6 @@
 ---
 title: Everything you should know about Ruby Splats
-description: Even though splats in Ruby are common, there are some complex edge cases that can be misleading. Let's see them together.
+description: Even though splats in Ruby are common, there are some complex edge cases that can be misleading.
 tags: [ruby]
 header:
   teaser: /assets/images/splat_bazinga.jpg

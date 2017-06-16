@@ -1,5 +1,8 @@
 ---
+title: About Me - Blog
+description: About Alex Castaño and his blog
 permalink: '/about/'
+last_modified_at: 16/06/2017
 
 ---
 
