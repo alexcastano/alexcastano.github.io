@@ -92,6 +92,8 @@ If you are interested in our project you can also [collaborate with us](https://
 
 ---
 
+This post was also published in [MoodleNet blog](https://blog.moodle.net/2018/moodlenet-more-than-a-technical-project/).
+
 Photos by [Jon Tyson](https://unsplash.com/photos/QL0FAxaq2z0),
 [Clark Tibbs](https://unsplash.com/photos/oqStl2L5oxI),
 [Ilyass SEDDOUG](https://unsplash.com/photos/c4lXkCHuaXY) and
