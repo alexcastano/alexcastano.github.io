@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 set -e # halt script on error
 
-bundle exec htmlproofer --http-status-ignore 999 --empty-alt-ignore --allow-hash-href --internal-domains alexcastano.com ./_site
+# bundle exec htmlproofer --http-status-ignore 999 --empty-alt-ignore --allow-hash-href --internal-domains alexcastano.com ./_site
