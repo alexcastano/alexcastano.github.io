@@ -1,6 +1,6 @@
 ---
 title: "MoodleNet: more than a technical project"
-description: Even though splats in Ruby are common, there are some complex edge cases that can be misleading.
+description: "How Moodle’s core values affect our development process in MoodleNet project"
 tags: [MoodleNet]
 header:
   teaser: /assets/images/moodlenet_more_technical_project/live_work_create.jpg
