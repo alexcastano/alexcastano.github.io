@@ -1,8 +1,7 @@
 ---
 title: "What is ActivityPub?"
 description: >
-  In MoodleNet project, we are implementing a generic ActivityPub protocol.
-  One of our goals is to make the world freer and less dependent of large corporates
+  A simple explanation about ActivityPub for technical people.
 tags: [MoodleNet, ActivityPub]
 header:
   teaser: /assets/images/what_is_activity_pub/activitypub.png
