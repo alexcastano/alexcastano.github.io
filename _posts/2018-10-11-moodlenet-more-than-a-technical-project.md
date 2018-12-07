@@ -3,7 +3,7 @@ title: "MoodleNet: more than a technical project"
 description: >
   In MoodleNet project, we are implementing a generic ActivityPub protocol.
   One of our goals is to make the world freer and less dependent of large corporates
-tags: [MoodleNet]
+tags: [MoodleNet, ActivityPub]
 header:
   teaser: /assets/images/moodlenet_more_technical_project/live_work_create.jpg
   image: /assets/images/moodlenet_more_technical_project/live_work_create.jpg

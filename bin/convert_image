@@ -1,0 +1,4 @@
+#!/bin/bash
+
+OUT=${2:-output.jpg}
+convert "$1" -resize 2000x1200\> -strip -flatten -interlace JPEG -sampling-factor 4:2:0 -quality 75 "$2"
