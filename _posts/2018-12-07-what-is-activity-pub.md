@@ -244,7 +244,7 @@ In this example we are working with images. The user Alyssa just move an image f
 }
 ```
 
-This activity is public only for the Alyssa’s followers. The client application send this activity to the Alyssa’s server. Now it is the server which has to locate all her followers and make sure that they receive this activity in their `outbox`. Maybe they are all locals, they resides on the same server, or maybe it has to send this activity to many external servers.
+This activity is public only for the Alyssa’s followers. The client application send this activity to the Alyssa’s server. Now it is the server which has to locate all her followers and make sure that they receive this activity in their `inbox`. Maybe they are all locals, they resides on the same server, or maybe it has to send this activity to many external servers.
 
 ### Follow request
 
@@ -271,7 +271,7 @@ In this scenario, Sally asks John to be friends in our application:
 }
 ```
 
-To make this request is using the `Offer` activity type with a `Relationship` object and with the target John. Now is John who can accept the offering with:
+We make this request using the `Offer` activity type with a `Relationship` object and with the target John. Now John can accept the offering with:
 
 ```json
 {
@@ -288,13 +288,13 @@ To make this request is using the `Offer` activity type with a `Relationship` ob
 }
 
 ```
-It is interesting to see that in this application, the creator decided to make public this kind of interactions. To make public an object we have to add to any "targeting property" the value `"https://www.w3.org/ns/activitystreams#Public"`, in this case was the `cc` property.
+It is interesting to see that in this application, the creator decided to make public this kind of interactions. To make public an object we have to add to any "targeting property" the value `"https://www.w3.org/ns/activitystreams#Public"`, in this case in the `cc` property.
 
 ## Conclusions
 
 It is important to remember that ActivityPub is a protocol. It defines the expected behaviour but never the implementation details behind it. The client sends activities to the server. The server federates the same activities to other servers. The client can fetch for activities and the server should provide them. The way you do it is completely up to you.
 
-There are a lot more things around ActivityPub, here we only scratched the surface. There are more types in the vocabulary, the possibility of extending it with your own types and properties, security recommendations, side effects, client and server responsibilities, etc. The goal of this article was to give a small introduction without getting lost technical formalities. I hope you enjoyed.
+There are a lot more things around ActivityPub, here we only scratched the surface. There are more types in the vocabulary, the possibility of extending it with your own types and properties, security recommendations, side effects, client and server responsibilities, etc. The goal of this article was to give a small introduction without getting lost in technical formalities. I hope you enjoyed.
 
 ---
 
