@@ -83,8 +83,8 @@ analytics:
 author:
   name             : "Alex Castaño"
   avatar           : "/assets/images/bio-photo.jpg" # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
-  bio              : "Maker"
-  location         : "Barcelona"
+  bio              : "Elixir developer"
+  location         : "Andorra"
   email            : "alexcastanodev@gmail.com"
   uri              :
   bitbucket        :
