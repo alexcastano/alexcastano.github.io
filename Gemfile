@@ -1,7 +1,8 @@
 source "https://rubygems.org"
 
-gem "jekyll", "~> 3.8.3"
-gem "minimal-mistakes-jekyll", "~> 4.12.2"
+gem "jekyll", "~> 4.1.1"
+gem "minimal-mistakes-jekyll", "~> 4.20.1"
+gem "jemoji"
 
 group :jekyll_plugins do
   gem 'jekyll-archives'
