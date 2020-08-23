@@ -1,0 +1,1342 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.20.1 by Michael Rose
+  Copyright 2013-2019 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Everything you should know about Ruby Splats | Alex Castaño</title>
+<meta name="description" content="Even though splats in Ruby are common, there are some complex edge cases that can be misleading.">
+
+
+  <meta name="author" content="Alex Castaño">
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en">
+<meta property="og:site_name" content="Alex Castaño">
+<meta property="og:title" content="Everything you should know about Ruby Splats">
+<meta property="og:url" content="https://alexcastano.com/everything-about-ruby-splats/">
+
+
+  <meta property="og:description" content="Even though splats in Ruby are common, there are some complex edge cases that can be misleading.">
+
+
+
+  <meta property="og:image" content="https://alexcastano.com/assets/images/splat_bazinga.jpg">
+
+
+
+  <meta name="twitter:site" content="@alexcasdev">
+  <meta name="twitter:title" content="Everything you should know about Ruby Splats">
+  <meta name="twitter:description" content="Even though splats in Ruby are common, there are some complex edge cases that can be misleading.">
+  <meta name="twitter:url" content="https://alexcastano.com/everything-about-ruby-splats/">
+
+  
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://alexcastano.com/assets/images/splat_bazinga.jpg">
+  
+
+  
+    <meta name="twitter:creator" content="@alexcasdev">
+  
+
+
+
+  <meta property="article:published_time" content="2017-05-24T00:00:00+02:00">
+
+
+
+  <meta property="article:modified_time" content="2017-06-06T00:00:00+02:00">
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="https://alexcastano.com/everything-about-ruby-splats/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "Alex Castaño",
+      "url": "https://alexcastano.com/",
+      "sameAs": ["https://twitter.com/alexcasdev","https://www.linkedin.com/in/alexcastano"]
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Alex Castaño Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css">
+
+<!--[if IE]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+
+    
+
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-touch-icon.png?v=1">
+<link rel="icon" type="image/png" href="/assets/images/favicons/favicon-32x32.png?v=1" sizes="32x32">
+<link rel="icon" type="image/png" href="/assets/images/favicons/favicon-16x16.png?v=1" sizes="16x16">
+<link rel="manifest" href="/assets/images/favicons/manifest.json?v=1">
+<link rel="mask-icon" href="/assets/images/favicons/safari-pinned-tab.svg?v=1" color="#00848a">
+<link rel="shortcut icon" type="image/x-icon" href="/assets/images/favicons/favicon.ico?v=1">
+<link rel="icon" href="/assets/images/favicons/favicon.ico?v=1">
+<meta name="apple-mobile-web-app-title" content="Alex Castaño">
+<meta name="application-name" content="Alex Castaño">
+<meta name="msapplication-config" content="/assets/images/favicons/browserconfig.xml?v=1">
+<meta name="theme-color" content="#000000">
+
+  </head>
+
+  <body class="layout--single">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          Alex Castaño
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/about/">About</a>
+            </li></ul>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+  
+
+
+
+
+
+
+
+<div class="page__hero--overlay"
+  style=" background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://alexcastano.com/assets/images/splat_bazinga.jpg');"
+>
+  
+    <div class="wrapper">
+      <h1 class="page__title" itemprop="headline">
+        
+          Everything you should know about Ruby Splats
+
+        
+      </h1>
+      
+      
+    </div>
+  
+  
+    <span class="page__hero-caption">Photo credit: <a href="http://gratisography.com/" target="_blank&quot;, rel=&quot;nofollow">Ryan McGuire</a>
+</span>
+  
+</div>
+
+
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="/assets/images/bio-photo.jpg" alt="Alex Castaño" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">Alex Castaño</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>Elixir developer</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="https://schema.org/Place">
+          <i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i> <span itemprop="name">Andorra</span>
+        </li>
+      
+
+      
+
+      
+
+      
+        <li>
+          <a href="mailto:alexcastanodev@gmail.com">
+            <meta itemprop="email" content="alexcastanodev@gmail.com" />
+            <i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i><span class="label">Email</span>
+          </a>
+        </li>
+      
+
+      
+
+      
+        <li>
+          <a href="https://twitter.com/alexcasdev" itemprop="sameAs" rel="nofollow noopener noreferrer">
+            <i class="fab fa-fw fa-twitter-square" aria-hidden="true"></i><span class="label">Twitter</span>
+          </a>
+        </li>
+      
+
+      
+
+      
+        <li>
+          <a href="https://www.linkedin.com/in/alexcastano" itemprop="sameAs" rel="nofollow noopener noreferrer">
+            <i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">LinkedIn</span>
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+        <li>
+          <a href="https://github.com/alexcastano" itemprop="sameAs" rel="nofollow noopener noreferrer">
+            <i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span>
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="http://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Everything you should know about Ruby Splats">
+    <meta itemprop="description" content="I’m working on a new project playing with new kids in town:Rails 5.1, Webpack(er), Bootstrap 4, React, etc.I was working with forms when I realizedthat Bootstrap 4 needs a lot of conditional CSS class to show states.Concatenating strings in a view it does not produce a very nice code.">
+    <meta itemprop="datePublished" content="May 24, 2017">
+    <meta itemprop="dateModified" content="June 06, 2017">
+
+    <div class="page__inner-wrap">
+      
+
+      <section class="page__content" itemprop="text">
+        <p>I’m working on a new project playing with new kids in town:
+Rails 5.1, Webpack(er), Bootstrap 4, React, etc.
+I was working with forms when I realized
+that Bootstrap 4 needs a lot of conditional CSS class to show states.
+Concatenating strings in a view it does not produce a very nice code.</p>
+
+<p>So I thought I could create a similar behavior replicating the
+<a href="https://github.com/JedWatson/classnames"><code class="language-plaintext highlighter-rouge">classNames</code> node package</a>:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">model</span><span class="p">.</span><span class="nf">valid?</span>
+<span class="o">=&gt;</span> <span class="kp">true</span>
+
+<span class="n">class_string</span><span class="p">(</span><span class="ss">:row</span><span class="p">,</span> <span class="ss">:promo</span><span class="p">,</span> <span class="ss">good: </span><span class="n">model</span><span class="p">.</span><span class="nf">valid?</span><span class="p">,</span> <span class="ss">bad: </span><span class="o">!</span><span class="n">model</span><span class="p">.</span><span class="nf">valid?</span><span class="p">)</span>
+<span class="o">=&gt;</span> <span class="s2">"row promo good"</span>
+</code></pre></div></div>
+
+<p>It concatenates all the hash’s keys whose value is truthy.
+For convenience,
+it also allows receiving an array for CSS classes
+that are always included.
+This is my helper’s implementation:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">class_string</span><span class="p">(</span><span class="o">*</span><span class="n">arr</span><span class="p">,</span> <span class="o">**</span><span class="nb">hash</span><span class="p">)</span>
+  <span class="nb">hash</span>
+    <span class="p">.</span><span class="nf">map</span> <span class="p">{</span> <span class="o">|</span><span class="n">css</span><span class="p">,</span> <span class="n">bool</span><span class="o">|</span> <span class="n">css</span> <span class="k">if</span> <span class="n">bool</span> <span class="p">}</span>
+    <span class="p">.</span><span class="nf">compact</span>
+    <span class="p">.</span><span class="nf">concat</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>
+    <span class="p">.</span><span class="nf">map</span><span class="p">(</span><span class="o">&amp;</span><span class="ss">:to_s</span><span class="p">)</span>
+    <span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="s2">" "</span><span class="p">)</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<p>Later,
+I found a bug in this method that amazed me.
+I believed I understood completely how
+the splats work in ruby,
+but his edge case it astonished me:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">splat_test</span><span class="p">(</span><span class="o">*</span><span class="n">array</span><span class="p">,</span> <span class="o">**</span><span class="nb">hash</span><span class="p">)</span>
+  <span class="nb">puts</span> <span class="s2">"array: </span><span class="si">#{</span><span class="n">array</span><span class="si">}</span><span class="s2"> ; hash: </span><span class="si">#{</span><span class="nb">hash</span><span class="si">}</span><span class="s2">"</span>
+<span class="k">end</span>
+
+<span class="n">splat_test</span><span class="p">(</span><span class="mi">42</span><span class="p">,</span> <span class="s1">'foo'</span> <span class="o">=&gt;</span> <span class="s1">'foo'</span><span class="p">,</span> <span class="ss">baz: :baz</span><span class="p">,</span> <span class="no">String</span> <span class="o">=&gt;</span> <span class="no">String</span><span class="p">,</span> <span class="ss">bar: :bar</span><span class="p">)</span>
+<span class="c1"># array: [42, {"foo"=&gt;"foo", String=&gt;String}] ; hash: {:baz=&gt;:baz, :bar=&gt;:bar}</span>
+</code></pre></div></div>
+
+<figure class="">
+  <img src="/assets/images/splat_bazinga.jpg" alt="Bazinga splat!" />
+  
+    <figcaption>
+      Bazinga splat!
+
+    </figcaption>
+  
+</figure>
+
+<p>And this is the reason why I wrote this post.
+I have been investigating how the splats work in depth
+after discovering this code
+and now I want to share with you.</p>
+
+<p>First I’ll explain the simple splat in detail,
+<del>including an unexpected benchmark result</del>
+<strong>updated: thanks to some comments I realized that the benchmark was not doing what I expected</strong>.
+I will continue with every case that has come to my mind with the double splat
+and the keyword arguments,
+to see later why they aren’t the same as a hash argument.
+Finally, I’ll try to explain why this code works in this way.</p>
+
+<p>I will use several snippets from <code class="language-plaintext highlighter-rouge">pry</code> sessions.
+For me, it is the best way to learn ruby,
+hopefully, it is useful for you too.</p>
+
+<h2 id="the-simple-splat">The simple *splat</h2>
+
+<p>The simple splat works with arrays.</p>
+
+<h3 id="ruby-splat-with-methods">Ruby splat with methods</h3>
+
+<p>One of the main uses of the splats is to receive an undefined number of arguments:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">splat_arguments</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+  <span class="n">args</span>
+<span class="k">end</span>
+
+<span class="n">splat_arguments</span><span class="p">(</span><span class="ss">:linux</span><span class="p">,</span> <span class="s2">"ms"</span><span class="p">,</span> <span class="no">String</span><span class="p">)</span>
+<span class="o">=&gt;</span> <span class="p">[</span><span class="ss">:linux</span><span class="p">,</span> <span class="s2">"ms"</span><span class="p">,</span> <span class="no">String</span><span class="p">]</span>
+
+<span class="n">splat_arguments</span><span class="p">(</span><span class="ss">linux: :cool</span><span class="p">,</span> <span class="ss">arch: :very_cool</span><span class="p">)</span>
+<span class="o">=&gt;</span> <span class="p">[{</span><span class="ss">:linux</span><span class="o">=&gt;</span><span class="ss">:cool</span><span class="p">,</span> <span class="ss">:arch</span><span class="o">=&gt;</span><span class="ss">:very_cool</span><span class="p">}]</span>
+</code></pre></div></div>
+
+<p>It works with more arguments as well:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">splat_more_arguments</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+  <span class="nb">puts</span> <span class="s2">"a </span><span class="si">#{</span><span class="n">a</span><span class="si">}</span><span class="s2"> ; args </span><span class="si">#{</span><span class="n">args</span><span class="si">}</span><span class="s2"> ; c </span><span class="si">#{</span><span class="n">c</span><span class="si">}</span><span class="s2">"</span>
+<span class="k">end</span>
+
+<span class="n">splat_more_arguments</span><span class="p">(</span><span class="ss">:archlinux</span><span class="p">,</span> <span class="ss">:elementaryos</span><span class="p">,</span> <span class="ss">:gentoo</span><span class="p">,</span> <span class="ss">:ubuntu</span><span class="p">,</span> <span class="ss">:centos</span><span class="p">)</span>
+<span class="c1"># a: archlinux ; args: [:elementaryos, :gentoo, :ubuntu] ; c: centos</span>
+
+<span class="n">splat_more_arguments</span><span class="p">(</span><span class="ss">:archlinux</span><span class="p">,</span> <span class="ss">:centos</span><span class="p">)</span>
+<span class="c1"># a: archlinux ; args: [] ; c centos</span>
+
+<span class="n">splat_more_arguments</span><span class="p">(</span><span class="ss">:archlinux</span><span class="p">,</span> <span class="p">[</span><span class="ss">:elementaryos</span><span class="p">,</span> <span class="ss">:gentoo</span><span class="p">],</span> <span class="ss">:ubuntu</span><span class="p">,</span> <span class="ss">:centos</span><span class="p">)</span>
+<span class="c1"># a: archlinux ; args: [[:elementaryos, :gentoo], :ubuntu] ; c: centos</span>
+
+<span class="n">splat_more_arguments</span><span class="p">(</span><span class="ss">:archlinux</span><span class="p">)</span>
+<span class="c1"># ArgumentError: wrong number of arguments (given 1, expected 2+)</span>
+</code></pre></div></div>
+
+<p>You can avoid giving a name to the splat variable.
+This way you show your intention of not using those variables
+and it won’t be confused with a possible bug in the future:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">anonymous_splat_arguments</span><span class="p">(</span><span class="n">first</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">last</span><span class="p">)</span>
+  <span class="p">[</span><span class="n">first</span><span class="p">,</span> <span class="n">last</span><span class="p">]</span>
+<span class="k">end</span>
+
+<span class="n">anonymous_splat_arguments</span><span class="p">(</span><span class="ss">:archlinux</span><span class="p">,</span> <span class="ss">:elementaryos</span><span class="p">,</span> <span class="ss">:gentoo</span><span class="p">,</span> <span class="ss">:ubuntu</span><span class="p">,</span> <span class="ss">:centos</span><span class="p">)</span>
+<span class="o">=&gt;</span> <span class="p">[</span><span class="ss">:archlinux</span><span class="p">,</span> <span class="ss">:centos</span><span class="p">]</span>
+
+<span class="c1"># Other interesting use</span>
+<span class="k">def</span> <span class="nf">inspected_method</span><span class="p">(</span><span class="o">*</span><span class="p">)</span>
+  <span class="nb">puts</span> <span class="s2">"before calling inspected_method"</span>
+  <span class="k">super</span>
+  <span class="nb">puts</span> <span class="s2">"after calling inspected_method"</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<h3 id="ruby-splat-as-parameters">Ruby splat as parameters</h3>
+
+<p>It can be used to pass parameters from an array:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">splat_parameters</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+  <span class="nb">puts</span> <span class="s2">"a: </span><span class="si">#{</span><span class="n">a</span><span class="si">}</span><span class="s2"> ; b: </span><span class="si">#{</span><span class="n">b</span><span class="si">}</span><span class="s2"> ; c: </span><span class="si">#{</span><span class="n">c</span><span class="si">}</span><span class="s2"> "</span>
+<span class="k">end</span>
+
+<span class="n">distros</span> <span class="o">=</span> <span class="p">[</span><span class="ss">:archlinux</span><span class="p">,</span> <span class="ss">:debian</span><span class="p">,</span> <span class="ss">:redhat</span><span class="p">]</span>
+
+<span class="n">splat_parameters</span><span class="p">(</span><span class="n">distros</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">distros</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">distros</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+<span class="c1"># a: archlinux ; b: debian ; c: redhat</span>
+
+<span class="c1"># Equivalent but easier to write</span>
+<span class="n">splat_parameters</span><span class="p">(</span><span class="o">*</span><span class="n">distros</span><span class="p">)</span>
+<span class="c1"># a: archlinux ; b: debian ; c: redhat</span>
+
+<span class="n">splat_parameters</span><span class="p">(</span><span class="ss">:archlinux</span><span class="p">,</span> <span class="o">*</span><span class="p">[</span><span class="ss">:debian</span><span class="p">,</span> <span class="ss">:redhat</span><span class="p">])</span>
+<span class="c1"># a: archlinux ; b: debian ; c: redhat</span>
+</code></pre></div></div>
+
+<h3 id="using-splats-with-blocks">Using splats with blocks</h3>
+
+<p>The previous points are also true for blocks:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">block_splat</span>
+  <span class="k">yield</span><span class="p">(</span><span class="ss">:linux</span><span class="p">,</span> <span class="s2">"ms"</span><span class="p">,</span> <span class="no">String</span><span class="p">)</span>
+<span class="k">end</span>
+
+<span class="n">block_splat</span> <span class="k">do</span> <span class="o">|*</span><span class="n">args</span><span class="o">|</span>
+  <span class="nb">p</span> <span class="n">args</span>
+<span class="k">end</span>
+<span class="c1"># [:linux, "ms", String]</span>
+
+<span class="k">def</span> <span class="nf">splatted_block</span>
+  <span class="n">distros</span> <span class="o">=</span> <span class="p">[</span><span class="ss">:archlinux</span><span class="p">,</span> <span class="ss">:elementaryos</span><span class="p">,</span> <span class="ss">:gentoo</span><span class="p">,</span> <span class="ss">:ubuntu</span><span class="p">,</span> <span class="ss">:centos</span><span class="p">]</span>
+  <span class="k">yield</span> <span class="o">*</span><span class="n">distros</span>
+<span class="k">end</span>
+
+<span class="n">splatted_block</span> <span class="k">do</span> <span class="o">|</span><span class="n">best</span><span class="p">,</span> <span class="n">better</span><span class="p">,</span> <span class="n">good</span><span class="p">,</span> <span class="n">common</span><span class="p">,</span> <span class="n">secure</span><span class="o">|</span>
+  <span class="nb">puts</span> <span class="s2">"</span><span class="si">#{</span><span class="n">best</span><span class="si">}</span><span class="s2">, </span><span class="si">#{</span><span class="n">better</span><span class="si">}</span><span class="s2">, </span><span class="si">#{</span><span class="n">good</span><span class="si">}</span><span class="s2">, </span><span class="si">#{</span><span class="n">common</span><span class="si">}</span><span class="s2">, </span><span class="si">#{</span><span class="n">secure</span><span class="si">}</span><span class="s2">"</span>
+<span class="k">end</span>
+<span class="c1"># archlinux, elementaryos, gentoo, ubuntu, centos</span>
+</code></pre></div></div>
+
+<p>As you can see it works exactly in the same way.</p>
+
+<h3 id="array-destructuring-with-splats">Array destructuring with splats</h3>
+
+<p>The simple splat can be used outside the method definitions and calls.
+It can be used in assignments in a very analogous way:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">distros</span> <span class="o">=</span> <span class="p">[</span><span class="ss">:archlinux</span><span class="p">,</span> <span class="ss">:elementaryos</span><span class="p">,</span> <span class="ss">:gentoo</span><span class="p">,</span> <span class="ss">:centos</span><span class="p">,</span> <span class="ss">:ubuntu</span><span class="p">]</span>
+<span class="n">best</span><span class="p">,</span> <span class="o">*</span><span class="n">rest</span><span class="p">,</span> <span class="n">last</span> <span class="o">=</span> <span class="n">distros</span>
+<span class="nb">puts</span> <span class="s2">"best: </span><span class="si">#{</span><span class="n">best</span><span class="si">}</span><span class="s2"> ; rest: </span><span class="si">#{</span><span class="n">rest</span><span class="si">}</span><span class="s2"> ; last: </span><span class="si">#{</span><span class="n">last</span><span class="si">}</span><span class="s2">"</span>
+<span class="c1"># first: archlinux ; rest: [:elementaryos, :gentoo, :centos] ; last: ubuntu</span>
+</code></pre></div></div>
+
+<p><strong>Updated: In a previous version of the article,
+I showed a <em>“wrong”</em> benchmark.
+Splat is not very performant technique.
+See comments for more information.</strong></p>
+
+<p>An astute reader may have realized that
+it is not exactly the same as using <code class="language-plaintext highlighter-rouge">first</code> and <code class="language-plaintext highlighter-rouge">last</code> methods,
+or <code class="language-plaintext highlighter-rouge">[1]</code>, <code class="language-plaintext highlighter-rouge">[2]</code>, <code class="language-plaintext highlighter-rouge">[-1]</code>, <code class="language-plaintext highlighter-rouge">[-2]</code>, etc.
+For example:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">first</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">last</span> <span class="o">=</span> <span class="p">[</span><span class="ss">:a</span><span class="p">]</span>
+<span class="n">first</span>
+<span class="o">=&gt;</span> <span class="ss">:a</span>
+<span class="n">last</span>
+<span class="o">=&gt;</span> <span class="kp">nil</span>
+
+<span class="n">first</span> <span class="o">=</span> <span class="p">[</span><span class="ss">:a</span><span class="p">].</span><span class="nf">first</span>
+<span class="n">first</span>
+<span class="o">=&gt;</span> <span class="ss">:a</span>
+<span class="n">last</span> <span class="o">=</span> <span class="p">[</span><span class="ss">:a</span><span class="p">].</span><span class="nf">last</span>
+<span class="n">last</span>
+<span class="o">=&gt;</span> <span class="ss">:a</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">first</code> and <code class="language-plaintext highlighter-rouge">last</code> are not always the same that using splats!</p>
+</blockquote>
+
+<p>Sometimes using splats is cleaner and better to show your real intentions.
+Just remember to no name the splat variable,
+like the above example,
+for better performance if you don’t need it.</p>
+
+<h3 id="flatten-arrays-with-splats">Flatten arrays with splats</h3>
+
+<figure class="">
+  <img src="/assets/images/red_splat.jpg" alt="Boom" />
+  
+    <figcaption>
+      Flatten splat by <a href="https://www.flickr.com/photos/97699489@N00/5196260104/" target="_blank', rel='nofollow">SidewaysSarah</a>
+
+    </figcaption>
+  
+</figure>
+
+<p>I think this example is self-explanatory:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">distros</span> <span class="o">=</span> <span class="p">[</span><span class="ss">:archlinux</span><span class="p">,</span> <span class="ss">:elementaryos</span><span class="p">,</span> <span class="ss">:gentoo</span><span class="p">,</span> <span class="ss">:centos</span><span class="p">,</span> <span class="ss">:ubuntu</span><span class="p">]</span>
+<span class="n">more_distros</span> <span class="o">=</span> <span class="p">[</span><span class="ss">:debian</span><span class="p">,</span> <span class="o">*</span><span class="n">distros</span><span class="p">,</span> <span class="ss">:fedora</span><span class="p">]</span>
+<span class="o">=&gt;</span> <span class="p">[</span><span class="ss">:debian</span><span class="p">,</span> <span class="ss">:archlinux</span><span class="p">,</span> <span class="ss">:elementaryos</span><span class="p">,</span> <span class="ss">:gentoo</span><span class="p">,</span> <span class="ss">:centos</span><span class="p">,</span> <span class="ss">:ubuntu</span><span class="p">,</span> <span class="ss">:fedora</span><span class="p">]</span>
+</code></pre></div></div>
+
+<h3 id="wrap-in-an-array-with-splats">Wrap in an array with splats</h3>
+
+<p>Last but not least,
+did you know splats can also replace the <code class="language-plaintext highlighter-rouge">Array()</code> method?</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="no">Array</span><span class="p">(</span><span class="s2">"string"</span><span class="p">)</span>
+<span class="o">=&gt;</span> <span class="p">[</span><span class="s2">"string"</span><span class="p">]</span>
+
+<span class="n">wrap</span> <span class="o">=</span> <span class="o">*</span><span class="s2">"string"</span>
+<span class="o">=&gt;</span> <span class="p">[</span><span class="s2">"string"</span><span class="p">]</span>
+
+<span class="n">wrap</span> <span class="o">=</span> <span class="o">*</span><span class="mi">1</span>
+<span class="o">=&gt;</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="no">Array</span><span class="p">(</span><span class="kp">nil</span><span class="p">)</span>
+<span class="o">=&gt;</span> <span class="p">[]</span>
+
+<span class="n">wrap</span> <span class="o">=</span> <span class="o">*</span><span class="kp">nil</span>
+<span class="o">=&gt;</span> <span class="p">[]</span>
+
+<span class="n">var</span> <span class="o">=</span> <span class="s2">"string"</span>
+<span class="n">wrap</span> <span class="o">=</span> <span class="o">*</span><span class="n">var</span>
+<span class="o">=&gt;</span> <span class="p">[</span><span class="s2">"string"</span><span class="p">]</span>
+
+<span class="n">var</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">wrap</span> <span class="o">=</span> <span class="o">*</span><span class="n">var</span>
+<span class="o">=&gt;</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="n">var</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">wrap</span> <span class="o">=</span> <span class="o">*</span><span class="n">var</span>
+<span class="o">=&gt;</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="n">var</span> <span class="o">=</span> <span class="kp">nil</span>
+<span class="n">wrap</span> <span class="o">=</span> <span class="o">*</span><span class="n">var</span>
+<span class="o">=&gt;</span> <span class="p">[]</span>
+</code></pre></div></div>
+
+<p>But maybe it doesn’t do what you expected with a hash:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">var</span> <span class="o">=</span> <span class="p">{</span><span class="ss">a: :a</span><span class="p">}</span>
+<span class="n">wrap</span> <span class="o">=</span> <span class="o">*</span><span class="n">var</span>
+<span class="o">=&gt;</span> <span class="p">[[</span><span class="ss">:a</span><span class="p">,</span> <span class="ss">:a</span><span class="p">]]</span>
+</code></pre></div></div>
+
+<p>And with this wrap,
+we finished the simple splat.
+Let’s take a look at the double one!</p>
+
+<h2 id="the-double-splat-operator-in-ruby">The double **splat operator in Ruby</h2>
+
+<p>The double splat in Ruby works with hashes instead of arrays,
+<em>but not with all of them</em> like I thought.</p>
+
+<figure class="">
+  <img src="/assets/images/double_splat.jpg" alt="Double splat" />
+  
+    <figcaption>
+      Double Splat by <a href="https://www.flickr.com/photos/epicfireworks/2855745838/" target="_blank', rel='nofollow">Epic Fireworks</a>
+
+    </figcaption>
+  
+</figure>
+
+<p>Let’s see some examples:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">double_splat</span><span class="p">(</span><span class="o">**</span><span class="nb">hash</span><span class="p">)</span>
+  <span class="nb">hash</span>
+<span class="k">end</span>
+
+<span class="n">double_splat</span><span class="p">(</span><span class="ss">a: :a</span><span class="p">,</span> <span class="ss">b: :b</span><span class="p">)</span>
+<span class="o">=&gt;</span> <span class="p">{</span><span class="ss">:a</span><span class="o">=&gt;</span><span class="ss">:a</span><span class="p">,</span> <span class="ss">:b</span><span class="o">=&gt;</span><span class="ss">:b</span><span class="p">}</span>
+
+<span class="nb">hash</span> <span class="o">=</span> <span class="p">{</span> <span class="ss">a: :a</span> <span class="p">}</span>
+<span class="n">double_splat</span><span class="p">(</span><span class="nb">hash</span><span class="p">)</span>
+<span class="o">=&gt;</span> <span class="p">{</span><span class="ss">:a</span><span class="o">=&gt;</span><span class="ss">:a</span><span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="keyword-arguments">Keyword arguments</h3>
+
+<p>This feature introduced in Ruby 2.0 is related to the double splat operator.
+You can define a method with <em>keyword arguments</em>,
+this means the parameters have a name.
+When you want to call a keyword argument method
+you have to name each argument:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">keyword_arguments</span><span class="p">(</span><span class="ss">key_a: :default_a</span><span class="p">,</span> <span class="ss">key_b: :default_b</span><span class="p">)</span>
+  <span class="p">[</span><span class="n">key_a</span><span class="p">,</span> <span class="n">key_b</span><span class="p">]</span>
+<span class="k">end</span>
+
+<span class="n">keyword_arguments</span><span class="p">(</span><span class="ss">key_a: :a</span><span class="p">,</span> <span class="ss">key_b: :b</span><span class="p">)</span>
+<span class="o">=&gt;</span> <span class="p">[</span><span class="ss">:a</span><span class="p">,</span> <span class="ss">:b</span><span class="p">]</span>
+
+<span class="n">keyword_arguments</span><span class="p">(</span><span class="ss">key_b: :b</span><span class="p">,</span> <span class="ss">key_a: :a</span><span class="p">)</span>
+<span class="o">=&gt;</span> <span class="p">[</span><span class="ss">:a</span><span class="p">,</span> <span class="ss">:b</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>As you can see,
+the order of the arguments does not matter,
+but calling this kind of methods is cumbersome.
+It may be nice for methods with a long list of parameters,
+however, this is usually considered a code smell.</p>
+
+<p>But this is not the only feature.
+They were declared with a default value,
+you can use them:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">keyword_arguments</span><span class="p">(</span><span class="ss">key_b: :b</span><span class="p">)</span>
+<span class="o">=&gt;</span> <span class="p">[</span><span class="ss">:default_a</span><span class="p">,</span> <span class="ss">:b</span><span class="p">]</span>
+
+<span class="n">keyword_arguments</span>
+<span class="o">=&gt;</span> <span class="p">[</span><span class="ss">:default_a</span><span class="p">,</span> <span class="ss">:default_b</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>You can use a hash with all the parameters:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">hash</span> <span class="o">=</span> <span class="p">{</span> <span class="ss">key_a: :a</span><span class="p">,</span> <span class="ss">key_b: :b</span> <span class="p">}</span>
+<span class="n">keyword_arguments</span><span class="p">(</span><span class="nb">hash</span><span class="p">)</span>
+<span class="o">=&gt;</span> <span class="p">[</span><span class="ss">:a</span><span class="p">,</span> <span class="ss">:b</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>If you forget to name the parameters it will fail:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">keyword_arguments</span><span class="p">(</span><span class="ss">:a</span><span class="p">,</span> <span class="ss">:b</span><span class="p">)</span>
+<span class="c1"># ArgumentError: wrong number of arguments (given 2, expected 0)</span>
+</code></pre></div></div>
+
+<p>The errors are very difficult to understand,
+so they deserve their own section…</p>
+
+<h3 id="double-splat-and-keyword-argument-errors">Double splat and Keyword argument Errors</h3>
+
+<p>The last error it seems very strange:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ArgumentError: wrong number of arguments (given 2, expected 0)
+</code></pre></div></div>
+
+<blockquote>
+  <p>Why did it expect 0 when 2 arguments were defined?</p>
+</blockquote>
+
+<p>The double splat argument and keyword arguments
+are special arguments in Ruby.
+You can check it with your ruby console
+and a little of introspection:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">simple_method</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+  <span class="n">value</span>
+<span class="k">end</span>
+<span class="no">Object</span><span class="p">.</span><span class="nf">instance_method</span><span class="p">(</span><span class="ss">:simple_method</span><span class="p">).</span><span class="nf">parameters</span>
+<span class="o">=&gt;</span> <span class="p">[[</span><span class="ss">:req</span><span class="p">,</span> <span class="ss">:value</span><span class="p">]]</span>
+
+<span class="k">def</span> <span class="nf">optional_method</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+  <span class="n">value</span>
+<span class="k">end</span>
+<span class="no">Object</span><span class="p">.</span><span class="nf">instance_method</span><span class="p">(</span><span class="ss">:optional_method</span><span class="p">).</span><span class="nf">parameters</span>
+<span class="o">=&gt;</span> <span class="p">[[</span><span class="ss">:opt</span><span class="p">,</span> <span class="ss">:value</span><span class="p">]]</span>
+
+<span class="k">def</span> <span class="nf">splat_method</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+  <span class="n">args</span>
+<span class="k">end</span>
+<span class="no">Object</span><span class="p">.</span><span class="nf">instance_method</span><span class="p">(</span><span class="ss">:splat_method</span><span class="p">).</span><span class="nf">parameters</span>
+<span class="o">=&gt;</span> <span class="p">[[</span><span class="ss">:rest</span><span class="p">,</span> <span class="ss">:args</span><span class="p">]]</span>
+
+<span class="k">def</span> <span class="nf">double_splat_method</span><span class="p">(</span><span class="o">**</span><span class="n">args</span><span class="p">)</span>
+  <span class="n">args</span>
+<span class="k">end</span>
+<span class="no">Object</span><span class="p">.</span><span class="nf">instance_method</span><span class="p">(</span><span class="ss">:double_splat_method</span><span class="p">).</span><span class="nf">parameters</span>
+<span class="o">=&gt;</span> <span class="p">[[</span><span class="ss">:key_rest</span><span class="p">,</span> <span class="ss">:args</span><span class="p">]]</span>
+
+<span class="k">def</span> <span class="nf">keyword_method</span><span class="p">(</span><span class="ss">a_key: :value</span><span class="p">)</span>
+  <span class="n">a_key</span>
+<span class="k">end</span>
+<span class="no">Object</span><span class="p">.</span><span class="nf">instance_method</span><span class="p">(</span><span class="ss">:keyword_method</span><span class="p">).</span><span class="nf">parameters</span>
+<span class="o">=&gt;</span> <span class="p">[[</span><span class="ss">:key</span><span class="p">,</span> <span class="ss">:a_key</span><span class="p">]]</span>
+
+<span class="k">def</span> <span class="nf">block_method</span><span class="p">(</span><span class="o">&amp;</span><span class="n">a_block</span><span class="p">)</span>
+  <span class="n">a_block</span>
+<span class="k">end</span>
+<span class="no">Object</span><span class="p">.</span><span class="nf">instance_method</span><span class="p">(</span><span class="ss">:block_method</span><span class="p">).</span><span class="nf">parameters</span>
+<span class="o">=&gt;</span> <span class="p">[[</span><span class="ss">:block</span><span class="p">,</span> <span class="ss">:a_block</span><span class="p">]]</span>
+</code></pre></div></div>
+
+<p>The error message is confused
+because you don’t expect that
+a keyword argument isn’t an argument,
+but for Ruby,
+they are completely different kind of arguments.</p>
+
+<p>Thus if you use regular values for double splat
+and keyword arguments Ruby complains:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">double_splat_method</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+<span class="c1"># ArgumentError: wrong number of arguments (given 1, expected 0)</span>
+
+<span class="n">keyword_method</span><span class="p">(</span><span class="s2">"4, 8, 15, 16, 23, 42"</span><span class="p">)</span>
+<span class="c1"># ArgumentError: wrong number of arguments (given 1, expected 0)</span>
+</code></pre></div></div>
+
+<h4 id="hash-keys-must-be-symbols">Hash keys MUST be symbols!</h4>
+
+<p>I didn’t know this before creating this post
+and it was part of my initial confusion.
+If you use a hash with no symbol keys,
+they aren’t used by the double splat and keyword arguments:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">keyword_method</span><span class="p">(</span><span class="s2">"a_key"</span> <span class="o">=&gt;</span> <span class="s2">"value"</span><span class="p">)</span>
+<span class="c1"># ArgumentError: wrong number of arguments (given 1, expected 0)</span>
+
+<span class="n">keyword_method</span><span class="p">(</span><span class="ss">a_key: </span><span class="s2">"value"</span><span class="p">)</span>
+<span class="o">=&gt;</span> <span class="s2">"value"</span>
+
+<span class="n">double_splat_method</span><span class="p">(</span><span class="s2">"a_key"</span> <span class="o">=&gt;</span> <span class="s2">"value"</span><span class="p">)</span>
+<span class="c1"># ArgumentError: wrong number of arguments (given 1, expected 0)</span>
+
+<span class="n">double_splat_method</span><span class="p">(</span><span class="ss">a_key: </span><span class="s2">"value"</span><span class="p">)</span>
+<span class="o">=&gt;</span> <span class="p">{</span><span class="ss">:a_key</span><span class="o">=&gt;</span><span class="s2">"value"</span><span class="p">}</span>
+</code></pre></div></div>
+
+<h4 id="hash-must-contain-exactly-the-same-keys">Hash MUST contain exactly the same keys</h4>
+
+<p>If you pass more keys than
+the defined in a keyword arguments method
+Ruby fails again:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">keyword_method</span><span class="p">(</span><span class="ss">a_key: </span><span class="s2">"value"</span><span class="p">)</span>
+<span class="o">=&gt;</span> <span class="s2">"value"</span>
+
+<span class="n">keyword_method</span><span class="p">(</span><span class="ss">a_key: </span><span class="s2">"value"</span><span class="p">,</span> <span class="ss">other_key: </span><span class="s2">"666"</span><span class="p">)</span>
+<span class="c1"># ArgumentError: unknown keyword: other_key</span>
+
+<span class="nb">hash</span> <span class="o">=</span> <span class="p">{</span> <span class="ss">a_key: </span><span class="s2">"value"</span><span class="p">,</span> <span class="ss">other_key: </span><span class="s2">"666"</span> <span class="p">}</span>
+<span class="n">keyword_method</span><span class="p">(</span><span class="nb">hash</span><span class="p">)</span>
+<span class="c1"># ArgumentError: unknown keyword: other_key</span>
+</code></pre></div></div>
+
+<p>To avoid this kind of errors,
+you can use the anonymous double splat operator:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">keyword_arguments_no_crash</span><span class="p">(</span><span class="ss">key_a: :default_a</span><span class="p">,</span> <span class="ss">key_b: :default_b</span><span class="p">,</span> <span class="o">**</span><span class="p">)</span>
+  <span class="p">[</span><span class="n">key_a</span><span class="p">,</span> <span class="n">key_b</span><span class="p">]</span>
+<span class="k">end</span>
+
+<span class="n">invalid_hash</span> <span class="o">=</span> <span class="p">{</span> <span class="ss">key_a: :hash_a</span><span class="p">,</span> <span class="ss">key_b: :hash_b</span><span class="p">,</span> <span class="ss">key_c: :hash_c</span> <span class="p">}</span>
+<span class="n">keyword_arguments_no_crash</span><span class="p">(</span><span class="n">invalid_hash</span><span class="p">)</span>
+<span class="o">=&gt;</span> <span class="p">[</span><span class="ss">:hash_a</span><span class="p">,</span> <span class="ss">:hash_b</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>In fact, you can give it a name
+and use it in the method:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">keyword_arguments_plus</span><span class="p">(</span><span class="ss">key_a: :default_a</span><span class="p">,</span> <span class="ss">key_b: :default_b</span><span class="p">,</span> <span class="o">**</span><span class="n">plus</span><span class="p">)</span>
+  <span class="p">[</span><span class="n">key_a</span><span class="p">,</span> <span class="n">key_b</span><span class="p">,</span> <span class="n">plus</span><span class="p">]</span>
+<span class="k">end</span>
+
+<span class="n">invalid_hash</span> <span class="o">=</span> <span class="p">{</span> <span class="ss">key_a: :hash_a</span><span class="p">,</span> <span class="ss">key_b: :hash_b</span><span class="p">,</span> <span class="ss">key_c: :hash_c</span> <span class="p">}</span>
+<span class="n">keyword_arguments_plus</span><span class="p">(</span><span class="n">invalid_hash</span><span class="p">)</span>
+<span class="o">=&gt;</span> <span class="p">[</span><span class="ss">:hash_a</span><span class="p">,</span> <span class="ss">:hash_b</span><span class="p">,</span> <span class="p">{</span><span class="ss">:key_c</span><span class="o">=&gt;</span><span class="ss">:hash_c</span><span class="p">}]</span>
+</code></pre></div></div>
+
+<h3 id="mandatory-keyword-arguments">Mandatory keyword arguments</h3>
+
+<p>Since Ruby 2.1,
+it is allowed to not add a default value to the arguments.
+In this case, the argument is mandatory:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">mandatory_arguments</span><span class="p">(</span><span class="n">mandatory</span><span class="p">:)</span>
+  <span class="n">mandatory</span>
+<span class="k">end</span>
+
+<span class="n">mandatory_arguments</span>
+<span class="c1"># ArgumentError: missing keyword: mandatory</span>
+
+<span class="n">mandatory_arguments</span><span class="p">(</span><span class="ss">mandatory: :learn</span><span class="p">)</span>
+<span class="o">=&gt;</span> <span class="ss">:learn</span>
+</code></pre></div></div>
+
+<p>It can be combined with the double splat to
+make some arguments optional and another mandatory:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">configuration</span><span class="p">(</span><span class="n">db</span><span class="p">:,</span> <span class="o">**</span><span class="n">other_options</span><span class="p">)</span>
+  <span class="nb">puts</span> <span class="s2">"db: </span><span class="si">#{</span><span class="n">db</span><span class="si">}</span><span class="s2">, other_options: </span><span class="si">#{</span><span class="n">other_options</span><span class="si">}</span><span class="s2">"</span>
+<span class="k">end</span>
+
+<span class="n">configuration</span><span class="p">(</span><span class="ss">db: :postgres</span><span class="p">)</span>
+<span class="c1"># db: postgres, other_options: {}</span>
+
+<span class="n">configuration</span><span class="p">(</span><span class="ss">pool: </span><span class="mi">5</span><span class="p">)</span>
+<span class="c1"># ArgumentError: missing keyword: db</span>
+
+<span class="n">configuration</span><span class="p">(</span><span class="ss">db: :postgres</span><span class="p">,</span> <span class="ss">pool: </span><span class="mi">5</span><span class="p">)</span>
+<span class="c1"># db: postgres, other_options: {:pool=&gt;5}</span>
+
+<span class="n">conf</span> <span class="o">=</span> <span class="p">{</span> <span class="ss">pool: </span><span class="mi">5</span><span class="p">,</span> <span class="ss">db: :postgres</span> <span class="p">}</span>
+<span class="n">configuration</span><span class="p">(</span><span class="n">conf</span><span class="p">)</span>
+<span class="c1"># db: postgres, other_options: {:pool=&gt;5}</span>
+</code></pre></div></div>
+
+<p>As you can see,
+<strong>Ruby splits the hash for you,
+making the code easier to read and to work with.</strong></p>
+
+<figure class="">
+  <img src="/assets/images/window_splat.jpg" alt="Splats everywhere" />
+  
+    <figcaption>
+      Splat everywhere by <a href="https://unsplash.com/search/splat?photo=Jlv0GcqrkJU" target="_blank', rel='nofollow">Dimitri Popov</a>
+
+    </figcaption>
+  
+</figure>
+
+<h3 id="the-double-splat-operator--destructuring-hashes">The double splat operator &amp; destructuring hashes</h3>
+
+<p>Finally,
+you can combine keyword arguments and hashes using the double splat operator.
+It will be similar to use the <code class="language-plaintext highlighter-rouge">merge</code> method:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">my_options</span> <span class="o">=</span> <span class="p">{</span> <span class="ss">logger: :stdout</span> <span class="p">}</span>
+
+<span class="n">configuration</span><span class="p">(</span><span class="n">my_options</span><span class="p">.</span><span class="nf">merge</span><span class="p">(</span><span class="ss">db: :mongodb</span><span class="p">))</span>
+<span class="c1"># db: mongodb, other_options: {:logger=&gt;:stdout}</span>
+
+<span class="n">configuration</span><span class="p">(</span><span class="ss">db: :mongodb</span><span class="p">,</span> <span class="o">**</span><span class="n">my_options</span><span class="p">)</span>
+<span class="c1"># db: mongodb, other_options: {:logger=&gt;:stdout}</span>
+</code></pre></div></div>
+
+<h3 id="using-double-splats-with-blocks">Using double splats with blocks</h3>
+
+<p>All the previous points
+can also be applied to the blocks in Ruby:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">block_double_splat</span>
+  <span class="k">yield</span><span class="p">(</span><span class="ss">kernel: :panic</span><span class="p">)</span>
+<span class="k">end</span>
+
+<span class="n">block_double_splat</span> <span class="k">do</span> <span class="o">|**</span><span class="n">args</span><span class="o">|</span>
+  <span class="nb">p</span> <span class="n">args</span>
+<span class="k">end</span>
+<span class="c1"># {:kernel=&gt;:panic}</span>
+
+<span class="k">def</span> <span class="nf">double_splatted_block</span>
+  <span class="n">distros</span> <span class="o">=</span> <span class="p">{</span> <span class="ss">best: :archlinux</span><span class="p">,</span> <span class="ss">common: :ubuntu</span> <span class="p">}</span>
+  <span class="k">yield</span> <span class="n">distros</span>
+<span class="k">end</span>
+
+<span class="n">double_splatted_block</span> <span class="k">do</span> <span class="o">|</span><span class="n">best</span><span class="p">:,</span> <span class="o">**|</span>
+  <span class="nb">puts</span> <span class="s2">"The best is </span><span class="si">#{</span><span class="n">best</span><span class="si">}</span><span class="s2">"</span>
+<span class="k">end</span>
+<span class="c1"># The best is archlinux</span>
+</code></pre></div></div>
+
+<h2 id="why-double-splat-when-the-last-argument-could-be-a-hash">Why double splat when the last argument could be a hash?</h2>
+
+<p>Do you remember that the double splat argument is not a regular argument?
+This causes strange message errors when the arguments are not expected,
+but you can also use it to take advantage of it:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">using_double_splat</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">hash_args</span><span class="p">)</span>
+  <span class="n">hash_args</span>
+<span class="k">end</span>
+
+<span class="k">def</span> <span class="nf">no_using_double_splat</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">hash_args</span><span class="p">)</span>
+  <span class="n">hash_args</span>
+<span class="k">end</span>
+
+<span class="n">using_double_splat</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="ss">daenerys: :targaryen</span><span class="p">)</span>
+ <span class="o">=&gt;</span> <span class="p">{</span><span class="ss">daenerys: :targaryen</span><span class="p">}</span>
+<span class="n">no_using_double_splat</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="ss">daenerys: :targaryen</span><span class="p">)</span>
+ <span class="o">=&gt;</span> <span class="p">{</span><span class="ss">daenerys: :targaryen</span><span class="p">}</span>
+</code></pre></div></div>
+
+<p>This seems to be the same behavior,
+but it is different when you don’t pass a hash as the last argument:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">using_double_splat</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">13</span><span class="p">)</span>
+<span class="o">=&gt;</span> <span class="p">{}</span>
+<span class="n">no_using_double_splat</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">13</span><span class="p">)</span>
+<span class="o">=&gt;</span> <span class="mi">13</span>
+</code></pre></div></div>
+
+<p>So, if you need the last argument to always be a hash,
+the double splat operator in the definition is the way to go.</p>
+
+<h2 id="the-strange-behavior-of-the-beginning">The strange behavior of the beginning</h2>
+
+<p>This was the code:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">splat_test</span><span class="p">(</span><span class="o">*</span><span class="n">array</span><span class="p">,</span> <span class="o">**</span><span class="nb">hash</span><span class="p">)</span>
+  <span class="nb">puts</span> <span class="s2">"array: </span><span class="si">#{</span><span class="n">array</span><span class="si">}</span><span class="s2"> ; hash: </span><span class="si">#{</span><span class="nb">hash</span><span class="si">}</span><span class="s2">"</span>
+<span class="k">end</span>
+
+<span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">splat_test</span><span class="p">(</span><span class="mi">42</span><span class="p">,</span> <span class="s1">'foo'</span> <span class="o">=&gt;</span> <span class="s1">'foo'</span><span class="p">,</span> <span class="ss">baz: :baz</span><span class="p">,</span> <span class="no">String</span> <span class="o">=&gt;</span> <span class="no">String</span><span class="p">,</span> <span class="ss">bar: :bar</span><span class="p">)</span>
+<span class="ss">array: </span><span class="p">[</span><span class="mi">42</span><span class="p">,</span> <span class="p">{</span><span class="s2">"foo"</span><span class="o">=&gt;</span><span class="s2">"foo"</span><span class="p">,</span> <span class="no">String</span><span class="o">=&gt;</span><span class="no">String</span><span class="p">}]</span> <span class="p">;</span> <span class="ss">hash: </span><span class="p">{</span><span class="ss">:baz</span><span class="o">=&gt;</span><span class="ss">:baz</span><span class="p">,</span> <span class="ss">:bar</span><span class="o">=&gt;</span><span class="ss">:bar</span><span class="p">}</span>
+</code></pre></div></div>
+
+<figure class="">
+  <img src="/assets/images/fighting_splats.jpg" alt="Fighting splats" />
+  
+    <figcaption>
+      Fighting with splats by <a href="https://www.flickr.com/photos/ixisit/14854928640/" target="_blank', rel='nofollow">Ixis IT</a>
+
+    </figcaption>
+  
+</figure>
+
+<p>My first mistake was thinking that
+the double splat operator captures all pairs key-value of the last hash.
+However, as we have seen before
+<strong>double splat operator only captures symbol keys!</strong></p>
+
+<p>Ruby interprets the call of the method <em>more or less</em> in this way:</p>
+
+<ol>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">42</code>: is a number and it will be the first element of the splat <code class="language-plaintext highlighter-rouge">*array</code>.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">'foo' =&gt; 'foo'</code>: the key is not a symbol, it is a string,
+this means it cannot be added to the keyword <code class="language-plaintext highlighter-rouge">hash</code>.
+Hence it adds the couple key-value to the second element of the <code class="language-plaintext highlighter-rouge">*array</code>.
+This second element is, of course, an array.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">:baz =&gt; :baz</code>: ruby finds a new couple key-value.
+This time the key is a symbol (<code class="language-plaintext highlighter-rouge">:baz</code>) and
+it is added to the keyword <code class="language-plaintext highlighter-rouge">hash</code></p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">String =&gt; String</code>: the key is not a symbol, it is a class.
+It cannot be added to the keyword <code class="language-plaintext highlighter-rouge">hash</code>.
+So ruby instead of complaining,
+cleverly (maybe too cleverly for my taste),
+it adds it to the splatted <code class="language-plaintext highlighter-rouge">array</code>.
+Instead of being added to a new hash at the third position,
+it is merged with the second and last element in this <code class="language-plaintext highlighter-rouge">array</code>.
+For me, it is clearly an unexpected behavior.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">:bar =&gt; bar</code>: This time the key is a symbol.
+It is added to the keyword <code class="language-plaintext highlighter-rouge">hash</code>.</p>
+  </li>
+</ol>
+
+<p>Ruby does not oppose to this bizarre syntax,
+it allows you mix keys of all types and
+they are added to the “right” variable on the fly.
+Ruby is literally splitting our last hash argument into two different hashes,
+depending on the type of the key.</p>
+
+<h2 id="conclusions">Conclusions</h2>
+
+<p>Congratulations if you reach until here :)
+This was a big review of splat features in Ruby.
+Hopefully, you learned something new
+among all the code snippets.</p>
+
+<figure class="">
+  <img src="/assets/images/end_splat.jpg" alt="Double splat" />
+  
+    <figcaption>
+      Double Splat by <a href="https://www.flickr.com/photos/rcktfld/2266691836/" target="_blank', rel='nofollow">Reuben Whitehouse</a>
+
+    </figcaption>
+  
+</figure>
+
+<p>The last part of this post,
+Ruby splitting the hash,
+is a curious feature.
+I can see the point
+because the keyword argument must have symbol keys,
+and it can be very useful as last optional argument.
+On the other hand,
+it is not very intuitive and
+it has to be used with caution.
+A future programmer may not know all the difficulties of splats in Ruby
+and bugs can easily introduce.</p>
+
+<p>And what do you think about splat? Did you see something that surprised you?</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="/tags/ruby" class="page__taxonomy-item" rel="tag">ruby</a>
+    
+    </span>
+  </p>
+
+
+
+
+        
+          <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Updated:</strong> <time datetime="2017-06-06">June 06, 2017</time></p>
+        
+      </footer>
+
+      <section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?via=alexcasdev&text=Everything+you+should+know+about+Ruby+Splats%20https%3A%2F%2Falexcastano.com%2Feverything-about-ruby-splats%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Falexcastano.com%2Feverything-about-ruby-splats%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Falexcastano.com%2Feverything-about-ruby-splats%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/the-hidden-cost-of-the-invisible-queries-in-rails/" class="pagination--pager" title="The hidden cost of the invisible queries in Rails
+">Previous</a>
+    
+    
+      <a href="/moodlenet-more-than-a-technical-project/" class="pagination--pager" title="MoodleNet: more than a technical project
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">Leave a Comment</h4>
+      <section id="disqus_thread"></section>
+    
+</div>
+
+    
+  </article>
+
+  
+
+  
+  
+    
+    
+        
+    
+    
+  
+    
+    
+        
+    
+    
+  
+    
+    
+        
+    
+    
+  
+    
+    
+    
+        
+          
+            <div class="page__related">
+              
+                <h4 class="page__related-title">You May Also Enjoy</h4>
+              
+              <div class="grid__wrapper">
+          
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/assets/images/hidden_cat.jpg" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/the-hidden-cost-of-the-invisible-queries-in-rails/" rel="permalink">The hidden cost of the invisible queries in Rails
+</a>
+      
+    </h2>
+    
+
+
+    <p class="archive__item-excerpt" itemprop="description">Ruby on Rails is awesome,
+it is really awesome.
+It allows us to create web applications without knowing every involved technology.
+After all,
+Rails is optimi...</p>
+  </article>
+</div>
+
+          
+          
+    
+  
+    
+    
+        
+          
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/assets/images/name_label.jpg" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/generate-unique-usernames-for-ruby-on-rails/" rel="permalink">Username generation in Ruby on Rails
+</a>
+      
+    </h2>
+    
+
+
+    <p class="archive__item-excerpt" itemprop="description">Today we are going to create a unique username automatically
+using the user’s full name in a typical Ruby on Rails application, i.e.,
+</p>
+  </article>
+</div>
+
+          
+          
+    
+  
+    
+    
+        
+    
+        
+    
+    
+  
+    
+    
+        
+    
+        
+    
+    
+  
+    
+    
+        
+    
+        
+    
+    
+  
+  
+      </div>
+    </div>
+  
+
+
+
+</div>
+
+    </div>
+
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        
+  <img src="https://data.alexcastano.com/img.gif" alt="img">
+
+
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+
+    
+
+    <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2020 Alex Castaño. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+
+
+
+  <script>
+  window.ga=function(){ga.q.push(arguments)};ga.q=[];ga.l=+new Date;
+  ga('create','UA-65462222-1','auto');
+  ga('set', 'anonymizeIp', false);
+  ga('send','pageview')
+</script>
+<script src="https://www.google-analytics.com/analytics.js" async></script>
+
+
+
+
+
+
+    
+  <script>
+    var disqus_config = function () {
+      this.page.url = "https://alexcastano.com/everything-about-ruby-splats/";  /* Replace PAGE_URL with your page's canonical URL variable */
+      this.page.identifier = "/everything-about-ruby-splats"; /* Replace PAGE_IDENTIFIER with your page's unique identifier variable */
+    };
+    (function() { /* DON'T EDIT BELOW THIS LINE */
+      var d = document, s = d.createElement('script');
+      s.src = 'https://alexcastano.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+  
+
+
+
+
+
+  </body>
+</html>

@@ -1,0 +1,1094 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.20.1 by Michael Rose
+  Copyright 2013-2019 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>The hidden cost of the invisible queries in Rails | Alex Castaño</title>
+<meta name="description" content="Rails queries are awesome, but there are some drawbacks we should avoid to get the best performance">
+
+
+  <meta name="author" content="Alex Castaño">
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en">
+<meta property="og:site_name" content="Alex Castaño">
+<meta property="og:title" content="The hidden cost of the invisible queries in Rails">
+<meta property="og:url" content="https://alexcastano.com/the-hidden-cost-of-the-invisible-queries-in-rails/">
+
+
+  <meta property="og:description" content="Rails queries are awesome, but there are some drawbacks we should avoid to get the best performance">
+
+
+
+  <meta property="og:image" content="https://alexcastano.com/assets/images/hidden_cat.jpg">
+
+
+
+  <meta name="twitter:site" content="@alexcasdev">
+  <meta name="twitter:title" content="The hidden cost of the invisible queries in Rails">
+  <meta name="twitter:description" content="Rails queries are awesome, but there are some drawbacks we should avoid to get the best performance">
+  <meta name="twitter:url" content="https://alexcastano.com/the-hidden-cost-of-the-invisible-queries-in-rails/">
+
+  
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://alexcastano.com/assets/images/hidden_cat.jpg">
+  
+
+  
+    <meta name="twitter:creator" content="@alexcasdev">
+  
+
+
+
+  <meta property="article:published_time" content="2017-05-11T00:00:00+02:00">
+
+
+
+  <meta property="article:modified_time" content="2017-05-13T00:00:00+02:00">
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="https://alexcastano.com/the-hidden-cost-of-the-invisible-queries-in-rails/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "Alex Castaño",
+      "url": "https://alexcastano.com/",
+      "sameAs": ["https://twitter.com/alexcasdev","https://www.linkedin.com/in/alexcastano"]
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Alex Castaño Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css">
+
+<!--[if IE]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+
+    
+
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-touch-icon.png?v=1">
+<link rel="icon" type="image/png" href="/assets/images/favicons/favicon-32x32.png?v=1" sizes="32x32">
+<link rel="icon" type="image/png" href="/assets/images/favicons/favicon-16x16.png?v=1" sizes="16x16">
+<link rel="manifest" href="/assets/images/favicons/manifest.json?v=1">
+<link rel="mask-icon" href="/assets/images/favicons/safari-pinned-tab.svg?v=1" color="#00848a">
+<link rel="shortcut icon" type="image/x-icon" href="/assets/images/favicons/favicon.ico?v=1">
+<link rel="icon" href="/assets/images/favicons/favicon.ico?v=1">
+<meta name="apple-mobile-web-app-title" content="Alex Castaño">
+<meta name="application-name" content="Alex Castaño">
+<meta name="msapplication-config" content="/assets/images/favicons/browserconfig.xml?v=1">
+<meta name="theme-color" content="#000000">
+
+  </head>
+
+  <body class="layout--single">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          Alex Castaño
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/about/">About</a>
+            </li></ul>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+  
+
+
+
+
+
+
+
+<div class="page__hero--overlay" style=" background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://alexcastano.com/assets/images/hidden_cat.jpg');">
+  
+    <div class="wrapper">
+      <h1 class="page__title" itemprop="headline">
+        
+          The hidden cost of the invisible queries in Rails
+
+        
+      </h1>
+      
+      
+    </div>
+  
+  
+    <span class="page__hero-caption">Photo credit: <a href="http://es.freeimages.com/photo/cat-1378752" target='_blank", rel="nofollow'><strong>mn-que</strong></a>
+</span>
+  
+</div>
+
+
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="/assets/images/bio-photo.jpg" alt="Alex Castaño" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">Alex Castaño</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>Elixir developer</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="https://schema.org/Place">
+          <i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i> <span itemprop="name">Andorra</span>
+        </li>
+      
+
+      
+
+      
+
+      
+        <li>
+          <a href="mailto:alexcastanodev@gmail.com">
+            <meta itemprop="email" content="alexcastanodev@gmail.com">
+            <i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i><span class="label">Email</span>
+          </a>
+        </li>
+      
+
+      
+
+      
+        <li>
+          <a href="https://twitter.com/alexcasdev" itemprop="sameAs" rel="nofollow noopener noreferrer">
+            <i class="fab fa-fw fa-twitter-square" aria-hidden="true"></i><span class="label">Twitter</span>
+          </a>
+        </li>
+      
+
+      
+
+      
+        <li>
+          <a href="https://www.linkedin.com/in/alexcastano" itemprop="sameAs" rel="nofollow noopener noreferrer">
+            <i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">LinkedIn</span>
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+        <li>
+          <a href="https://github.com/alexcastano" itemprop="sameAs" rel="nofollow noopener noreferrer">
+            <i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span>
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="http://schema.org/CreativeWork">
+    <meta itemprop="headline" content="The hidden cost of the invisible queries in Rails">
+    <meta itemprop="description" content="Ruby on Rails is awesome,it is really awesome.It allows us to create web applications without knowing every involved technology.After all,Rails is optimized for programmers happinessand it does a terrific job.">
+    <meta itemprop="datePublished" content="May 11, 2017">
+    <meta itemprop="dateModified" content="May 13, 2017">
+
+    <div class="page__inner-wrap">
+      
+
+      <section class="page__content" itemprop="text">
+        <p>Ruby on Rails is awesome,
+<em>it is really awesome</em>.
+It allows us to create web applications without knowing every involved technology.
+After all,
+<a href="http://rubyonrails.org/doctrine/#optimize-for-programmer-happiness">Rails is optimized for programmers happiness</a>
+and it does a terrific job.</p>
+
+<p>One of those technologies where Rails is really helpful is SQL.
+It removes the complexity of creating manual SQL queries using ActiveRecord.
+However, it is not only for our own good.
+Today we will see some of the drawbacks
+and how they affect the Rails application development.</p>
+
+<h2 id="what-the-heck-am-i-doing">What the heck am I doing?</h2>
+
+<p>Yes, we know we are creating a Ruby on Rails application, but…</p>
+
+<blockquote>
+  <p>Do you know exactly what are you doing on each line of your code?</p>
+</blockquote>
+
+<p>This is not a trap question,
+it is a very important one,
+and it should be asked continuously while we are developing.
+We are better coders
+when we learn new implications of our code.</p>
+
+<p><img src="/assets/images/i_have_no_idea_im_doing.jpg" alt="image-center" class="align-center"></p>
+
+<p>Rails helps us to write nice code,
+although the less experimented developers forget that
+behind a beautiful method call there are
+queries to the database,
+email sending,
+calls to remote API
+or messages to Redis. For example:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># We are doing a query to the table movies</span>
+<span class="c1"># where actor_id == actor.id</span>
+<span class="n">actor</span><span class="p">.</span><span class="nf">movies</span><span class="p">.</span><span class="nf">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">movie</span><span class="o">|</span>
+  <span class="o">...</span>
+<span class="k">end</span>
+
+<span class="c1"># Sends an email</span>
+<span class="no">UserMailer</span><span class="p">.</span><span class="nf">welcome_email</span><span class="p">(</span><span class="vi">@user</span><span class="p">).</span><span class="nf">deliver_now</span>
+
+<span class="c1"># Here we are doing 3 different API calls to Stripe</span>
+<span class="n">customer</span> <span class="o">=</span> <span class="no">Stripe</span><span class="o">::</span><span class="no">Customer</span><span class="p">.</span><span class="nf">retrieve</span><span class="p">(</span><span class="s2">"cus_AcnQorgF0BIeBt"</span><span class="p">)</span>
+<span class="n">card</span> <span class="o">=</span> <span class="n">customer</span><span class="p">.</span><span class="nf">sources</span><span class="p">.</span><span class="nf">retrieve</span><span class="p">(</span><span class="s2">"card_1AHXpr2eZvKYlo2CtTq8IsO5"</span><span class="p">)</span>
+<span class="n">card</span><span class="p">.</span><span class="nf">name</span> <span class="o">=</span> <span class="s2">"Noah Moore"</span>
+<span class="n">card</span><span class="p">.</span><span class="nf">save</span>
+
+<span class="c1"># We are sending a message to a Redis server</span>
+<span class="c1"># with the needed data to perform a background task.</span>
+<span class="c1"># Later a Sidekiq server will read it and it will be executed</span>
+<span class="no">MyWorker</span><span class="p">.</span><span class="nf">perform_async</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>All those operations have something in common:
+<em>they have to communicate with external processes</em>.
+Maybe with a process on the same computer, so they are faster,
+or maybe on a remote server.</p>
+
+<blockquote>
+  <p>Communication with an external process is slow</p>
+</blockquote>
+
+<p>Anyway, the point is those communications take time,
+much more than <code class="language-plaintext highlighter-rouge">meaning_of_life = 21 * 2</code>.
+So we have to be careful when using them.
+With a deeper knowledge about the framework we are using,
+we start to write better code and
+do fewer beginners mistakes.</p>
+
+<p>Let’s see some of those mistakes that I personally did
+or I found in candidates’ code <a href="https://deverify.com">Deverify submissions</a></p>
+
+<h2 id="the-super-infamous-1n">The super infamous 1+N</h2>
+
+<p>The most common beginner mistake in Ruby on Rails:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># This is a query</span>
+<span class="n">actor</span> <span class="o">=</span> <span class="no">Actor</span><span class="p">.</span><span class="nf">find</span><span class="p">(</span><span class="n">actor_id</span><span class="p">)</span>
+
+<span class="n">actor</span><span class="p">.</span><span class="nf">movies</span><span class="p">.</span><span class="nf">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">movie</span><span class="o">|</span>
+  <span class="c1"># for each movie we are doing another query to get the director</span>
+  <span class="c1"># so it is not very efficient</span>
+  <span class="nb">puts</span> <span class="n">movie</span><span class="p">.</span><span class="nf">director</span><span class="p">.</span><span class="nf">name</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<p>A good solution is to make only two queries:</p>
+
+<ol>
+  <li>Get all the movies from the actors.</li>
+  <li>Get all the directors using the already loaded movies.</li>
+</ol>
+
+<p>This can be done in a convenient way with the <code class="language-plaintext highlighter-rouge">includes</code> method:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># This is a query</span>
+<span class="n">actor</span> <span class="o">=</span> <span class="no">Actor</span><span class="p">.</span><span class="nf">find</span><span class="p">(</span><span class="n">actor_id</span><span class="p">)</span>
+<span class="c1"># This makes two queries, one for the movies</span>
+<span class="c1"># and another for all the directors of the movies</span>
+<span class="n">actor</span><span class="p">.</span><span class="nf">movies</span><span class="p">.</span><span class="nf">includes</span><span class="p">(</span><span class="ss">:director</span><span class="p">).</span><span class="nf">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">movie</span><span class="o">|</span>
+  <span class="c1"># No query is performed here</span>
+  <span class="nb">puts</span> <span class="n">movie</span><span class="p">.</span><span class="nf">director</span><span class="p">.</span><span class="nf">name</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<p>After the <code class="language-plaintext highlighter-rouge">includes(:director)</code>,
+all the movies have the associated director model loaded in memory.
+Another way to get the same result is:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># It makes the three queries here: actor, movies and directors</span>
+<span class="n">actor</span> <span class="o">=</span> <span class="no">Actor</span><span class="p">.</span><span class="nf">find</span><span class="p">(</span><span class="n">actor_id</span><span class="p">).</span><span class="nf">includes</span><span class="p">(</span><span class="ss">movies: :director</span><span class="p">)</span>
+
+<span class="n">actor</span><span class="p">.</span><span class="nf">movies</span><span class="p">.</span><span class="nf">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">movie</span><span class="o">|</span>
+  <span class="c1"># No query is performed here</span>
+  <span class="nb">puts</span> <span class="n">movie</span><span class="p">.</span><span class="nf">director</span><span class="p">.</span><span class="nf">name</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<p>We have also the fantastic <a href="https://github.com/flyerhzm/bullet" rel="nofollow">gem Bullet</a>
+that warns us if it detects a 1+N query.
+Take a look.
+It is a very good one.</p>
+
+<p>Finally,
+we have this <a href="http://blog.arkency.com/2013/12/rails4-preloading/">fantastic Arkency post</a>
+to learn more about preloading associations in Rails.</p>
+
+<h2 id="how-far-do-you-plan-to-count">How far do you plan to count?</h2>
+
+<p>Another poor performance statement using ActiveRecord is:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="no">Actor</span><span class="p">.</span><span class="nf">count</span> <span class="o">==</span> <span class="mi">0</span>
+  <span class="nb">puts</span> <span class="s2">"No actors"</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<p>This code performs a count query on the SQL server.
+However, we don’t need to count <em>all</em> the actors on the table.
+The only thing we want is to know if there is at least one.</p>
+
+<figure class="">
+  <img src="/assets/images/counting_fast.jpg" alt="Counting fast">
+  
+    <figcaption>
+      Counting fast by <a href="https://unsplash.com/search/count?photo=ft0-Xu4nTvA" rel="nofollow">Loic Djim</a>
+
+    </figcaption>
+  
+</figure>
+
+<p>The <a href="https://wiki.postgresql.org/wiki/Slow_Counting">SQL count query</a>
+can be slower than we think.
+It possibly makes a sequential scan of the table.
+This means the database will go through each row,
+until the very last one,
+just to return the number of actors.
+A better approach is:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="no">Actor</span><span class="p">.</span><span class="nf">limit</span><span class="p">(</span><span class="mi">1</span><span class="p">).</span><span class="nf">count</span> <span class="o">==</span> <span class="mi">0</span>
+  <span class="nb">puts</span> <span class="s2">"No actors"</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<p>Here we are telling to the database
+to stop the query after finding the first one
+and return the result immediately.
+It’s much more performant this way!</p>
+
+<blockquote>
+  <p>Count only until you need</p>
+</blockquote>
+
+<p>It’s also applicable to compare the count with other numbers:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="no">Actor</span><span class="p">.</span><span class="nf">limit</span><span class="p">(</span><span class="mi">2</span><span class="p">).</span><span class="nf">count</span> <span class="o">&gt;</span> <span class="mi">1</span>
+  <span class="nb">puts</span> <span class="s2">"Many actors"</span>
+<span class="k">end</span>
+
+<span class="k">if</span> <span class="no">Actor</span><span class="p">.</span><span class="nf">limit</span><span class="p">(</span><span class="mi">101</span><span class="p">).</span><span class="nf">count</span> <span class="o">&gt;</span> <span class="mi">100</span>
+  <span class="nb">puts</span> <span class="s2">"More than 10 pages of 10 actors"</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<h3 id="some-rails-query-methods-seem-not-optimized">Some Rails query methods seem not optimized</h3>
+
+<p>When I was writing this post,
+I was testing alternatives methods in Rails to do the same.
+It surprised me that the common methods like <code class="language-plaintext highlighter-rouge">any?</code>,
+<code class="language-plaintext highlighter-rouge">many?</code> and <code class="language-plaintext highlighter-rouge">empty?</code> don’t use the simple optimization I recommended before.
+Maybe there is a reason for this behavior, but I don’t know.</p>
+
+<p>Let me show some examples:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span> <span class="no">Actor</span><span class="p">.</span><span class="nf">count</span>
+   <span class="p">(</span><span class="mf">3.4</span><span class="n">ms</span><span class="p">)</span>  <span class="no">SELECT</span> <span class="no">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="no">FROM</span> <span class="s2">"actors"</span>
+<span class="o">=&gt;</span> <span class="mi">9211</span>
+<span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span> <span class="no">Actor</span><span class="p">.</span><span class="nf">all</span><span class="p">.</span><span class="nf">empty?</span>
+   <span class="p">(</span><span class="mf">3.6</span><span class="n">ms</span><span class="p">)</span>  <span class="no">SELECT</span> <span class="no">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="no">FROM</span> <span class="s2">"actors"</span>
+<span class="o">=&gt;</span> <span class="kp">false</span>
+<span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span> <span class="no">Actor</span><span class="p">.</span><span class="nf">any?</span>
+   <span class="p">(</span><span class="mf">3.3</span><span class="n">ms</span><span class="p">)</span>  <span class="no">SELECT</span> <span class="no">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="no">FROM</span> <span class="s2">"actors"</span>
+<span class="o">=&gt;</span> <span class="kp">true</span>
+<span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span> <span class="no">Actor</span><span class="p">.</span><span class="nf">many?</span>
+   <span class="p">(</span><span class="mf">3.1</span><span class="n">ms</span><span class="p">)</span>  <span class="no">SELECT</span> <span class="no">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="no">FROM</span> <span class="s2">"actors"</span>
+<span class="o">=&gt;</span> <span class="kp">true</span>
+<span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span> <span class="no">Actor</span><span class="p">.</span><span class="nf">all</span><span class="p">.</span><span class="nf">limit</span><span class="p">(</span><span class="mi">1</span><span class="p">).</span><span class="nf">count</span>
+   <span class="p">(</span><span class="mf">0.8</span><span class="n">ms</span><span class="p">)</span>  <span class="no">SELECT</span> <span class="no">COUNT</span><span class="p">(</span><span class="n">count_column</span><span class="p">)</span> <span class="no">FROM</span> <span class="p">(</span><span class="no">SELECT</span>  <span class="mi">1</span> <span class="no">AS</span> <span class="n">count_column</span> <span class="no">FROM</span> <span class="s2">"actors"</span> <span class="no">LIMIT</span> <span class="vg">$1</span><span class="p">)</span> <span class="n">subquery_for_count</span>  <span class="p">[[</span><span class="s2">"LIMIT"</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+<span class="o">=&gt;</span> <span class="mi">1</span>
+<span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span> <span class="no">Actor</span><span class="p">.</span><span class="nf">all</span><span class="p">.</span><span class="nf">limit</span><span class="p">(</span><span class="mi">2</span><span class="p">).</span><span class="nf">count</span>
+   <span class="p">(</span><span class="mf">0.9</span><span class="n">ms</span><span class="p">)</span>  <span class="no">SELECT</span> <span class="no">COUNT</span><span class="p">(</span><span class="n">count_column</span><span class="p">)</span> <span class="no">FROM</span> <span class="p">(</span><span class="no">SELECT</span>  <span class="mi">1</span> <span class="no">AS</span> <span class="n">count_column</span> <span class="no">FROM</span> <span class="s2">"actors"</span> <span class="no">LIMIT</span> <span class="vg">$1</span><span class="p">)</span> <span class="n">subquery_for_count</span>  <span class="p">[[</span><span class="s2">"LIMIT"</span><span class="p">,</span> <span class="mi">2</span><span class="p">]]</span>
+<span class="o">=&gt;</span> <span class="mi">2</span>
+
+</code></pre></div></div>
+
+<p>And a simple benchmark:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="no">Benchmark</span><span class="p">.</span><span class="nf">ips</span> <span class="k">do</span> <span class="o">|</span><span class="n">x</span><span class="o">|</span>
+  <span class="n">x</span><span class="p">.</span><span class="nf">report</span><span class="p">(</span><span class="s2">"any?"</span><span class="p">)</span> <span class="p">{</span> <span class="no">Actor</span><span class="p">.</span><span class="nf">any?</span> <span class="p">}</span>
+  <span class="n">x</span><span class="p">.</span><span class="nf">report</span><span class="p">(</span><span class="s2">"limit(1)"</span><span class="p">)</span> <span class="p">{</span> <span class="no">Actor</span><span class="p">.</span><span class="nf">limit</span><span class="p">(</span><span class="mi">1</span><span class="p">).</span><span class="nf">count</span> <span class="p">}</span>
+  <span class="n">x</span><span class="p">.</span><span class="nf">compare!</span>
+<span class="k">end</span>
+
+<span class="no">Comparison</span><span class="p">:</span>
+  <span class="n">limit</span><span class="p">(</span><span class="mi">1</span><span class="p">):</span>     <span class="mf">1213.5</span> <span class="n">i</span><span class="o">/</span><span class="n">s</span>
+      <span class="ss">any?:      </span><span class="mf">597.1</span> <span class="n">i</span><span class="o">/</span><span class="n">s</span> <span class="o">-</span> <span class="mf">2.03</span><span class="n">x</span>  <span class="n">slower</span>
+</code></pre></div></div>
+
+<p>As we can see,
+only with a table of 9.000 rows the difference is noticeable.
+With 100.000.000 rows the difference will be huge.</p>
+
+<p>If someone knows the reason,
+please leave a comment about this.
+Thank you.</p>
+
+<h4 id="exists-method-is-good-updated">Exists? method is good (Updated)</h4>
+
+<p>KD made a comment to add that the method <code class="language-plaintext highlighter-rouge">exists?</code> works as expected.</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="mf">2.2</span><span class="o">.</span><span class="mi">4</span> <span class="p">:</span><span class="mo">007</span> <span class="o">&gt;</span><span class="no">User</span><span class="p">.</span><span class="nf">exists?</span>
+<span class="no">User</span> <span class="no">Exists</span> <span class="p">(</span><span class="mf">3.0</span><span class="n">ms</span><span class="p">)</span> <span class="no">SELECT</span> <span class="mi">1</span> <span class="no">AS</span> <span class="n">one</span> <span class="no">FROM</span> <span class="s2">"users"</span> <span class="no">LIMIT</span> <span class="mi">1</span>
+<span class="o">=&gt;</span> <span class="kp">true</span>
+</code></pre></div></div>
+
+<p>It uses the <code class="language-plaintext highlighter-rouge">limit 1</code>, so it is efficient.
+Nevertheless, this method won’t help us
+when we want to know if there are 2, 3, 4 or more rows in the database.</p>
+
+<h2 id="from-wave-particle-duality-to-relation-array-duality-on-rails">From wave-particle duality to relation-array duality on Rails</h2>
+
+<p>A <code class="language-plaintext highlighter-rouge">has_many</code> association in Ruby on Rails is not an array:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">actor</span><span class="p">.</span><span class="nf">movies</span><span class="p">.</span><span class="nf">class</span>
+<span class="o">=&gt;</span> <span class="no">Movies</span><span class="o">::</span><span class="no">ActiveRecord_Associations_CollectionProxy</span>
+</code></pre></div></div>
+
+<p>But it can behave like one:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span> <span class="no">Array</span><span class="p">.</span><span class="nf">wrap</span><span class="p">(</span><span class="n">actor</span><span class="p">.</span><span class="nf">movies</span><span class="p">)</span>
+<span class="o">=&gt;</span> <span class="p">[</span><span class="c1">#&lt;Movie:0x00000004a77660...</span>
+</code></pre></div></div>
+
+<p>The <code class="language-plaintext highlighter-rouge">ActiveRecord_Associations_CollectionProxy</code> is a subclass of <code class="language-plaintext highlighter-rouge">ActiveRecord::Relation</code>
+(<a href="https://github.com/rails/rails/blob/b73e1c49e170f255daf0150b12234300725e782f/activerecord/lib/active_record/associations/collection_proxy.rb#L30" rel="nofollow">see the code on Github</a>).</p>
+
+<p><code class="language-plaintext highlighter-rouge">ActiveRecord::Relation</code> is like a query proxy object
+and it allows us to create pretty queries:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="no">User</span><span class="p">.</span><span class="nf">where</span><span class="p">(</span><span class="ss">surname: </span><span class="s1">'Stallman'</span><span class="p">)</span> <span class="c1"># this returns an ActiveRecord::Relation</span>
+<span class="no">User</span><span class="p">.</span><span class="nf">where</span><span class="p">(</span><span class="ss">surname: </span><span class="s1">'Stallman'</span><span class="p">).</span><span class="nf">where</span><span class="p">(</span><span class="ss">name: </span><span class="s1">'Richard'</span><span class="p">)</span> <span class="c1"># and this one too</span>
+</code></pre></div></div>
+
+<p>And the <code class="language-plaintext highlighter-rouge">ActiveRecord::Relation</code> class includes the module <code class="language-plaintext highlighter-rouge">Enumerable</code>
+(<a href="https://github.com/rails/rails/blob/ff0395721d79ebff18ce4c3c23dade9196dfaa87/activerecord/lib/active_record/relation.rb#L15" rel="nofollow">see the code on Github</a>).</p>
+
+<blockquote>
+  <p>It’s an array, it’s a relation, it’s RAILS!</p>
+</blockquote>
+
+<p>So there are methods in the <code class="language-plaintext highlighter-rouge">ActiveRecord_Associations_CollectionProxy</code>
+that work like a SQL query
+and others work like an array.
+It is really important to see the difference
+and take advantage of it when it is possible.</p>
+
+<p>Let’s see some examples.</p>
+
+<h3 id="when-once-is-better-than-twice">When once is better than twice</h3>
+
+<p>Imagine we want to print two movie lists,
+one with the published movies and another with the unpublished movies.
+If we do:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">puts</span> <span class="s2">"Published movies"</span>
+<span class="c1"># First query</span>
+<span class="n">director</span><span class="p">.</span><span class="nf">movies</span><span class="p">.</span><span class="nf">where</span><span class="p">(</span><span class="ss">published: </span><span class="kp">true</span><span class="p">).</span><span class="nf">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">movie</span><span class="o">|</span>
+  <span class="nb">puts</span> <span class="n">movie</span><span class="p">.</span><span class="nf">name</span>
+<span class="k">end</span>
+
+<span class="nb">puts</span> <span class="s2">"Unpublished movies"</span>
+<span class="c1"># Second query</span>
+<span class="n">director</span><span class="p">.</span><span class="nf">movies</span><span class="p">.</span><span class="nf">where</span><span class="p">(</span><span class="ss">published: </span><span class="kp">false</span><span class="p">).</span><span class="nf">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">movie</span><span class="o">|</span>
+  <span class="nb">puts</span> <span class="n">movie</span><span class="p">.</span><span class="nf">name</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<p>We are doing two queries,
+but we are loading all the movies for this director anyway.
+It has better performance if we just load all movies at once
+and then we use them like an array:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># This is an array now</span>
+<span class="n">movies</span> <span class="o">=</span> <span class="n">director</span><span class="p">.</span><span class="nf">movies</span><span class="p">.</span><span class="nf">to_a</span>
+
+<span class="nb">puts</span> <span class="s2">"Published movies"</span>
+<span class="n">movies</span><span class="p">.</span><span class="nf">select</span> <span class="p">{</span> <span class="o">|</span><span class="n">m</span><span class="o">|</span> <span class="n">m</span><span class="p">.</span><span class="nf">published</span> <span class="p">}.</span><span class="nf">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">movie</span><span class="o">|</span>
+  <span class="nb">puts</span> <span class="n">movie</span><span class="p">.</span><span class="nf">name</span>
+<span class="k">end</span>
+
+<span class="nb">puts</span> <span class="s2">"Unpublished movies"</span>
+<span class="n">movies</span><span class="p">.</span><span class="nf">reject</span> <span class="p">{</span> <span class="o">|</span><span class="n">m</span><span class="o">|</span> <span class="n">m</span><span class="p">.</span><span class="nf">published</span> <span class="p">}.</span><span class="nf">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">movie</span><span class="o">|</span>
+  <span class="nb">puts</span> <span class="n">movie</span><span class="p">.</span><span class="nf">name</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<p>There are several situations
+where doing a <em>select</em> in plain ruby
+is faster than doing it in the SQL server.
+This isn’t a general rule,
+we should considerate each case independently.
+For example,
+if we are not showing all the models,
+we are paginating them,
+to do the <em>select</em> in plain ruby is slower
+because we are requesting and instantiating unused models.</p>
+
+<h3 id="where-is-my-movie">Where is my movie??</h3>
+
+<p>Does this code surprise you?</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">director</span><span class="p">.</span><span class="nf">movies</span><span class="p">.</span><span class="nf">build</span><span class="p">(</span><span class="ss">name: </span><span class="s2">"Gone with the Rails"</span><span class="p">)</span>
+<span class="o">=&gt;</span> <span class="c1">#&lt;Movie:0x00000007be57b0</span>
+ <span class="ss">id: </span><span class="kp">nil</span><span class="p">,</span>
+ <span class="ss">name: </span><span class="s2">"Gone with the Rails"</span><span class="o">&gt;</span>
+
+<span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">director</span><span class="p">.</span><span class="nf">movies</span><span class="p">.</span><span class="nf">size</span>
+<span class="o">=&gt;</span> <span class="mi">1</span>
+
+<span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">director</span><span class="p">.</span><span class="nf">movies</span><span class="p">.</span><span class="nf">count</span>
+   <span class="p">(</span><span class="mf">1.4</span><span class="n">ms</span><span class="p">)</span>  <span class="no">SELECT</span> <span class="no">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="no">FROM</span> <span class="s2">"movies"</span> <span class="no">WHERE</span> <span class="s2">"movies"</span><span class="o">.</span><span class="s2">"director_id"</span> <span class="o">=</span> <span class="vg">$1</span>  <span class="p">[[</span><span class="s2">"director_id"</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+<span class="o">=&gt;</span> <span class="mi">0</span>
+</code></pre></div></div>
+
+<p>It is the array-relation duality in action again!
+First of all, we create a movie associated with the director;
+but this model is not saved in the database
+because we used the <code class="language-plaintext highlighter-rouge">build</code> method instead of the <code class="language-plaintext highlighter-rouge">create</code> method.</p>
+
+<p>The method <code class="language-plaintext highlighter-rouge">ActiveRecord::Relation#size</code> is the <em>“array method”</em>
+and the <code class="language-plaintext highlighter-rouge">ActiveRecord::Relation#count</code> is the <em>“relation/SQL method”</em>.
+The <code class="language-plaintext highlighter-rouge">count</code> method will always perform a query.
+Our new movie is not in the database so it is impossible to be counted.</p>
+
+<p>On the other hand,
+<code class="language-plaintext highlighter-rouge">size</code> is taking care of the models in memory (in the array),
+and it will make the query only if it is really needed.</p>
+
+<p>This is not the only case, though,
+it can also happen in a very different situation:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">director</span><span class="p">.</span><span class="nf">movies</span><span class="p">.</span><span class="nf">build</span><span class="p">(</span><span class="ss">name: </span><span class="s2">"Gone with the Rails"</span><span class="p">)</span>
+<span class="o">=&gt;</span> <span class="c1">#&lt;Movie:0x00000007be57b0</span>
+ <span class="ss">id: </span><span class="kp">nil</span><span class="p">,</span>
+ <span class="ss">name: </span><span class="s2">"Gone with the Rails"</span><span class="o">&gt;</span>
+
+<span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">director</span><span class="p">.</span><span class="nf">movies</span><span class="p">.</span><span class="nf">where</span><span class="p">(</span><span class="ss">name: </span><span class="s2">"Gone with the Rails"</span><span class="p">).</span><span class="nf">first</span>
+  <span class="no">Movie</span> <span class="no">Load</span> <span class="p">(</span><span class="mf">1.1</span><span class="n">ms</span><span class="p">)</span>  <span class="no">SELECT</span>  <span class="s2">"movies"</span><span class="p">.</span><span class="nf">*</span> <span class="no">FROM</span> <span class="s2">"movies"</span> <span class="no">WHERE</span> <span class="s2">"movies"</span><span class="o">.</span><span class="s2">"director_id"</span> <span class="o">=</span> <span class="vg">$1</span> <span class="no">AND</span> <span class="s2">"movies"</span><span class="o">.</span><span class="s2">"name"</span> <span class="o">=</span> <span class="vg">$2</span> <span class="no">ORDER</span> <span class="no">BY</span> <span class="s2">"movies"</span><span class="o">.</span><span class="s2">"id"</span> <span class="no">ASC</span> <span class="no">LIMIT</span> <span class="vg">$3</span>  <span class="p">[[</span><span class="s2">"director_id"</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="s2">"name"</span><span class="p">,</span> <span class="s2">"Gone with the Rails"</span><span class="p">],</span> <span class="p">[</span><span class="s2">"LIMIT"</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+<span class="o">=&gt;</span> <span class="kp">nil</span>
+
+<span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">director</span><span class="p">.</span><span class="nf">movies</span><span class="p">.</span><span class="nf">select</span> <span class="p">{</span> <span class="o">|</span><span class="n">m</span><span class="o">|</span> <span class="n">m</span><span class="p">.</span><span class="nf">name</span> <span class="o">==</span> <span class="s2">"Gone with the Rails"</span> <span class="p">}.</span><span class="nf">first</span>
+  <span class="no">Movie</span> <span class="no">Load</span> <span class="p">(</span><span class="mf">1.0</span><span class="n">ms</span><span class="p">)</span>  <span class="no">SELECT</span> <span class="s2">"movies"</span><span class="p">.</span><span class="nf">*</span> <span class="no">FROM</span> <span class="s2">"movies"</span> <span class="no">WHERE</span> <span class="s2">"movies"</span><span class="o">.</span><span class="s2">"director_id"</span> <span class="o">=</span> <span class="vg">$1</span>  <span class="p">[[</span><span class="s2">"director_id"</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+<span class="o">=&gt;</span> <span class="c1">#&lt;Movie:0x00000007be57b0</span>
+ <span class="ss">id: </span><span class="kp">nil</span><span class="p">,</span>
+ <span class="ss">name: </span><span class="s2">"Gone with the Rails"</span><span class="o">&gt;</span>
+</code></pre></div></div>
+
+<p>Again, the <code class="language-plaintext highlighter-rouge">where</code> method just performs the query
+and the <code class="language-plaintext highlighter-rouge">select</code> method uses in memory models as well.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<figure class="">
+  <img src="/assets/images/hidden_cat.jpg" alt="Hidden cat">
+  
+    <figcaption>
+      So nice as the invisible queries in Rails
+
+    </figcaption>
+  
+</figure>
+
+<p>At the end, this is not a critic to Ruby on Rails.
+It is an awesome technology that I love,
+and beginners have the opportunity to learn it fast.
+As we learn we have to take into account this kind of peculiarities, though.</p>
+
+<p>Specially if your application,
+with thousands of active users,
+is down because a query is really really slow;
+and the problem is this harmless line:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="n">notes</span><span class="p">.</span><span class="nf">count</span> <span class="o">&gt;</span> <span class="mi">0</span>
+</code></pre></div></div>
+
+<p>Oh my …! Believe me! You learn faster! <strong>True story.</strong></p>
+
+<p>So be aware of those issues and use it to your advantages to improve as programmer!
+And RTFM! <img class="emoji" title=":wink:" alt=":wink:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f609.png" height="20" width="20"></p>
+
+<p>What about you? What unexpected behaviour did you find developing your app?
+Do you find bad performance issues due to invisible queries?</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="/tags/ruby-on-rails" class="page__taxonomy-item" rel="tag">ruby on rails</a><span class="sep">, </span>
+    
+      
+      
+      <a href="/tags/ruby" class="page__taxonomy-item" rel="tag">ruby</a>
+    
+    </span>
+  </p>
+
+
+
+
+        
+          <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Updated:</strong> <time datetime="2017-05-13">May 13, 2017</time></p>
+        
+      </footer>
+
+      <section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?via=alexcasdev&amp;text=The+hidden+cost+of+the+invisible+queries+in+Rails%20https%3A%2F%2Falexcastano.com%2Fthe-hidden-cost-of-the-invisible-queries-in-rails%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Falexcastano.com%2Fthe-hidden-cost-of-the-invisible-queries-in-rails%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A%2F%2Falexcastano.com%2Fthe-hidden-cost-of-the-invisible-queries-in-rails%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/generate-unique-usernames-for-ruby-on-rails/" class="pagination--pager" title="Username generation in Ruby on Rails
+">Previous</a>
+    
+    
+      <a href="/everything-about-ruby-splats/" class="pagination--pager" title="Everything you should know about Ruby Splats
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">Leave a Comment</h4>
+      <section id="disqus_thread"></section>
+    
+</div>
+
+    
+  </article>
+
+  
+
+  
+  
+    
+    
+        
+    
+        
+    
+    
+  
+    
+    
+        
+    
+        
+    
+    
+  
+    
+    
+        
+    
+        
+    
+    
+  
+    
+    
+        
+    
+        
+          
+            <div class="page__related">
+              
+                <h4 class="page__related-title">You May Also Enjoy</h4>
+              
+              <div class="grid__wrapper">
+          
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/assets/images/splat_bazinga.jpg" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/everything-about-ruby-splats/" rel="permalink">Everything you should know about Ruby Splats
+</a>
+      
+    </h2>
+    
+
+
+    <p class="archive__item-excerpt" itemprop="description">I’m working on a new project playing with new kids in town:
+Rails 5.1, Webpack(er), Bootstrap 4, React, etc.
+I was working with forms when I realized
+that Bo...</p>
+  </article>
+</div>
+
+          
+          
+    
+  
+    
+    
+        
+          
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/assets/images/hidden_cat.jpg" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/the-hidden-cost-of-the-invisible-queries-in-rails/" rel="permalink">The hidden cost of the invisible queries in Rails
+</a>
+      
+    </h2>
+    
+
+
+    <p class="archive__item-excerpt" itemprop="description">Ruby on Rails is awesome,
+it is really awesome.
+It allows us to create web applications without knowing every involved technology.
+After all,
+Rails is optimi...</p>
+  </article>
+</div>
+
+          
+          
+    
+  
+    
+    
+        
+          
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/assets/images/name_label.jpg" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/generate-unique-usernames-for-ruby-on-rails/" rel="permalink">Username generation in Ruby on Rails
+</a>
+      
+    </h2>
+    
+
+
+    <p class="archive__item-excerpt" itemprop="description">Today we are going to create a unique username automatically
+using the user’s full name in a typical Ruby on Rails application, i.e.,
+</p>
+  </article>
+</div>
+
+          
+          
+    
+  
+    
+    
+        
+    
+        
+    
+    
+  
+    
+    
+        
+    
+        
+    
+    
+  
+    
+    
+        
+    
+        
+    
+    
+  
+  
+      </div>
+    </div>
+  
+
+
+
+</div>
+
+    </div>
+
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        
+  <img src="https://data.alexcastano.com/img.gif" alt="img">
+
+
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+
+    
+
+    <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">© 2020 Alex Castaño. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+
+
+
+  <script>
+  window.ga=function(){ga.q.push(arguments)};ga.q=[];ga.l=+new Date;
+  ga('create','UA-65462222-1','auto');
+  ga('set', 'anonymizeIp', false);
+  ga('send','pageview')
+</script>
+<script src="https://www.google-analytics.com/analytics.js" async></script>
+
+
+
+
+
+
+    
+  <script>
+    var disqus_config = function () {
+      this.page.url = "https://alexcastano.com/the-hidden-cost-of-the-invisible-queries-in-rails/";  /* Replace PAGE_URL with your page's canonical URL variable */
+      this.page.identifier = "/the-hidden-cost-of-the-invisible-queries-in-rails"; /* Replace PAGE_IDENTIFIER with your page's unique identifier variable */
+    };
+    (function() { /* DON'T EDIT BELOW THIS LINE */
+      var d = document, s = d.createElement('script');
+      s.src = 'https://alexcastano.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+</noscript>
+
+
+  
+
+
+
+
+
+  </body>
+</html>

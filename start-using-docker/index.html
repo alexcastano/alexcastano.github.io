@@ -1,0 +1,633 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.20.1 by Michael Rose
+  Copyright 2013-2019 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Start using Docker | Alex Castaño</title>
+<meta name="description" content="Docker can be an overwhelming technology at the beginning. However we don’t need to use it in every piece of our developments, even less when we are learning it. We can start using slowly.">
+
+
+  <meta name="author" content="Alex Castaño">
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en">
+<meta property="og:site_name" content="Alex Castaño">
+<meta property="og:title" content="Start using Docker">
+<meta property="og:url" content="https://alexcastano.com/start-using-docker/">
+
+
+  <meta property="og:description" content="Docker can be an overwhelming technology at the beginning. However we don’t need to use it in every piece of our developments, even less when we are learning it. We can start using slowly.">
+
+
+
+  <meta property="og:image" content="https://alexcastano.com/assets/images/bio-photo.jpg">
+
+
+
+  <meta name="twitter:site" content="@alexcasdev">
+  <meta name="twitter:title" content="Start using Docker">
+  <meta name="twitter:description" content="Docker can be an overwhelming technology at the beginning. However we don’t need to use it in every piece of our developments, even less when we are learning it. We can start using slowly.">
+  <meta name="twitter:url" content="https://alexcastano.com/start-using-docker/">
+
+  
+    <meta name="twitter:card" content="summary">
+    
+      <meta name="twitter:image" content="https://alexcastano.com/assets/images/bio-photo.jpg">
+    
+  
+
+  
+    <meta name="twitter:creator" content="@alexcasdev">
+  
+
+
+
+  <meta property="article:published_time" content="2017-01-23T00:00:00+01:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="https://alexcastano.com/start-using-docker/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "Alex Castaño",
+      "url": "https://alexcastano.com/",
+      "sameAs": ["https://twitter.com/alexcasdev","https://www.linkedin.com/in/alexcastano"]
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Alex Castaño Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css">
+
+<!--[if IE]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+
+    
+
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-touch-icon.png?v=1">
+<link rel="icon" type="image/png" href="/assets/images/favicons/favicon-32x32.png?v=1" sizes="32x32">
+<link rel="icon" type="image/png" href="/assets/images/favicons/favicon-16x16.png?v=1" sizes="16x16">
+<link rel="manifest" href="/assets/images/favicons/manifest.json?v=1">
+<link rel="mask-icon" href="/assets/images/favicons/safari-pinned-tab.svg?v=1" color="#00848a">
+<link rel="shortcut icon" type="image/x-icon" href="/assets/images/favicons/favicon.ico?v=1">
+<link rel="icon" href="/assets/images/favicons/favicon.ico?v=1">
+<meta name="apple-mobile-web-app-title" content="Alex Castaño">
+<meta name="application-name" content="Alex Castaño">
+<meta name="msapplication-config" content="/assets/images/favicons/browserconfig.xml?v=1">
+<meta name="theme-color" content="#000000">
+
+  </head>
+
+  <body class="layout--single">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          Alex Castaño
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/about/">About</a>
+            </li></ul>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="/assets/images/bio-photo.jpg" alt="Alex Castaño" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">Alex Castaño</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>Elixir developer</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="https://schema.org/Place">
+          <i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i> <span itemprop="name">Andorra</span>
+        </li>
+      
+
+      
+
+      
+
+      
+        <li>
+          <a href="mailto:alexcastanodev@gmail.com">
+            <meta itemprop="email" content="alexcastanodev@gmail.com" />
+            <i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i><span class="label">Email</span>
+          </a>
+        </li>
+      
+
+      
+
+      
+        <li>
+          <a href="https://twitter.com/alexcasdev" itemprop="sameAs" rel="nofollow noopener noreferrer">
+            <i class="fab fa-fw fa-twitter-square" aria-hidden="true"></i><span class="label">Twitter</span>
+          </a>
+        </li>
+      
+
+      
+
+      
+        <li>
+          <a href="https://www.linkedin.com/in/alexcastano" itemprop="sameAs" rel="nofollow noopener noreferrer">
+            <i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">LinkedIn</span>
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+        <li>
+          <a href="https://github.com/alexcastano" itemprop="sameAs" rel="nofollow noopener noreferrer">
+            <i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span>
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="http://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Start using Docker">
+    <meta itemprop="description" content="Docker can be an overwhelming technology at the beginning.However we don’t need to use it in every piece of our developments,even less when we are learning it.We can start using slowly.">
+    <meta itemprop="datePublished" content="January 23, 2017">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 class="page__title" itemprop="headline">Start using Docker
+</h1>
+          
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        <p>Docker can be an overwhelming technology at the beginning.
+However we don’t need to use it in every piece of our developments,
+even less when we are learning it.
+We can start using slowly.</p>
+
+<p><img src="/assets/images/docker.svg" alt="Docker" class="align-center" /></p>
+
+<h2 id="use-docker-for-databases-in-a-development-environment">Use docker for databases in a development environment</h2>
+
+<p>I think a good first step to start using it can be like a database for development purpose.
+If we have installed a Postgres, MySQL or MongoDB service on our development machine,
+usually, the information we are storing there is for testing and not important at all.
+In those cases, we can virtualize those services inside a docker instance without fear.</p>
+
+<p>Moreover, we will have several advantages:</p>
+
+<ul>
+  <li>We can have multiple versions running at the same time without conflicts</li>
+  <li>We can use the production version without depending on your distribution packages</li>
+  <li>We can stop using them with just a command, reducing memory when need it</li>
+  <li>We can learn more things about docker in the process</li>
+</ul>
+
+<h2 id="dockerizing-a-postgres-database">Dockerizing a Postgres Database</h2>
+
+<h3 id="previous-steps">Previous steps</h3>
+
+<p>Before going on, remember to uninstall your current database if you have already installed:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># pacman -Rns postgres
+</code></pre></div></div>
+
+<p>And of course, install <a href="https://wiki.archlinux.org/index.php/Docker">docker</a>.
+Pay special attention to the <code class="language-plaintext highlighter-rouge">docker</code> group and remember to log out correctly of your current session.</p>
+
+<h3 id="running-postgres-in-a-docker-container">Running Postgres in a Docker container</h3>
+
+<p>A simple way to start could be:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>docker run <span class="nt">--restart</span><span class="o">=</span>unless-stopped <span class="nt">--name</span> postgres <span class="nt">-p</span> 5432:5432 <span class="nt">-d</span> postgres:latest
+</code></pre></div></div>
+
+<p>Let’s explain the command bit by bit:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">docker</code> the main program</li>
+  <li><code class="language-plaintext highlighter-rouge">run</code> is a subcommand defined in docker. It allows us to run a command in a new container</li>
+  <li><code class="language-plaintext highlighter-rouge">--restart=unless-stopped</code> in case the container died for any reason, this will reboot the docker container.
+It also works to start the container automatically when computer boots</li>
+  <li><code class="language-plaintext highlighter-rouge">--name postgres</code> a label to identify the container in an easy way, in this case, we called <em>postgres</em></li>
+  <li><code class="language-plaintext highlighter-rouge">-p 5432:5432</code> exposes the port of <code class="language-plaintext highlighter-rouge">5432</code> of the container like <code class="language-plaintext highlighter-rouge">5432</code> in our real computer. This port is the default <em>postgres</em> port</li>
+  <li><code class="language-plaintext highlighter-rouge">-d</code> sends the process to the background</li>
+  <li><code class="language-plaintext highlighter-rouge">postgres:latest</code> is the image we are going to execute. In this case is the <a href="https://hub.docker.com/_/postgres/">official postgres image</a>.
+It is ready to execute the database automatically.
+<em>latest</em> is to use the last version available, but we could use other options like <em>9.6</em>, <em>9.5</em> or even more specific <em>9.5.2</em>.</li>
+</ul>
+
+<p>And now we have an postgres running as docker container. To see the docker currently running we can use:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ docker ps
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                    NAMES
+462b1bae2bf8        postgres            "/docker-entrypoint.s"   4 weeks ago         Up 2 days           0.0.0.0:5432-&gt;5432/tcp   postgres
+</code></pre></div></div>
+
+<p>If for any reason we want to stop it:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ docker stop postgres
+</code></pre></div></div>
+
+<p>And to remove definitely we will use:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ docker rm postgres
+</code></pre></div></div>
+
+<h2 id="connecting-to-the-database">Connecting to the database</h2>
+
+<p>You can now connect to the database. The default credentials are:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>host: localhost
+user: postgres
+password: (empty)
+</code></pre></div></div>
+
+<p>You can modify those values. More information in the <a href="https://hub.docker.com/_/postgres/">official postgres image</a>.
+Remember to change those values in your development projects. In <code class="language-plaintext highlighter-rouge">Ruby on Rails</code> would be something like this:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># File config/database.yml</span>
+<span class="na">development</span><span class="pi">:</span>
+  <span class="na">adapter</span><span class="pi">:</span>  <span class="s">postgresql</span>
+  <span class="na">host</span><span class="pi">:</span>     <span class="s">localhost</span>
+  <span class="na">encoding</span><span class="pi">:</span> <span class="s">unicode</span>
+  <span class="na">database</span><span class="pi">:</span> <span class="s">project_development</span>
+  <span class="na">pool</span><span class="pi">:</span>     <span class="m">5</span>
+  <span class="na">username</span><span class="pi">:</span> <span class="s">postgres</span>
+  <span class="na">password</span><span class="pi">:</span>
+  <span class="na">template</span><span class="pi">:</span> <span class="s">template0</span>
+
+</code></pre></div></div>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>This is it, this is the very minimum to start with docker.
+It exists a long way before mastering this awesome technology:
+docker-compose, production environment, interconnection, etc.
+However, we can benefit from minute one, just learning the basics.</p>
+
+<p>And do you use docker to virtualize your databases in development?</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="/tags/docker" class="page__taxonomy-item" rel="tag">docker</a>
+    
+    </span>
+  </p>
+
+
+
+
+        
+          <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Updated:</strong> <time datetime="2017-01-23T00:00:00+01:00">January 23, 2017</time></p>
+        
+      </footer>
+
+      <section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?via=alexcasdev&text=Start+using+Docker%20https%3A%2F%2Falexcastano.com%2Fstart-using-docker%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Falexcastano.com%2Fstart-using-docker%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Falexcastano.com%2Fstart-using-docker%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/hello-world/" class="pagination--pager" title="Hello World
+">Previous</a>
+    
+    
+      <a href="/github-pages-with-jekyll-plugins-and-themes/" class="pagination--pager" title="Github Pages with Jekyll Plugins and Theme
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">Leave a Comment</h4>
+      <section id="disqus_thread"></section>
+    
+</div>
+
+    
+  </article>
+
+  
+
+  
+  
+    
+    
+        
+    
+    
+  
+    
+    
+        
+    
+    
+  
+    
+    
+        
+    
+    
+  
+    
+    
+        
+    
+    
+  
+    
+    
+        
+    
+    
+  
+    
+    
+        
+    
+    
+  
+    
+    
+        
+    
+    
+  
+    
+    
+    
+        
+    
+    
+  
+  
+
+
+
+</div>
+
+    </div>
+
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        
+  <img src="https://data.alexcastano.com/img.gif" alt="img">
+
+
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+
+    
+
+    <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2020 Alex Castaño. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+
+
+
+  <script>
+  window.ga=function(){ga.q.push(arguments)};ga.q=[];ga.l=+new Date;
+  ga('create','UA-65462222-1','auto');
+  ga('set', 'anonymizeIp', false);
+  ga('send','pageview')
+</script>
+<script src="https://www.google-analytics.com/analytics.js" async></script>
+
+
+
+
+
+
+    
+  <script>
+    var disqus_config = function () {
+      this.page.url = "https://alexcastano.com/start-using-docker/";  /* Replace PAGE_URL with your page's canonical URL variable */
+      this.page.identifier = "/start-using-docker"; /* Replace PAGE_IDENTIFIER with your page's unique identifier variable */
+    };
+    (function() { /* DON'T EDIT BELOW THIS LINE */
+      var d = document, s = d.createElement('script');
+      s.src = 'https://alexcastano.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+  
+
+
+
+
+
+  </body>
+</html>

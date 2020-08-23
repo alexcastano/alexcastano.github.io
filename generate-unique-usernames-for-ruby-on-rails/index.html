@@ -1,0 +1,847 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.20.1 by Michael Rose
+  Copyright 2013-2019 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Username generation in Ruby on Rails | Alex Castaño</title>
+<meta name="description" content="Today we are going to create a unique username automatically using the user’s full name in a typical Ruby on Rails application, i.e.,">
+
+
+  <meta name="author" content="Alex Castaño">
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en">
+<meta property="og:site_name" content="Alex Castaño">
+<meta property="og:title" content="Username generation in Ruby on Rails">
+<meta property="og:url" content="https://alexcastano.com/generate-unique-usernames-for-ruby-on-rails/">
+
+
+  <meta property="og:description" content="Today we are going to create a unique username automatically using the user’s full name in a typical Ruby on Rails application, i.e.,">
+
+
+
+  <meta property="og:image" content="https://alexcastano.com/assets/images/name_label.jpg">
+
+
+
+  <meta name="twitter:site" content="@alexcasdev">
+  <meta name="twitter:title" content="Username generation in Ruby on Rails">
+  <meta name="twitter:description" content="Today we are going to create a unique username automatically using the user’s full name in a typical Ruby on Rails application, i.e.,">
+  <meta name="twitter:url" content="https://alexcastano.com/generate-unique-usernames-for-ruby-on-rails/">
+
+  
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://alexcastano.com/assets/images/name_label.jpg">
+  
+
+  
+    <meta name="twitter:creator" content="@alexcasdev">
+  
+
+
+
+  <meta property="article:published_time" content="2017-04-25T00:00:00+02:00">
+
+
+
+  <meta property="article:modified_time" content="2017-05-04T00:00:00+02:00">
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="https://alexcastano.com/generate-unique-usernames-for-ruby-on-rails/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "Alex Castaño",
+      "url": "https://alexcastano.com/",
+      "sameAs": ["https://twitter.com/alexcasdev","https://www.linkedin.com/in/alexcastano"]
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Alex Castaño Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css">
+
+<!--[if IE]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+
+    
+
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-touch-icon.png?v=1">
+<link rel="icon" type="image/png" href="/assets/images/favicons/favicon-32x32.png?v=1" sizes="32x32">
+<link rel="icon" type="image/png" href="/assets/images/favicons/favicon-16x16.png?v=1" sizes="16x16">
+<link rel="manifest" href="/assets/images/favicons/manifest.json?v=1">
+<link rel="mask-icon" href="/assets/images/favicons/safari-pinned-tab.svg?v=1" color="#00848a">
+<link rel="shortcut icon" type="image/x-icon" href="/assets/images/favicons/favicon.ico?v=1">
+<link rel="icon" href="/assets/images/favicons/favicon.ico?v=1">
+<meta name="apple-mobile-web-app-title" content="Alex Castaño">
+<meta name="application-name" content="Alex Castaño">
+<meta name="msapplication-config" content="/assets/images/favicons/browserconfig.xml?v=1">
+<meta name="theme-color" content="#000000">
+
+  </head>
+
+  <body class="layout--single">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          Alex Castaño
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/about/">About</a>
+            </li></ul>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+  
+
+
+
+
+
+
+
+<div class="page__hero--overlay"
+  style=" background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://alexcastano.com/assets/images/name_label.jpg');"
+>
+  
+    <div class="wrapper">
+      <h1 class="page__title" itemprop="headline">
+        
+          Username generation in Ruby on Rails
+
+        
+      </h1>
+      
+      
+    </div>
+  
+  
+    <span class="page__hero-caption">Photo credit: <a href="http://gratisography.com/" target="_blank&quot;, rel=&quot;nofollow"><strong>Ryan McGuire</strong></a>
+</span>
+  
+</div>
+
+
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="/assets/images/bio-photo.jpg" alt="Alex Castaño" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">Alex Castaño</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>Elixir developer</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="https://schema.org/Place">
+          <i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i> <span itemprop="name">Andorra</span>
+        </li>
+      
+
+      
+
+      
+
+      
+        <li>
+          <a href="mailto:alexcastanodev@gmail.com">
+            <meta itemprop="email" content="alexcastanodev@gmail.com" />
+            <i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i><span class="label">Email</span>
+          </a>
+        </li>
+      
+
+      
+
+      
+        <li>
+          <a href="https://twitter.com/alexcasdev" itemprop="sameAs" rel="nofollow noopener noreferrer">
+            <i class="fab fa-fw fa-twitter-square" aria-hidden="true"></i><span class="label">Twitter</span>
+          </a>
+        </li>
+      
+
+      
+
+      
+        <li>
+          <a href="https://www.linkedin.com/in/alexcastano" itemprop="sameAs" rel="nofollow noopener noreferrer">
+            <i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">LinkedIn</span>
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+        <li>
+          <a href="https://github.com/alexcastano" itemprop="sameAs" rel="nofollow noopener noreferrer">
+            <i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span>
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="http://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Username generation in Ruby on Rails">
+    <meta itemprop="description" content="Today we are going to create a unique username automaticallyusing the user’s full name in a typical Ruby on Rails application, i.e.,">
+    <meta itemprop="datePublished" content="April 25, 2017">
+    <meta itemprop="dateModified" content="May 04, 2017">
+
+    <div class="page__inner-wrap">
+      
+
+      <section class="page__content" itemprop="text">
+        <p>Today we are going to create a unique username automatically
+using the user’s full name in a typical Ruby on Rails application, i.e.,</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"Alex Castaño" =&gt; "alex_castano"
+</code></pre></div></div>
+
+<p>It can be very useful when creating a sign-up form,
+as we want it to be as simple as possible,
+like our <a href="https://deverify.com/register">Deverify register form</a>.</p>
+
+<p>We don’t want to bother our potential user with another field.
+Furthermore, it has to be unique in our database;
+it could be a pain for our user to find an available one.
+If the username is very visible in the application,
+we could give the user the ability to change it if he doesn’t like it.</p>
+
+<figure class="">
+  <img src="/assets/images/name_label.jpg" alt="names" />
+  
+</figure>
+
+<h2 id="the-username-conventions">The username conventions</h2>
+
+<p>Our username can only contain lower letters and underscores: <code class="language-plaintext highlighter-rouge">/[a-z_]+/</code>.
+We will use the full name given by the user to generate this username.
+However, the full name can contain capital letters, spaces, accents, etc.
+So our first step is to turn our full name in a valid username,
+keeping it as similar as possible:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="k">def</span> <span class="nf">generate_username</span><span class="p">(</span><span class="n">fullname</span><span class="p">)</span>
+    <span class="no">ActiveSupport</span><span class="o">::</span><span class="no">Inflector</span><span class="p">.</span><span class="nf">transliterate</span><span class="p">(</span><span class="n">fullname</span><span class="p">)</span> <span class="c1"># change ñ =&gt; n</span>
+      <span class="p">.</span><span class="nf">downcase</span>              <span class="c1"># only lower case</span>
+      <span class="p">.</span><span class="nf">strip</span>                 <span class="c1"># remove spaces around the string</span>
+      <span class="p">.</span><span class="nf">gsub</span><span class="p">(</span><span class="sr">/[^a-z]/</span><span class="p">,</span> <span class="s1">'_'</span><span class="p">)</span>   <span class="c1"># any character that is not a letter or a number will be _</span>
+      <span class="p">.</span><span class="nf">gsub</span><span class="p">(</span><span class="sr">/\A_+/</span><span class="p">,</span> <span class="s1">''</span><span class="p">)</span>      <span class="c1"># remove underscores at the beginning</span>
+      <span class="p">.</span><span class="nf">gsub</span><span class="p">(</span><span class="sr">/_+\Z/</span><span class="p">,</span> <span class="s1">''</span><span class="p">)</span>      <span class="c1"># remove underscores at the end</span>
+      <span class="p">.</span><span class="nf">gsub</span><span class="p">(</span><span class="sr">/_+/</span><span class="p">,</span> <span class="s1">'_'</span><span class="p">)</span>       <span class="c1"># maximum an underscore in a row</span>
+  <span class="k">end</span>
+</code></pre></div></div>
+
+<p>In addition to the rules above we added:</p>
+
+<ul>
+  <li>Avoid username which starts with or ends with an underscore.</li>
+  <li>We don’t want two underscores together; it can be confusing to type.</li>
+</ul>
+
+<p>As Julien says in the comments, we can simply use:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">fullname</span><span class="p">.</span><span class="nf">parameterize</span><span class="p">(</span><span class="ss">separator: </span><span class="s1">'_'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>And we’ll get the same result with less code!</p>
+
+<h2 id="avoid-username-duplications-in-the-database">Avoid username duplications in the database</h2>
+
+<p>The next step is to prevent duplications in the database.
+The best way to do this is <strong>adding a unique index in the username column</strong>,
+so we should do it if we haven’t already done it in a previous migration.
+It will also make our queries faster,
+and we need it to avoid concurrency problems that are explained later.</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">AddIndexToUsernameInUsers</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Migration</span><span class="p">[</span><span class="mf">5.0</span><span class="p">]</span>
+  <span class="k">def</span> <span class="nf">change</span>
+    <span class="n">add_index</span> <span class="ss">:users</span><span class="p">,</span> <span class="ss">:username</span><span class="p">,</span> <span class="ss">unique: </span><span class="kp">true</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<p>So what should it happen if the generated username,
+<code class="language-plaintext highlighter-rouge">john_doe</code>,
+is already in the database?
+With our solution, it should generate <code class="language-plaintext highlighter-rouge">john_doe_2</code>.
+But if this username is already taken too?
+Well, as you can imagine, the function should return <code class="language-plaintext highlighter-rouge">john_doe_3</code>.</p>
+
+<p>The code would be something like this:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="k">def</span> <span class="nf">find_unique_username</span><span class="p">(</span><span class="n">username</span><span class="p">)</span>
+    <span class="n">taken_usernames</span> <span class="o">=</span> <span class="no">User</span>
+      <span class="p">.</span><span class="nf">where</span><span class="p">(</span><span class="s2">"username LIKE ?"</span><span class="p">,</span> <span class="s2">"</span><span class="si">#{</span><span class="n">username</span><span class="si">}</span><span class="s2">%"</span><span class="p">)</span>
+      <span class="p">.</span><span class="nf">pluck</span><span class="p">(</span><span class="ss">:username</span><span class="p">)</span>
+
+    <span class="c1"># username if it's free</span>
+    <span class="k">return</span> <span class="n">username</span> <span class="k">if</span> <span class="o">!</span> <span class="n">taken_usernames</span><span class="p">.</span><span class="nf">include?</span><span class="p">(</span><span class="n">username</span><span class="p">)</span>
+
+    <span class="n">count</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="k">while</span> <span class="kp">true</span>
+      <span class="c1"># username_2, username_3...</span>
+      <span class="n">new_username</span> <span class="o">=</span> <span class="s2">"</span><span class="si">#{</span><span class="n">username</span><span class="si">}</span><span class="s2">_</span><span class="si">#{</span><span class="n">count</span><span class="si">}</span><span class="s2">"</span>
+      <span class="k">return</span> <span class="n">new_username</span> <span class="k">if</span> <span class="o">!</span> <span class="n">taken_usernames</span><span class="p">.</span><span class="nf">include?</span><span class="p">(</span><span class="n">new_username</span><span class="p">)</span>
+      <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+</code></pre></div></div>
+
+<p>The given username variable is the one we generated previously with generate_username.
+We will imagine that the value is <code class="language-plaintext highlighter-rouge">'john_doe'</code>.</p>
+
+<p>Here, it is important thing is to minimize the number of queries we make to our database.
+Instead of doing a query for each username,
+we will do only one query for all the current usernames that start with <code class="language-plaintext highlighter-rouge">'john_doe'</code>.
+The regexp is <code class="language-plaintext highlighter-rouge">/^john_doe.*/</code>, but in SQL, it is <code class="language-plaintext highlighter-rouge">john_doe%</code>.
+We use the <a href="http://api.rubyonrails.org/classes/ActiveRecord/Calculations.html#method-i-pluck">ActiveRecord method pluck</a>
+which is ideal for this situation.</p>
+
+<p>First, try to check if <code class="language-plaintext highlighter-rouge">john_doe</code> is taken.
+If it is not, we’ll return it.
+Otherwise, we iterate generating the usernames:</p>
+
+<ol>
+  <li><code class="language-plaintext highlighter-rouge">john_doe_2</code></li>
+  <li><code class="language-plaintext highlighter-rouge">john_doe_3</code></li>
+  <li><code class="language-plaintext highlighter-rouge">john_doe_4</code></li>
+</ol>
+
+<p>Until one is not taken.</p>
+
+<h2 id="avoid-concurrency-problems-with-unique-validation-in-rails">Avoid concurrency problems with unique validation in Rails</h2>
+
+<p>Finally, we have to deal with the concurrency problem.
+If two separate requests reach our servers, at the same time,
+with both the same name,
+one of them will fail (if we added the unique index).
+This problem is more common that you can think at first,
+and it should not be ignored!
+Especially as it is so easy to fix.</p>
+
+<p>There are a lot of pages <a href="https://robots.thoughtbot.com/the-perils-of-uniqueness-validations">talking about the problem of uniqueness validation</a>,
+so we know we should not use it.
+The SQL unique index is a more appropriate tool
+however Rails does not deal with it nicely.
+If the row already exists,
+Rails launches an exception we would have to capture.</p>
+
+<p>Fortunately, rescue unique constraint gem
+solves exactly this problem.
+Personally,
+I’d like a solution better integrated like <a href="https://hexdocs.pm/ecto/Ecto.Changeset.html#check_constraint/3">Phoenix/Ecto with <code class="language-plaintext highlighter-rouge">#check_constraint/3</code></a>,
+but Rails has its own personality.</p>
+
+<p>Anyway, it is a small gem with no dependencies,
+so you can add it directly
+or you can to “copy &amp; paste &amp; modify” its code in your project.</p>
+
+<p>Another difficulty is to differentiate between the same error in different fields:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">email</code> is taken: we should notify the user, probably he is already registered</li>
+  <li><code class="language-plaintext highlighter-rouge">username</code> is taken: we have to generate a new username again because a concurrent thread was faster</li>
+</ul>
+
+<p>For example:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="k">def</span> <span class="nf">create_user</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+    <span class="n">username</span> <span class="o">=</span> <span class="n">generate_username</span><span class="p">(</span><span class="n">params</span><span class="p">.</span><span class="nf">fetch</span><span class="p">(</span><span class="ss">:name</span><span class="p">))</span>
+    <span class="n">username</span> <span class="o">=</span> <span class="n">find_unique_username</span><span class="p">(</span><span class="n">username</span><span class="p">)</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="no">User</span><span class="p">.</span><span class="nf">create</span><span class="p">(</span><span class="n">params</span><span class="p">.</span><span class="nf">merge</span><span class="p">(</span><span class="ss">username: </span><span class="n">username</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">user</span><span class="p">.</span><span class="nf">errors</span><span class="p">.</span><span class="nf">details</span><span class="p">[</span><span class="ss">:username</span><span class="p">].</span><span class="nf">any?</span> <span class="p">{</span> <span class="o">|</span><span class="n">h</span><span class="o">|</span> <span class="n">h</span><span class="p">[</span><span class="ss">:error</span><span class="p">]</span> <span class="o">==</span> <span class="ss">:taken</span> <span class="p">}</span>
+      <span class="c1"># a faster thread took our username, try again!</span>
+      <span class="n">create_user</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+    <span class="k">else</span>
+      <span class="n">user</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+</code></pre></div></div>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>The code is not very long, and it does what is expected.
+We could integrate it in almost any Rails project.
+I recommend having all this user creation code in a <a href="http://blog.arkency.com/2016/10/the-esthetics-of-a-ruby-service-object/">service object</a>,
+or much better,
+considerate creating a <a href="https://robots.thoughtbot.com/activemodel-form-objects">form object</a>.</p>
+
+<p>However you do it,
+the most important is to simplify the life of our users.
+And this is our job, isn’t it?</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="/tags/ruby-on-rails" class="page__taxonomy-item" rel="tag">ruby on rails</a><span class="sep">, </span>
+    
+      
+      
+      <a href="/tags/ruby" class="page__taxonomy-item" rel="tag">ruby</a>
+    
+    </span>
+  </p>
+
+
+
+
+        
+          <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Updated:</strong> <time datetime="2017-05-04">May 04, 2017</time></p>
+        
+      </footer>
+
+      <section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?via=alexcasdev&text=Username+generation+in+Ruby+on+Rails%20https%3A%2F%2Falexcastano.com%2Fgenerate-unique-usernames-for-ruby-on-rails%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Falexcastano.com%2Fgenerate-unique-usernames-for-ruby-on-rails%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Falexcastano.com%2Fgenerate-unique-usernames-for-ruby-on-rails%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/github-pages-with-jekyll-plugins-and-themes/" class="pagination--pager" title="Github Pages with Jekyll Plugins and Theme
+">Previous</a>
+    
+    
+      <a href="/the-hidden-cost-of-the-invisible-queries-in-rails/" class="pagination--pager" title="The hidden cost of the invisible queries in Rails
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">Leave a Comment</h4>
+      <section id="disqus_thread"></section>
+    
+</div>
+
+    
+  </article>
+
+  
+
+  
+  
+    
+    
+        
+    
+        
+    
+    
+  
+    
+    
+        
+    
+        
+    
+    
+  
+    
+    
+        
+    
+        
+    
+    
+  
+    
+    
+        
+    
+        
+          
+            <div class="page__related">
+              
+                <h4 class="page__related-title">You May Also Enjoy</h4>
+              
+              <div class="grid__wrapper">
+          
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/assets/images/splat_bazinga.jpg" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/everything-about-ruby-splats/" rel="permalink">Everything you should know about Ruby Splats
+</a>
+      
+    </h2>
+    
+
+
+    <p class="archive__item-excerpt" itemprop="description">I’m working on a new project playing with new kids in town:
+Rails 5.1, Webpack(er), Bootstrap 4, React, etc.
+I was working with forms when I realized
+that Bo...</p>
+  </article>
+</div>
+
+          
+          
+    
+  
+    
+    
+        
+          
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/assets/images/hidden_cat.jpg" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/the-hidden-cost-of-the-invisible-queries-in-rails/" rel="permalink">The hidden cost of the invisible queries in Rails
+</a>
+      
+    </h2>
+    
+
+
+    <p class="archive__item-excerpt" itemprop="description">Ruby on Rails is awesome,
+it is really awesome.
+It allows us to create web applications without knowing every involved technology.
+After all,
+Rails is optimi...</p>
+  </article>
+</div>
+
+          
+          
+    
+  
+    
+    
+        
+          
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/assets/images/name_label.jpg" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/generate-unique-usernames-for-ruby-on-rails/" rel="permalink">Username generation in Ruby on Rails
+</a>
+      
+    </h2>
+    
+
+
+    <p class="archive__item-excerpt" itemprop="description">Today we are going to create a unique username automatically
+using the user’s full name in a typical Ruby on Rails application, i.e.,
+</p>
+  </article>
+</div>
+
+          
+          
+    
+  
+    
+    
+        
+    
+        
+    
+    
+  
+    
+    
+        
+    
+        
+    
+    
+  
+    
+    
+        
+    
+        
+    
+    
+  
+  
+      </div>
+    </div>
+  
+
+
+
+</div>
+
+    </div>
+
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        
+  <img src="https://data.alexcastano.com/img.gif" alt="img">
+
+
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+
+    
+
+    <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2020 Alex Castaño. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+
+
+
+  <script>
+  window.ga=function(){ga.q.push(arguments)};ga.q=[];ga.l=+new Date;
+  ga('create','UA-65462222-1','auto');
+  ga('set', 'anonymizeIp', false);
+  ga('send','pageview')
+</script>
+<script src="https://www.google-analytics.com/analytics.js" async></script>
+
+
+
+
+
+
+    
+  <script>
+    var disqus_config = function () {
+      this.page.url = "https://alexcastano.com/generate-unique-usernames-for-ruby-on-rails/";  /* Replace PAGE_URL with your page's canonical URL variable */
+      this.page.identifier = "/generate-unique-usernames-for-ruby-on-rails"; /* Replace PAGE_IDENTIFIER with your page's unique identifier variable */
+    };
+    (function() { /* DON'T EDIT BELOW THIS LINE */
+      var d = document, s = d.createElement('script');
+      s.src = 'https://alexcastano.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+  
+
+
+
+
+
+  </body>
+</html>

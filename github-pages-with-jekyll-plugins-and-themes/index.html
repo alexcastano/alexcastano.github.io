@@ -1,0 +1,808 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.20.1 by Michael Rose
+  Copyright 2013-2019 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Github Pages with Jekyll Plugins and Theme | Alex Castaño</title>
+<meta name="description" content="Github allows us to host a Jekyll page using Github Pages, but the support for plugins and themes is very limited. We cannot freely use the plugins that you want, and we have exactly the same problem with the themes. Only safe plugins and the next available themes can be used.">
+
+
+  <meta name="author" content="Alex Castaño">
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en">
+<meta property="og:site_name" content="Alex Castaño">
+<meta property="og:title" content="Github Pages with Jekyll Plugins and Theme">
+<meta property="og:url" content="https://alexcastano.com/github-pages-with-jekyll-plugins-and-themes/">
+
+
+  <meta property="og:description" content="Github allows us to host a Jekyll page using Github Pages, but the support for plugins and themes is very limited. We cannot freely use the plugins that you want, and we have exactly the same problem with the themes. Only safe plugins and the next available themes can be used.">
+
+
+
+  <meta property="og:image" content="https://alexcastano.com/assets/images/octojekyll.png">
+
+
+
+  <meta name="twitter:site" content="@alexcasdev">
+  <meta name="twitter:title" content="Github Pages with Jekyll Plugins and Theme">
+  <meta name="twitter:description" content="Github allows us to host a Jekyll page using Github Pages, but the support for plugins and themes is very limited. We cannot freely use the plugins that you want, and we have exactly the same problem with the themes. Only safe plugins and the next available themes can be used.">
+  <meta name="twitter:url" content="https://alexcastano.com/github-pages-with-jekyll-plugins-and-themes/">
+
+  
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://alexcastano.com/assets/images/octojekyll.png">
+  
+
+  
+    <meta name="twitter:creator" content="@alexcasdev">
+  
+
+
+
+  <meta property="article:published_time" content="2017-03-04T00:00:00+01:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="https://alexcastano.com/github-pages-with-jekyll-plugins-and-themes/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "Alex Castaño",
+      "url": "https://alexcastano.com/",
+      "sameAs": ["https://twitter.com/alexcasdev","https://www.linkedin.com/in/alexcastano"]
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Alex Castaño Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css">
+
+<!--[if IE]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+
+    
+
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-touch-icon.png?v=1">
+<link rel="icon" type="image/png" href="/assets/images/favicons/favicon-32x32.png?v=1" sizes="32x32">
+<link rel="icon" type="image/png" href="/assets/images/favicons/favicon-16x16.png?v=1" sizes="16x16">
+<link rel="manifest" href="/assets/images/favicons/manifest.json?v=1">
+<link rel="mask-icon" href="/assets/images/favicons/safari-pinned-tab.svg?v=1" color="#00848a">
+<link rel="shortcut icon" type="image/x-icon" href="/assets/images/favicons/favicon.ico?v=1">
+<link rel="icon" href="/assets/images/favicons/favicon.ico?v=1">
+<meta name="apple-mobile-web-app-title" content="Alex Castaño">
+<meta name="application-name" content="Alex Castaño">
+<meta name="msapplication-config" content="/assets/images/favicons/browserconfig.xml?v=1">
+<meta name="theme-color" content="#000000">
+
+  </head>
+
+  <body class="layout--single">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          Alex Castaño
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/about/">About</a>
+            </li></ul>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+  
+
+
+
+
+
+
+
+<div class="page__hero--overlay" style=" background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://alexcastano.com/assets/images/octojekyll.png');">
+  
+    <div class="wrapper">
+      <h1 class="page__title" itemprop="headline">
+        
+          Github Pages with Jekyll Plugins and Theme
+
+        
+      </h1>
+      
+      
+    </div>
+  
+  
+</div>
+
+
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="/assets/images/bio-photo.jpg" alt="Alex Castaño" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">Alex Castaño</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>Elixir developer</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="https://schema.org/Place">
+          <i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i> <span itemprop="name">Andorra</span>
+        </li>
+      
+
+      
+
+      
+
+      
+        <li>
+          <a href="mailto:alexcastanodev@gmail.com">
+            <meta itemprop="email" content="alexcastanodev@gmail.com">
+            <i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i><span class="label">Email</span>
+          </a>
+        </li>
+      
+
+      
+
+      
+        <li>
+          <a href="https://twitter.com/alexcasdev" itemprop="sameAs" rel="nofollow noopener noreferrer">
+            <i class="fab fa-fw fa-twitter-square" aria-hidden="true"></i><span class="label">Twitter</span>
+          </a>
+        </li>
+      
+
+      
+
+      
+        <li>
+          <a href="https://www.linkedin.com/in/alexcastano" itemprop="sameAs" rel="nofollow noopener noreferrer">
+            <i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">LinkedIn</span>
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+        <li>
+          <a href="https://github.com/alexcastano" itemprop="sameAs" rel="nofollow noopener noreferrer">
+            <i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span>
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="http://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Github Pages with Jekyll Plugins and Theme">
+    <meta itemprop="description" content="Github allows us to host a Jekyll page using Github Pages,but the support for plugins and themes is very limited.We cannot freely use the plugins that you want,and we have exactly the same problem with the themes.Only safe plugins andthe next available themes can be used.">
+    <meta itemprop="datePublished" content="March 04, 2017">
+    
+
+    <div class="page__inner-wrap">
+      
+
+      <section class="page__content" itemprop="text">
+        <p>Github allows us to host a Jekyll page using <a href="https://pages.github.com/">Github Pages</a>,
+but the support for plugins and themes is very limited.
+We cannot freely use the plugins that you want,
+and we have exactly the same problem with the themes.
+Only <a href="https://jekyllrb.com/docs/plugins/">safe plugins</a> and
+the next <a href="https://pages.github.com/themes/">available themes</a> can be used.</p>
+
+<p>At the beginning, I was happy with those limitations.
+Plugins can make your life much easier sometimes
+but I didn’t need them at the moment.
+So I installed <a href="https://mmistakes.github.io/minimal-mistakes/">minimal mistakes</a>
+theme <em>manually</em> and everything works.</p>
+
+<p><img src="/assets/images/octojekyll.png" alt="OctoJekyll" class="align-center"></p>
+
+<p>The day I wanted to modify and to update the theme
+I realized that I need a simpler alternative to work with.
+It turned out to be much easier than I supposed at beginning.
+Github Pages also allows us to upload an static page
+instead of the source of a Jekyll page and we will
+use this feature to our goal.</p>
+
+<p>If you have minimal mistakes theme like me,
+probably you can find useful the <a href="https://mmistakes.github.io/minimal-mistakes/docs/quick-start-guide/">migration to gem version</a> as first step.</p>
+
+<h2 id="deploy-manually-to-github-pages">Deploy manually to Github Pages</h2>
+
+<p>The simplest solution I found is to work with two different branches:</p>
+
+<ul>
+  <li>
+<code class="language-plaintext highlighter-rouge">source</code> will contain the <em>website source code</em>, which the current master branch is</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">master</code> will contain only the <em>Jekyll output</em>, the <code class="language-plaintext highlighter-rouge">_site</code> folder in Jekyll project.</li>
+</ul>
+
+<p>We will have the two branches working together in the same directory structure.
+To do that will execute the follow commands,
+but <strong>be careful:</strong>
+the commands will remove the history of the <code class="language-plaintext highlighter-rouge">master</code> branch,
+although it will be kept in the <code class="language-plaintext highlighter-rouge">source</code> branch.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># create the source branch from the master</span>
+git checkout <span class="nt">-b</span> <span class="nb">source</span>
+<span class="c"># push this branch to git repository</span>
+git push
+
+<span class="c"># build the jekyll site</span>
+bundle <span class="nb">exec </span>jekyll build
+<span class="c"># move to the output directory</span>
+<span class="nb">cd </span>_site
+<span class="c"># create a new git repository in this folder</span>
+git init <span class="nb">.</span>
+<span class="c"># we commit everything in this folder, which is the page</span>
+git add <span class="nb">.</span>
+git commit <span class="nt">-m</span> <span class="s2">"Initial commit"</span>
+<span class="c"># push this commit to github pages, all the history to avoid conflicts</span>
+git remote add origin git@github.com:YOURUSERNAME.github.io
+git push <span class="nt">-u</span> <span class="nt">--force</span>
+</code></pre></div></div>
+
+<p>Like the <code class="language-plaintext highlighter-rouge">_site</code> directory is ignored by git because <code class="language-plaintext highlighter-rouge">.gitignore</code> excludes it,
+we can create another git repository to be used only with the <code class="language-plaintext highlighter-rouge">master</code> branch.</p>
+
+<p>The <code class="language-plaintext highlighter-rouge">source</code> branch, where we will be working most of the time,
+it will be host in the root of the directory.
+We can work in it like we were working before in the <code class="language-plaintext highlighter-rouge">master</code>.</p>
+
+<p>To deploy new changes we only have to:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bundle <span class="nb">exec </span>jekyll build
+<span class="nb">cd </span>_site
+git add <span class="nb">.</span>
+git commit <span class="nt">-m</span> <span class="s2">"New version"</span>
+git push
+</code></pre></div></div>
+
+<p>But also we can create <code class="language-plaintext highlighter-rouge">bin/deploy</code> file with execution permission and the following content:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/usr/bin/env bash</span>
+<span class="nb">set</span> <span class="nt">-e</span> <span class="c"># halt script on error</span>
+
+bundle <span class="nb">exec </span>jekyll build
+<span class="nb">cd </span>_site
+<span class="nb">rm</span> <span class="nt">-rf</span> .git
+git init <span class="nb">.</span>
+git add <span class="nb">.</span>
+git commit <span class="nt">-m</span> <span class="s2">"New version"</span>
+git remote add origin git@github.com:YOURUSERNAME.github.io
+git push <span class="nt">-u</span> <span class="nt">--force</span>
+</code></pre></div></div>
+
+<p>We avoid conflicts forcing the push at the expense of don’t have <code class="language-plaintext highlighter-rouge">master</code> branch history.
+I don’t find it very useful anyway.</p>
+
+<p>I found this solution very simple to work with and very integrated.
+Another advantage is that we can have our <code class="language-plaintext highlighter-rouge">source</code> and published site desynchronized,
+i.e: we can be working in a new draft post and push it to the <code class="language-plaintext highlighter-rouge">source</code> branch,
+so will be saved in Github repostory
+but until we don’t push the <code class="language-plaintext highlighter-rouge">master</code> branch will not be published.</p>
+
+<p>On the other hand,
+if we forgot by mistake to push the <code class="language-plaintext highlighter-rouge">master</code> branch our work will never be published.
+We can automate the <em>deploy</em> process using Travis CI,
+or we can, in fact, use both methods at the same time.</p>
+
+<h2 id="testing-jekyll-site">Testing Jekyll site</h2>
+
+<p><a href="https://github.com/gjtorikian/html-proofer"><code class="language-plaintext highlighter-rouge">html-proofer</code></a>
+is a gem very useful to test the output of our Jekyll site.
+We add to the <code class="language-plaintext highlighter-rouge">Gemfile</code>:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">gem</span> <span class="s2">"html-proofer"</span> <span class="c1"># Add this line</span>
+</code></pre></div></div>
+
+<p>Run <code class="language-plaintext highlighter-rouge">bundle install</code> to be installed.</p>
+
+<p>And we create a new script, <code class="language-plaintext highlighter-rouge">bin/test</code>, to check the html generated is correct:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/usr/bin/env bash</span>
+<span class="nb">set</span> <span class="nt">-e</span> <span class="c"># halt script on error</span>
+
+bundle <span class="nb">exec </span>htmlproofer <span class="nt">--allow-hash-href</span>  <span class="nt">--internal-domains</span> YOURDOMAIN ./_site
+</code></pre></div></div>
+
+<p>To test it we need the execute the Jekyll server previously.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ bin/test
+Running ["LinkCheck", "ScriptCheck", "ImageCheck"] on ["./_site"] on *.html...
+
+
+Checking 30 external links...
+Ran on 8 files!
+
+
+HTML-Proofer finished successfully.
+</code></pre></div></div>
+
+<p>No problem in this output! <img class="emoji" title=":dizzy:" alt=":dizzy:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f4ab.png" height="20" width="20"></p>
+
+<h2 id="deploy-automatically-to-github-pages-with-travis-ci-and-ci">Deploy automatically to Github Pages with Travis-ci and CI</h2>
+
+<p>If you don’t like manual deployment we have another free alternative.
+<a href="https://travis-ci.org">Travis CI</a> is a platform for continuous integration.
+It allows us to build, test and deploy almost any project.
+It can be used for free for open sourced projects
+and we’ll use this possibility for our web site.</p>
+
+<p><img src="/assets/images/travis-ci.png" alt="Travis CI" class="align-center"></p>
+
+<p>We have to connect our Github page with the Travis one and
+to add our Github pages repository.</p>
+
+<p>After that we need those two files:</p>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">bin/build</code>: just to build the project easier</p>
+
+    <div class="language-bash highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code><span class="c">#!/usr/bin/env bash</span>
+<span class="nb">set</span> <span class="nt">-e</span> <span class="c"># halt script on error</span>
+
+bundle <span class="nb">exec </span>jekyll build
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">.travis.yml</code>: this is the configuration for Travis CI
+```yaml
+language: ruby
+env:
+  global:</p>
+    <ul>
+      <li>NOKOGIRI_USE_SYSTEM_LIBRARIES=true</li>
+    </ul>
+
+    <p>before_script: ./bin/build
+script: ./bin/test</p>
+
+    <p>deploy:
+  provider: pages
+  github-token: $PRIVATE_TOKEN
+  target-branch: master
+  local-dir: _site
+  project-name: blog
+  email: YOUREMAIL@gmail.com
+  name: Deployment bot</p>
+
+    <p>skip_cleanup: true
+  on:
+    branch: source
+  ```</p>
+  </li>
+</ul>
+
+<p>Remember to add executable permissions to the files in the bin directory:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">chmod</span> +x bin/<span class="k">*</span>
+</code></pre></div></div>
+
+<p>We make use of the
+(private token of Github)[https://help.github.com/articles/creating-a-personal-access-token-for-the-command-line/]
+for public repositories.
+We add it to (variables in repository settings)[https://docs.travis-ci.com/user/environment-variables/#Defining-Variables-in-Repository-Settings]
+like <code class="language-plaintext highlighter-rouge">PRIVATE_TOKEN</code>.</p>
+
+<p>If everything is ok,
+every time we push the source branch
+Travis will build, test and push the new version to the Github pages.
+If something fails it will send us an email with the error.</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="/tags/blog" class="page__taxonomy-item" rel="tag">blog</a><span class="sep">, </span>
+    
+      
+      
+      <a href="/tags/continuous-integration" class="page__taxonomy-item" rel="tag">continuous integration</a>
+    
+    </span>
+  </p>
+
+
+
+
+        
+          <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Updated:</strong> <time datetime="2017-03-04T00:00:00+01:00">March 04, 2017</time></p>
+        
+      </footer>
+
+      <section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?via=alexcasdev&amp;text=Github+Pages+with+Jekyll+Plugins+and+Theme%20https%3A%2F%2Falexcastano.com%2Fgithub-pages-with-jekyll-plugins-and-themes%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Falexcastano.com%2Fgithub-pages-with-jekyll-plugins-and-themes%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A%2F%2Falexcastano.com%2Fgithub-pages-with-jekyll-plugins-and-themes%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/start-using-docker/" class="pagination--pager" title="Start using Docker
+">Previous</a>
+    
+    
+      <a href="/generate-unique-usernames-for-ruby-on-rails/" class="pagination--pager" title="Username generation in Ruby on Rails
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">Leave a Comment</h4>
+      <section id="disqus_thread"></section>
+    
+</div>
+
+    
+  </article>
+
+  
+
+  
+  
+    
+    
+        
+    
+        
+    
+    
+  
+    
+    
+        
+    
+        
+    
+    
+  
+    
+    
+        
+    
+        
+    
+    
+  
+    
+    
+        
+    
+        
+    
+    
+  
+    
+    
+        
+    
+        
+    
+    
+  
+    
+    
+        
+    
+        
+    
+    
+  
+    
+    
+    
+        
+    
+        
+    
+    
+  
+    
+    
+        
+          
+            <div class="page__related">
+              
+                <h4 class="page__related-title">You May Also Enjoy</h4>
+              
+              <div class="grid__wrapper">
+          
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/assets/images/sunrise.jpg" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/hello-world/" rel="permalink">Hello World
+</a>
+      
+    </h2>
+    
+
+
+    <p class="archive__item-excerpt" itemprop="description">It’s finally here!! This is my new and shiny blog!! Hooray <img class="emoji" title=":tada:" alt=":tada:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f389.png" height="20" width="20"> <img class="emoji" title=":tada:" alt=":tada:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f389.png" height="20" width="20"> <img class="emoji" title=":tada:" alt=":tada:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f389.png" height="20" width="20">
+</p>
+  </article>
+</div>
+
+          
+          
+    
+  
+  
+      </div>
+    </div>
+  
+
+
+
+</div>
+
+    </div>
+
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        
+  <img src="https://data.alexcastano.com/img.gif" alt="img">
+
+
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+
+    
+
+    <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">© 2020 Alex Castaño. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+
+
+
+  <script>
+  window.ga=function(){ga.q.push(arguments)};ga.q=[];ga.l=+new Date;
+  ga('create','UA-65462222-1','auto');
+  ga('set', 'anonymizeIp', false);
+  ga('send','pageview')
+</script>
+<script src="https://www.google-analytics.com/analytics.js" async></script>
+
+
+
+
+
+
+    
+  <script>
+    var disqus_config = function () {
+      this.page.url = "https://alexcastano.com/github-pages-with-jekyll-plugins-and-themes/";  /* Replace PAGE_URL with your page's canonical URL variable */
+      this.page.identifier = "/github-pages-with-jekyll-plugins-and-themes"; /* Replace PAGE_IDENTIFIER with your page's unique identifier variable */
+    };
+    (function() { /* DON'T EDIT BELOW THIS LINE */
+      var d = document, s = d.createElement('script');
+      s.src = 'https://alexcastano.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+</noscript>
+
+
+  
+
+
+
+
+
+  </body>
+</html>

@@ -1,0 +1,903 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.20.1 by Michael Rose
+  Copyright 2013-2019 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>What is ActivityPub? | Alex Castaño</title>
+<meta name="description" content="A simple explanation about ActivityPub for technical people.">
+
+
+  <meta name="author" content="Alex Castaño">
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en">
+<meta property="og:site_name" content="Alex Castaño">
+<meta property="og:title" content="What is ActivityPub?">
+<meta property="og:url" content="https://alexcastano.com/what-is-activity-pub/">
+
+
+  <meta property="og:description" content="A simple explanation about ActivityPub for technical people.">
+
+
+
+  <meta property="og:image" content="https://alexcastano.com/assets/images/what_is_activity_pub/activitypub.png">
+
+
+
+  <meta name="twitter:site" content="@alexcasdev">
+  <meta name="twitter:title" content="What is ActivityPub?">
+  <meta name="twitter:description" content="A simple explanation about ActivityPub for technical people.">
+  <meta name="twitter:url" content="https://alexcastano.com/what-is-activity-pub/">
+
+  
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://alexcastano.com/assets/images/what_is_activity_pub/activitypub.png">
+  
+
+  
+    <meta name="twitter:creator" content="@alexcasdev">
+  
+
+
+
+  <meta property="article:published_time" content="2018-12-07T00:00:00+01:00">
+
+
+
+  <meta property="article:modified_time" content="2018-12-07T00:00:00+01:00">
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="https://alexcastano.com/what-is-activity-pub/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "Alex Castaño",
+      "url": "https://alexcastano.com/",
+      "sameAs": ["https://twitter.com/alexcasdev","https://www.linkedin.com/in/alexcastano"]
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Alex Castaño Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css">
+
+<!--[if IE]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+
+    
+
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-touch-icon.png?v=1">
+<link rel="icon" type="image/png" href="/assets/images/favicons/favicon-32x32.png?v=1" sizes="32x32">
+<link rel="icon" type="image/png" href="/assets/images/favicons/favicon-16x16.png?v=1" sizes="16x16">
+<link rel="manifest" href="/assets/images/favicons/manifest.json?v=1">
+<link rel="mask-icon" href="/assets/images/favicons/safari-pinned-tab.svg?v=1" color="#00848a">
+<link rel="shortcut icon" type="image/x-icon" href="/assets/images/favicons/favicon.ico?v=1">
+<link rel="icon" href="/assets/images/favicons/favicon.ico?v=1">
+<meta name="apple-mobile-web-app-title" content="Alex Castaño">
+<meta name="application-name" content="Alex Castaño">
+<meta name="msapplication-config" content="/assets/images/favicons/browserconfig.xml?v=1">
+<meta name="theme-color" content="#000000">
+
+  </head>
+
+  <body class="layout--single">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          Alex Castaño
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/about/">About</a>
+            </li></ul>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+  
+
+
+
+
+
+
+
+<div class="page__hero--overlay"
+  style=" background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://alexcastano.com/assets/images/what_is_activity_pub/activitypub.png');"
+>
+  
+    <div class="wrapper">
+      <h1 class="page__title" itemprop="headline">
+        
+          What is ActivityPub?
+
+        
+      </h1>
+      
+      
+    </div>
+  
+  
+</div>
+
+
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="/assets/images/bio-photo.jpg" alt="Alex Castaño" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">Alex Castaño</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>Elixir developer</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="https://schema.org/Place">
+          <i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i> <span itemprop="name">Andorra</span>
+        </li>
+      
+
+      
+
+      
+
+      
+        <li>
+          <a href="mailto:alexcastanodev@gmail.com">
+            <meta itemprop="email" content="alexcastanodev@gmail.com" />
+            <i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i><span class="label">Email</span>
+          </a>
+        </li>
+      
+
+      
+
+      
+        <li>
+          <a href="https://twitter.com/alexcasdev" itemprop="sameAs" rel="nofollow noopener noreferrer">
+            <i class="fab fa-fw fa-twitter-square" aria-hidden="true"></i><span class="label">Twitter</span>
+          </a>
+        </li>
+      
+
+      
+
+      
+        <li>
+          <a href="https://www.linkedin.com/in/alexcastano" itemprop="sameAs" rel="nofollow noopener noreferrer">
+            <i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">LinkedIn</span>
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+        <li>
+          <a href="https://github.com/alexcastano" itemprop="sameAs" rel="nofollow noopener noreferrer">
+            <i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span>
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="http://schema.org/CreativeWork">
+    <meta itemprop="headline" content="What is ActivityPub?">
+    <meta itemprop="description" content="This was my first question when I joined to MoodleNet team. Now, after studying it deeply for a few weeks, I feel able to give a proper answer. So I thought of writing a blog post, with my goal being to offer a nice introduction to ActivityPub for technical people. If you’re interested in my more general impressions on the fediverse and our approach to building a federated app, I recommend you to read my previous blog post about our goals.">
+    <meta itemprop="datePublished" content="December 07, 2018">
+    <meta itemprop="dateModified" content="December 07, 2018">
+
+    <div class="page__inner-wrap">
+      
+
+      <section class="page__content" itemprop="text">
+        <p>This was my first question when I joined to MoodleNet team. Now, after studying it deeply for a few weeks, I feel able to give a proper answer. So I thought of writing a blog post, with my goal being to offer a <strong>nice introduction to ActivityPub for technical people</strong>. If you’re interested in my more general impressions on the <em>fediverse</em> and our approach to building a federated app, I recommend you to read <a href="/moodlenet-more-than-a-technical-project/">my previous blog post about our goals</a>.</p>
+
+<figure class="">
+  <img src="/assets/images/what_is_activity_pub/activitypub.png" alt="ActivityPub" />
+  
+</figure>
+
+<p><em><a href="https://www.w3.org/TR/activitypub/">ActivityPub</a> is a protocol for decentralized social networks, which can also be extended to create all kinds of federated apps.</em> So if you are thinking of building one it is very interesting to know how this standard works. It is important to notice it has two different parts:</p>
+
+<ul>
+  <li>Client to Server API</li>
+  <li>Server to Server API</li>
+</ul>
+
+<p>A service can decide if it wants to implement only one or both of them. This decision just depends on the needs of the project. If you’re a frontend developer, you might use the Client to Server API. You will be focused on the Server to Server API when you only care about the federation part though.</p>
+
+<h2 id="activitystreams-20">ActivityStreams 2.0</h2>
+
+<p>The ActivityPub message format is JSON-LD, which can be used just like regular JSON and we’ll do this for this blog post. The vocabulary used in this protocol is defined by <a href="https://www.w3.org/TR/activitystreams-core/">ActivityStreams 2.0</a> and ActivityPub just adds a couple of requirements more on top of it. In this vocabulary only exists two kind of entities: <code class="language-plaintext highlighter-rouge">Link</code> and <code class="language-plaintext highlighter-rouge">Object</code>. Here we will focus on <code class="language-plaintext highlighter-rouge">Object</code> and its subtypes. <strong>An <code class="language-plaintext highlighter-rouge">Object</code> has several fields and only two of them are required by ActivityPub:</strong> <code class="language-plaintext highlighter-rouge">id</code> and <code class="language-plaintext highlighter-rouge">type</code>. The most important properties are:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">type</code>: which defines the type of object. It can be a string or an array if the object implements more than a type. This is mandatory in ActivityPub.</li>
+  <li><code class="language-plaintext highlighter-rouge">id</code>: a unique identifier for the object. For ActivityPub this field should be a URL. The interesting part is that you can retrieve the full object information making a <code class="language-plaintext highlighter-rouge">GET</code> request to this URL with the ActivityStreams accept header. This allows us to send just the <code class="language-plaintext highlighter-rouge">id</code> instead the full object information in many cases.</li>
+  <li><code class="language-plaintext highlighter-rouge">content</code>: The content or textual representation of the Object, usually an HTML string.</li>
+  <li><code class="language-plaintext highlighter-rouge">name</code>: A simple, human-readable, plain-text name for the object.</li>
+  <li><code class="language-plaintext highlighter-rouge">summary</code>: A natural language summary of the object encoded as HTML.</li>
+  <li><code class="language-plaintext highlighter-rouge">image</code>: A link to an image that represents an object.</li>
+  <li><code class="language-plaintext highlighter-rouge">@context</code>: This is the only necessary property to accomplish with JSON-LD specification. In our examples we just set to <code class="language-plaintext highlighter-rouge">"https://www.w3.org/ns/activitystreams"</code>.</li>
+</ul>
+
+<h2 id="natural-language-values">Natural Language Values</h2>
+
+<p>So any object can have those fields. It is interesting that any field likely to be translated, like <code class="language-plaintext highlighter-rouge">content</code>, <code class="language-plaintext highlighter-rouge">name</code> or <code class="language-plaintext highlighter-rouge">summary</code>, can be renamed to a “map variant” to include different languages, ie:</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"@context"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://www.w3.org/ns/activitystreams"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Note"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://mycoolserver.com/notes/1"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"content"</span><span class="p">:</span><span class="w"> </span><span class="s2">"This is a translated note"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+
+</span><span class="p">{</span><span class="w">
+  </span><span class="nl">"@context"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://www.w3.org/ns/activitystreams"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Note"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://mycoolserver.com/notes/1"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"contentMap"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+     </span><span class="nl">"es"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Esto es una nota traducida"</span><span class="p">,</span><span class="w">
+     </span><span class="nl">"en"</span><span class="p">:</span><span class="w"> </span><span class="s2">"This is a translated note"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<h2 id="data-container-objects">“Data Container” Objects</h2>
+
+<p>You may have noticed that the type of the previous object is <code class="language-plaintext highlighter-rouge">"Note"</code> instead of <code class="language-plaintext highlighter-rouge">"Object"</code>. A <code class="language-plaintext highlighter-rouge">Note</code> is a subtype of object defined by ActivityStreams too, and it is used to represent any short written work. A subtype means that share the same fields, but it may define more if needed.</p>
+
+<p>There are some more defined types like <code class="language-plaintext highlighter-rouge">Article</code>, <code class="language-plaintext highlighter-rouge">Image</code>, <code class="language-plaintext highlighter-rouge">Page</code>, <code class="language-plaintext highlighter-rouge">Document</code>, <code class="language-plaintext highlighter-rouge">Video</code>, and more. While it may feel strange to not see something like comment or similar, ActivityStreams is very generic and we have to keep this in mind. The recommendation is to use <code class="language-plaintext highlighter-rouge">Note</code> because it <a href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-note">“Represents a short written work”</a>.
+Those objects may be considerated “data container” objects. They don’t define more fields and they are used to transmit information.</p>
+
+<h2 id="activity">Activity</h2>
+
+<p>In addition to those “data container” objects, ActivityStream defines <code class="language-plaintext highlighter-rouge">Activity</code> objects. The type of those objects may be more intuitive:</p>
+
+<ul>
+  <li>Create</li>
+  <li>Delete</li>
+  <li>Update</li>
+  <li>Add</li>
+  <li>Remove</li>
+  <li>Join</li>
+  <li>Follow</li>
+  <li>etc</li>
+</ul>
+
+<p>They are the type of actions that you can expect from a social network. Special attention should be paid to  the <code class="language-plaintext highlighter-rouge">Announce</code> activity, as it used to call attention to particular objects or notifications. It can be understood like a “retweet” on Twitter, or a simple way to share an already created object in your social network.</p>
+
+<p>Activities may have 6 additional properties compared to a simple object:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">object</code></li>
+  <li><code class="language-plaintext highlighter-rouge">actor</code></li>
+  <li><code class="language-plaintext highlighter-rouge">target</code></li>
+  <li><code class="language-plaintext highlighter-rouge">origin</code></li>
+  <li><code class="language-plaintext highlighter-rouge">result</code></li>
+  <li><code class="language-plaintext highlighter-rouge">instrument</code></li>
+</ul>
+
+<p>Of course, not all of them make sense in every type of activities, so they are optional. So imagine you want to represent that Luke created the previous note, you can write:</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"@context"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://www.w3.org/ns/activitystreams"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Create"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://mycoolserver.com/activity/1"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"actor"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://mycoolserver.com/actor/luke"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"object"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://mycoolserver.com/note/1"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Here, you only used <code class="language-plaintext highlighter-rouge">actor</code> and <code class="language-plaintext highlighter-rouge">object</code>. The more common ones. You don’t need to use the rest of them if they do not make sense in your activity.</p>
+
+<p>One important thing to keep in mind is that the ids of the objects will not always appear, and the complete specification of them may appear instead. The previous example could be written in the following way, both being completely valid:</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"@context"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://www.w3.org/ns/activitystreams"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Create"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://mycoolserver.com/activity/1"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"actor"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+     </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Person"</span><span class="p">,</span><span class="w">
+     </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://mycoolserver.com/actor/luke"</span><span class="p">,</span><span class="w">
+     </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Luke"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+  </span><span class="nl">"object"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Note"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://mycoolserver.com/notes/1"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"contentMap"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+       </span><span class="nl">"es"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Esto es una nota traducida"</span><span class="p">,</span><span class="w">
+     </span><span class="nl">"en"</span><span class="p">:</span><span class="w"> </span><span class="s2">"This is a translated note"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<h2 id="actor">Actor</h2>
+
+<p>If you take a close look at the previous example you will see that Luke is a <code class="language-plaintext highlighter-rouge">Person</code>, this is a type of Object we haven’t yet mentioned. <code class="language-plaintext highlighter-rouge">Person</code> is one of the 5 types of <code class="language-plaintext highlighter-rouge">actors</code> that ActivityStreams defines:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">Person</code></li>
+  <li><code class="language-plaintext highlighter-rouge">Group</code></li>
+  <li><code class="language-plaintext highlighter-rouge">Organization</code></li>
+  <li><code class="language-plaintext highlighter-rouge">Application</code></li>
+  <li><code class="language-plaintext highlighter-rouge">Service</code></li>
+</ul>
+
+<p>Actors are objects that may execute the different activities, this means they can be used as the <code class="language-plaintext highlighter-rouge">actor</code> field on an Activity. An actor has two mandatory properties as well:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">inbox</code></li>
+  <li><code class="language-plaintext highlighter-rouge">outbox</code></li>
+</ul>
+
+<p>The previous two properties are mandatory for any actor. The following properties are not but they are recommended to be implemented:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">following</code></li>
+  <li><code class="language-plaintext highlighter-rouge">follower</code></li>
+  <li><code class="language-plaintext highlighter-rouge">liked</code></li>
+</ul>
+
+<h2 id="collection">Collection</h2>
+
+<p>All these five properties are from a core type we haven’t talked about yet: <code class="language-plaintext highlighter-rouge">Collections</code>. As you’d expect, a <code class="language-plaintext highlighter-rouge">Collection</code> is simply a group of objects. They also have additional properties, ie: <code class="language-plaintext highlighter-rouge">totalItems</code> with the number of elements in the <code class="language-plaintext highlighter-rouge">Collection</code> or <code class="language-plaintext highlighter-rouge">items</code> where you’ll find the objects in the collection.</p>
+
+<p>So this means that the <code class="language-plaintext highlighter-rouge">inbox</code> of an actor is just a <code class="language-plaintext highlighter-rouge">Collection</code> containing all the activities received by the actor. The <code class="language-plaintext highlighter-rouge">outbox</code> contains all the activities sent by the actor. Any time an actor likes an object, this is added to their <code class="language-plaintext highlighter-rouge">liked</code> collection.</p>
+
+<p>Obviously, after a while, those collections cannot be managed with just an array. It will be impractical to manage all the followers of a popular person in a simple array. For this reason, we have the last core type of ActivityStreams: the <code class="language-plaintext highlighter-rouge">CollectionPage</code> which should be used to paginate a full <code class="language-plaintext highlighter-rouge">Collection</code>.</p>
+
+<h2 id="core-types">Core types</h2>
+
+<p>So those are the 5 core object types that ActivityStreams defines:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">Object</code></li>
+  <li><code class="language-plaintext highlighter-rouge">Actor</code></li>
+  <li><code class="language-plaintext highlighter-rouge">Activity</code></li>
+  <li><code class="language-plaintext highlighter-rouge">Collection</code></li>
+  <li><code class="language-plaintext highlighter-rouge">CollectionPage</code></li>
+</ul>
+
+<p>All of them are also an <code class="language-plaintext highlighter-rouge">Object</code>, so they share most of the fields. Once you understand this vocabulary it becomes easier to work with the ActivityPub protocol.</p>
+
+<h2 id="targeting">Targeting</h2>
+
+<p>A big difference from working with other private social networks is the “Audience Targeting”. All objects can use 5 optional fields for this:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">to</code></li>
+  <li><code class="language-plaintext highlighter-rouge">bto</code></li>
+  <li><code class="language-plaintext highlighter-rouge">cc</code></li>
+  <li><code class="language-plaintext highlighter-rouge">bcc</code></li>
+  <li><code class="language-plaintext highlighter-rouge">audience</code></li>
+</ul>
+
+<figure class="">
+  <img src="/assets/images/what_is_activity_pub/mail_boxes.jpg" alt="Mail Boxes" />
+  
+</figure>
+
+<p>Not only that, but it is the client application that fills in these fields. It can be just an actor, but maybe is your followers collection or it is just “public”. This can be better understood with the following examples.</p>
+
+<h2 id="examples">Examples</h2>
+
+<h3 id="sending-a-private-message">Sending a private message</h3>
+
+<p>First of all, messages are always activities in ActivityPub. So if you want to send a private message to Ben, you have to build a <code class="language-plaintext highlighter-rouge">Create</code> activity with a <code class="language-plaintext highlighter-rouge">Note</code>. <strong>It is equally important to set the field <code class="language-plaintext highlighter-rouge">to</code> to only Ben’s id, because is a private message between Alyssa and Ben.</strong> You don’t want to make it public or to share with your followers. The JSON could be something like the following:</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"@context"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://www.w3.org/ns/activitystreams"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Create"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://social.example/alyssa/posts/a29a6843-9feb-4c74-a7f7-081b9c9201d3"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"to"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="s2">"https://chatty.example/ben/"</span><span class="w">
+  </span><span class="p">],</span><span class="w">
+  </span><span class="nl">"actor"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://social.example/alyssa/"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"object"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Note"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://social.example/alyssa/posts/49e2d03d-b53a-4c4c-a95c-94a6abf45a19"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"attributedTo"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://social.example/alyssa/"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"to"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="s2">"https://chatty.example/ben/"</span><span class="w">
+    </span><span class="p">],</span><span class="w">
+    </span><span class="nl">"content"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Say, did you finish reading that book I lent you?"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>This is a <code class="language-plaintext highlighter-rouge">Create</code> activity because, of course, the message didn’t already exist. As you can see, the actor property is just a Link with Alyssa’s ID. Not need to send the full object. Similarly with the property <code class="language-plaintext highlighter-rouge">to</code> with Ben’s ID, but in this case in an array.</p>
+
+<p>ActivityPub defines that a client should always create new activities talking to the server where the user’s account resides. In this example, Alyssa account resides at “https://social.example/”. Once the message is received by the server it is persisted so it can be requested at any time, but also, it detects that the recipient of the message does not belong to this server. This means that it’s now the server which should communicate this message to Ben’s server, in this case: “https://chatty.example/ben/”. It will send a post request to Ben’s inbox. <em>It should then be Ben’s server that notifies Ben that he has a new message</em>.</p>
+
+<h3 id="add-an-image-to-an-album">Add an image to an album</h3>
+
+<p>In this example we are working with images. The user Alyssa just move an image from her “Camera Roll” album to “My Cat Pictures”. The client application generates the following activity to represent the action that just happened:</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"@context"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://www.w3.org/ns/activitystreams"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://social.example/alyssa/activities/10239"</span><span class="w">
+  </span><span class="nl">"summary"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Alyssa added a picture of her cat to her cat picture collection"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Add"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"actor"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://social.example/alyssa"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"to"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://social.example/alyssa/followers"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"object"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Image"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"A picture of my cat"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://example.org/img/cat.png"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="nl">"origin"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Collection"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Camera Roll"</span><span class="w">
+    </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://social.example/alyssa/collection/1"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="nl">"target"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Collection"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"My Cat Pictures"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://social.example/alyssa/collection/278"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>This activity is public only for the Alyssa’s followers. The client application send this activity to the Alyssa’s server. Now it is the server which has to locate all her followers and make sure that they receive this activity in their <code class="language-plaintext highlighter-rouge">inbox</code>. Maybe they are all locals, they resides on the same server, or maybe it has to send this activity to many external servers.</p>
+
+<h3 id="follow-request">Follow request</h3>
+
+<p>In this scenario, Sally asks John to be friends in our application:</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"@context"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://www.w3.org/ns/activitystreams"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://example.org/connection-requests/123"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"summary"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Sally requested to be a friend of John"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Offer"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"actor"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://sally.example.org"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"object"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"summary"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Sally and John's friendship"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://example.org/connections/123"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Relationship"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"subject"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://sally.example.org"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"relationship"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://purl.org/vocab/relationship/friendOf"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"object"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://john.example.org"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="nl">"target"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://john.example.org"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"to"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://john.example.org"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"cc"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://www.w3.org/ns/activitystreams#Public"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>We make this request using the <code class="language-plaintext highlighter-rouge">Offer</code> activity type with a <code class="language-plaintext highlighter-rouge">Relationship</code> object and with the target John. Now John can accept the offering with:</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+     </span><span class="nl">"@context"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://www.w3.org/ns/activitystreams"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"summary"</span><span class="p">:</span><span class="w"> </span><span class="s2">"John accepted Sally's friend request"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://example.org/activities/122"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Accept"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"actor"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://john.example.org"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"object"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://example.org/connection-requests/123"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"inReplyTo"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://example.org/connection-requests/123"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"context"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://example.org/connections/123"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"to"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://sally.example.org/"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"cc"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://www.w3.org/ns/activitystreams#Public"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+
+</span></code></pre></div></div>
+<p>It is interesting to see that in this application, the creator decided to make public this kind of interactions. To make public an object we have to add to any “targeting property” the value <code class="language-plaintext highlighter-rouge">"https://www.w3.org/ns/activitystreams#Public"</code>, in this case in the <code class="language-plaintext highlighter-rouge">cc</code> property.</p>
+
+<h2 id="conclusions">Conclusions</h2>
+
+<p>It is important to remember that ActivityPub is a protocol. It defines the expected behaviour but never the implementation details behind it. The client sends activities to the server. The server federates the same activities to other servers. The client can fetch for activities and the server should provide them. The way you do it is completely up to you.</p>
+
+<p>There are a lot more things around ActivityPub, here we only scratched the surface. There are more types in the vocabulary, the possibility of extending it with your own types and properties, security recommendations, side effects, client and server responsibilities, etc. The goal of this article was to give a small introduction without getting lost in technical formalities. I hope you enjoyed.</p>
+
+<hr />
+
+<p>This post was also published in <a href="https://blog.moodle.net/2018/what-is-activitypub/">MoodleNet blog</a>.</p>
+
+<p>Photo by <a href="https://unsplash.com/photos/UXfi8LyqGDk">Marius Christensen</a></p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="/tags/activitypub" class="page__taxonomy-item" rel="tag">ActivityPub</a><span class="sep">, </span>
+    
+      
+      
+      <a href="/tags/moodlenet" class="page__taxonomy-item" rel="tag">MoodleNet</a>
+    
+    </span>
+  </p>
+
+
+
+
+        
+          <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Updated:</strong> <time datetime="2018-12-07">December 07, 2018</time></p>
+        
+      </footer>
+
+      <section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?via=alexcasdev&text=What+is+ActivityPub%3F%20https%3A%2F%2Falexcastano.com%2Fwhat-is-activity-pub%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Falexcastano.com%2Fwhat-is-activity-pub%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Falexcastano.com%2Fwhat-is-activity-pub%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/moodlenet-more-than-a-technical-project/" class="pagination--pager" title="MoodleNet: more than a technical project
+">Previous</a>
+    
+    
+      <a href="/how-to-stop-a-genserver-in-elixir/" class="pagination--pager" title="Why and how a GenServer stops?
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">Leave a Comment</h4>
+      <section id="disqus_thread"></section>
+    
+</div>
+
+    
+  </article>
+
+  
+
+  
+  
+    
+    
+        
+    
+        
+    
+    
+  
+    
+    
+    
+        
+          
+            <div class="page__related">
+              
+                <h4 class="page__related-title">You May Also Enjoy</h4>
+              
+              <div class="grid__wrapper">
+          
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/assets/images/moodlenet_more_technical_project/live_work_create.jpg" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/moodlenet-more-than-a-technical-project/" rel="permalink">MoodleNet: more than a technical project
+</a>
+      
+    </h2>
+    
+
+
+    <p class="archive__item-excerpt" itemprop="description">As many of you already know, I have been hired by Moodle to work on the MoodleNet project. Moodle is the world’s most popular learning platform with more tha...</p>
+  </article>
+</div>
+
+          
+          
+    
+  
+    
+    
+        
+    
+        
+    
+    
+  
+    
+    
+        
+    
+        
+    
+    
+  
+    
+    
+        
+    
+        
+    
+    
+  
+    
+    
+        
+    
+        
+    
+    
+  
+    
+    
+        
+    
+        
+    
+    
+  
+    
+    
+        
+    
+        
+    
+    
+  
+  
+      </div>
+    </div>
+  
+
+
+
+</div>
+
+    </div>
+
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        
+  <img src="https://data.alexcastano.com/img.gif" alt="img">
+
+
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+
+    
+
+    <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2020 Alex Castaño. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+
+
+
+  <script>
+  window.ga=function(){ga.q.push(arguments)};ga.q=[];ga.l=+new Date;
+  ga('create','UA-65462222-1','auto');
+  ga('set', 'anonymizeIp', false);
+  ga('send','pageview')
+</script>
+<script src="https://www.google-analytics.com/analytics.js" async></script>
+
+
+
+
+
+
+    
+  <script>
+    var disqus_config = function () {
+      this.page.url = "https://alexcastano.com/what-is-activity-pub/";  /* Replace PAGE_URL with your page's canonical URL variable */
+      this.page.identifier = "/what-is-activity-pub"; /* Replace PAGE_IDENTIFIER with your page's unique identifier variable */
+    };
+    (function() { /* DON'T EDIT BELOW THIS LINE */
+      var d = document, s = d.createElement('script');
+      s.src = 'https://alexcastano.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+  
+
+
+
+
+
+  </body>
+</html>

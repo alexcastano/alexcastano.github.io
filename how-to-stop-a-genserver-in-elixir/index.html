@@ -1,0 +1,1311 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.20.1 by Michael Rose
+  Copyright 2013-2019 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Why and how a GenServer stops? | Alex Castaño</title>
+<meta name="description" content="The different possibilities to stop a GenServer and how to handle the termination process.">
+
+
+  <meta name="author" content="Alex Castaño">
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en">
+<meta property="og:site_name" content="Alex Castaño">
+<meta property="og:title" content="Why and how a GenServer stops?">
+<meta property="og:url" content="https://alexcastano.com/how-to-stop-a-genserver-in-elixir/">
+
+
+  <meta property="og:description" content="The different possibilities to stop a GenServer and how to handle the termination process.">
+
+
+
+  <meta property="og:image" content="https://alexcastano.com/assets/images/bio-photo.jpg">
+
+
+
+  <meta name="twitter:site" content="@alexcasdev">
+  <meta name="twitter:title" content="Why and how a GenServer stops?">
+  <meta name="twitter:description" content="The different possibilities to stop a GenServer and how to handle the termination process.">
+  <meta name="twitter:url" content="https://alexcastano.com/how-to-stop-a-genserver-in-elixir/">
+
+  
+    <meta name="twitter:card" content="summary">
+    
+      <meta name="twitter:image" content="https://alexcastano.com/assets/images/bio-photo.jpg">
+    
+  
+
+  
+    <meta name="twitter:creator" content="@alexcasdev">
+  
+
+
+
+  <meta property="article:published_time" content="2020-08-23T00:00:00+02:00">
+
+
+
+  <meta property="article:modified_time" content="2020-08-23T00:00:00+02:00">
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="https://alexcastano.com/how-to-stop-a-genserver-in-elixir/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "Alex Castaño",
+      "url": "https://alexcastano.com/",
+      "sameAs": ["https://twitter.com/alexcasdev","https://www.linkedin.com/in/alexcastano"]
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Alex Castaño Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css">
+
+<!--[if IE]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+
+    
+
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-touch-icon.png?v=1">
+<link rel="icon" type="image/png" href="/assets/images/favicons/favicon-32x32.png?v=1" sizes="32x32">
+<link rel="icon" type="image/png" href="/assets/images/favicons/favicon-16x16.png?v=1" sizes="16x16">
+<link rel="manifest" href="/assets/images/favicons/manifest.json?v=1">
+<link rel="mask-icon" href="/assets/images/favicons/safari-pinned-tab.svg?v=1" color="#00848a">
+<link rel="shortcut icon" type="image/x-icon" href="/assets/images/favicons/favicon.ico?v=1">
+<link rel="icon" href="/assets/images/favicons/favicon.ico?v=1">
+<meta name="apple-mobile-web-app-title" content="Alex Castaño">
+<meta name="application-name" content="Alex Castaño">
+<meta name="msapplication-config" content="/assets/images/favicons/browserconfig.xml?v=1">
+<meta name="theme-color" content="#000000">
+
+  </head>
+
+  <body class="layout--single">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          Alex Castaño
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/about/">About</a>
+            </li></ul>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="/assets/images/bio-photo.jpg" alt="Alex Castaño" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">Alex Castaño</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>Elixir developer</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="https://schema.org/Place">
+          <i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i> <span itemprop="name">Andorra</span>
+        </li>
+      
+
+      
+
+      
+
+      
+        <li>
+          <a href="mailto:alexcastanodev@gmail.com">
+            <meta itemprop="email" content="alexcastanodev@gmail.com" />
+            <i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i><span class="label">Email</span>
+          </a>
+        </li>
+      
+
+      
+
+      
+        <li>
+          <a href="https://twitter.com/alexcasdev" itemprop="sameAs" rel="nofollow noopener noreferrer">
+            <i class="fab fa-fw fa-twitter-square" aria-hidden="true"></i><span class="label">Twitter</span>
+          </a>
+        </li>
+      
+
+      
+
+      
+        <li>
+          <a href="https://www.linkedin.com/in/alexcastano" itemprop="sameAs" rel="nofollow noopener noreferrer">
+            <i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">LinkedIn</span>
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+        <li>
+          <a href="https://github.com/alexcastano" itemprop="sameAs" rel="nofollow noopener noreferrer">
+            <i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span>
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="http://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Why and how a GenServer stops?">
+    <meta itemprop="description" content="The last day, I was creating a GenServer and I realized that I didn’t know the proper way to stop it.I had a vague idea about the process, but I needed fine-grained details.This post is the result of my little research about it.">
+    <meta itemprop="datePublished" content="August 23, 2020">
+    <meta itemprop="dateModified" content="August 23, 2020">
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 class="page__title" itemprop="headline">Why and how a GenServer stops?
+</h1>
+          
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        <p>The last day, I was creating a GenServer and I realized that I didn’t know the proper way to stop it.
+I had a vague idea about the process, but I needed fine-grained details.
+This post is the result of my little research about it.</p>
+
+<p>I think this is a very important matter, however,
+I sometimes see a lot of people that don’t pay enough attention to it.
+If you want to create a resilient Elixir application, the startup and shutdown process must be properly implemented.
+The application will behave much better even in the worst situations.</p>
+
+<p>Thanks to the Erlang supervision tree,
+if you have a bug or something unexpected happens,
+we are giving a chance to the application to heal itself.
+An extraordinary feature in my opinion.</p>
+
+<p>It is also important because we are living in the Kubernetes era,
+where servers are continuously created and destroyed.
+For this reason, the shutdown process must be under control at all levels.
+Today we focus on how a GenServer stops.</p>
+
+<h2 id="the-terminate2-callback">The terminate/2 callback</h2>
+
+<p>Before we look at the reasons why GenServer stops, let’s see the <code class="language-plaintext highlighter-rouge">terminate/2</code> callback.
+It is not a mandatory one, we can implement only when we need it,
+but it can help us if we want to do something before stopping.
+Besides, this is our last chance.
+After the execution of this function, we will lose the state of the GenServer forever.</p>
+
+<p>It receives two arguments, the first one is the reason for shutting down,
+and the second is the last state of the process.
+We will see more about them in the following examples.</p>
+
+<h2 id="how-a-genserver-can-stop-itself">How a GenServer can stop itself</h2>
+
+<p>We have two contexts from which to stop GenServer, from the GenServer process itself, and from any other process. Let’s start with the first one.</p>
+
+<h3 id="a-bug-in-the-code">A bug in the code</h3>
+
+<p>I don’t know about you, but the most common way I see a GenServer stop is a bug in my code. This is how it behaves when this happens:</p>
+
+<div class="language-elixir highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">defmodule</span> <span class="no">Buggy</span> <span class="k">do</span>
+  <span class="kn">use</span> <span class="no">GenServer</span>
+
+  <span class="nv">@impl</span> <span class="no">true</span>
+  <span class="k">def</span> <span class="n">init</span><span class="p">(</span><span class="n">state</span><span class="p">)</span> <span class="k">do</span>
+    <span class="p">{</span><span class="ss">:ok</span><span class="p">,</span> <span class="n">state</span><span class="p">}</span>
+  <span class="k">end</span>
+
+  <span class="nv">@impl</span> <span class="no">true</span>
+  <span class="k">def</span> <span class="n">handle_info</span><span class="p">({</span><span class="ss">:div</span><span class="p">,</span> <span class="n">num</span><span class="p">},</span> <span class="n">state</span><span class="p">)</span> <span class="k">do</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">state</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="no">IO</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="s2">":div received, updating state to: </span><span class="si">#{</span><span class="n">state</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="no">IO</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="s2">"Divission = 100 / </span><span class="si">#{</span><span class="n">num</span><span class="si">}</span><span class="s2"> = </span><span class="si">#{</span><span class="mi">100</span> <span class="o">/</span> <span class="n">num</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="p">{</span><span class="ss">:noreply</span><span class="p">,</span> <span class="n">state</span><span class="p">}</span>
+  <span class="k">end</span>
+
+  <span class="nv">@impl</span> <span class="no">true</span>
+  <span class="k">def</span> <span class="n">terminate</span><span class="p">(</span><span class="n">reason</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span> <span class="k">do</span>
+    <span class="no">IO</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="s2">"terminate/2 callback"</span><span class="p">)</span>
+    <span class="no">IO</span><span class="o">.</span><span class="n">inspect</span><span class="p">({</span><span class="ss">:reason</span><span class="p">,</span> <span class="n">reason</span><span class="p">})</span>
+    <span class="no">IO</span><span class="o">.</span><span class="n">inspect</span><span class="p">({</span><span class="ss">:state</span><span class="p">,</span> <span class="n">state</span><span class="p">})</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<div class="language-elixir highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">iex</span><span class="o">&gt;</span> <span class="p">{</span><span class="ss">:ok</span><span class="p">,</span> <span class="n">pid</span><span class="p">}</span> <span class="o">=</span> <span class="no">GenServer</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="no">Buggy</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="p">{</span><span class="ss">:ok</span><span class="p">,</span> <span class="c1">#PID&lt;0.139.0&gt;}</span>
+
+<span class="n">iex</span><span class="o">&gt;</span> <span class="n">send</span><span class="p">(</span><span class="n">pid</span><span class="p">,</span> <span class="p">{</span><span class="ss">:div</span><span class="p">,</span> <span class="mi">10</span><span class="p">})</span>
+<span class="p">{</span><span class="ss">:div</span><span class="p">,</span> <span class="mi">10</span><span class="p">}</span>
+<span class="s2">":div received, updating state to: 1"</span>
+<span class="s2">"Divission = 100 / 10 = 10.0"</span>
+
+<span class="n">iex</span><span class="o">&gt;</span> <span class="n">send</span><span class="p">(</span><span class="n">pid</span><span class="p">,</span> <span class="p">{</span><span class="ss">:div</span><span class="p">,</span> <span class="mi">0</span><span class="p">})</span>
+<span class="p">{</span><span class="ss">:div</span><span class="p">,</span> <span class="mi">0</span><span class="p">}</span>
+<span class="s2">":div received, updating state to: 2"</span>
+<span class="s2">"terminate/2 callback"</span>
+<span class="p">{</span><span class="ss">:reason</span><span class="p">,</span>
+ <span class="p">{</span><span class="ss">:badarith</span><span class="p">,</span>
+  <span class="p">[</span>
+    <span class="p">{</span><span class="no">Buggy</span><span class="p">,</span> <span class="ss">:handle_info</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="p">[</span><span class="ss">file:</span> <span class="s1">'buggy.ex'</span><span class="p">,</span> <span class="ss">line:</span> <span class="mi">13</span><span class="p">]},</span>
+    <span class="p">{</span><span class="ss">:gen_server</span><span class="p">,</span> <span class="ss">:try_dispatch</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="p">[</span><span class="ss">file:</span> <span class="s1">'gen_server.erl'</span><span class="p">,</span> <span class="ss">line:</span> <span class="mi">680</span><span class="p">]},</span>
+    <span class="p">{</span><span class="ss">:gen_server</span><span class="p">,</span> <span class="ss">:handle_msg</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="p">[</span><span class="ss">file:</span> <span class="s1">'gen_server.erl'</span><span class="p">,</span> <span class="ss">line:</span> <span class="mi">756</span><span class="p">]},</span>
+    <span class="p">{</span><span class="ss">:proc_lib</span><span class="p">,</span> <span class="ss">:init_p_do_apply</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="p">[</span><span class="ss">file:</span> <span class="s1">'proc_lib.erl'</span><span class="p">,</span> <span class="ss">line:</span> <span class="mi">226</span><span class="p">]}</span>
+  <span class="p">]}}</span>
+<span class="p">{</span><span class="ss">:state</span><span class="p">,</span> <span class="mi">1</span><span class="p">}</span>
+
+<span class="c1">## Error log</span>
+<span class="sd">"""
+18:00:28.809 [error] GenServer #PID&lt;0.139.0&gt; terminating
+** (ArithmeticError) bad argument in arithmetic expression
+    buggy.ex:13: Buggy.handle_info/2
+    (stdlib 3.13) gen_server.erl:680: :gen_server.try_dispatch/4
+    (stdlib 3.13) gen_server.erl:756: :gen_server.handle_msg/6
+    (stdlib 3.13) proc_lib.erl:226: :proc_lib.init_p_do_apply/3
+Last message: {:div, 0}
+State: 1
+"""</span>
+</code></pre></div></div>
+
+<p>It is interesting to see that the state received by the <code class="language-plaintext highlighter-rouge">terminate/2</code> callback is the last one before the last <code class="language-plaintext highlighter-rouge">handle_call/2</code> callback was called.
+We didn’t have the chance to return the updated state,
+so this is the best the GenServer behavior can do.
+We will see this pattern more times,
+so keep it in mind when developing the <code class="language-plaintext highlighter-rouge">terminate/2</code> callback.</p>
+
+<p>We can also see that we received a lot of details about the crash in the reason parameter.
+It can be interesting to report an error if it stops for an unexpected reason.</p>
+
+<h3 id="raise-an-exception">Raise an exception</h3>
+
+<p>Something very similar will happen if we manually raise an exception:</p>
+
+<div class="language-elixir highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">defmodule</span> <span class="no">Raising</span> <span class="k">do</span>
+  <span class="kn">use</span> <span class="no">GenServer</span>
+
+  <span class="nv">@impl</span> <span class="no">true</span>
+  <span class="k">def</span> <span class="n">init</span><span class="p">(</span><span class="n">state</span><span class="p">)</span> <span class="k">do</span>
+    <span class="p">{</span><span class="ss">:ok</span><span class="p">,</span> <span class="n">state</span><span class="p">}</span>
+  <span class="k">end</span>
+
+  <span class="nv">@impl</span> <span class="no">true</span>
+  <span class="k">def</span> <span class="n">handle_info</span><span class="p">(</span><span class="ss">:raising</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span> <span class="k">do</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">state</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="no">IO</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="s2">":raising received, updating state to: </span><span class="si">#{</span><span class="n">state</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="k">raise</span> <span class="s2">"Raising!"</span>
+    <span class="c1"># Never return</span>
+    <span class="c1"># {:noreply, state}</span>
+  <span class="k">end</span>
+
+  <span class="nv">@impl</span> <span class="no">true</span>
+  <span class="k">def</span> <span class="n">terminate</span><span class="p">(</span><span class="n">reason</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span> <span class="k">do</span>
+    <span class="no">IO</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="s2">"terminate/2 callback"</span><span class="p">)</span>
+    <span class="no">IO</span><span class="o">.</span><span class="n">inspect</span><span class="p">({</span><span class="ss">:reason</span><span class="p">,</span> <span class="n">reason</span><span class="p">})</span>
+    <span class="no">IO</span><span class="o">.</span><span class="n">inspect</span><span class="p">({</span><span class="ss">:state</span><span class="p">,</span> <span class="n">state</span><span class="p">})</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<div class="language-elixir highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">iex</span><span class="o">&gt;</span> <span class="p">{</span><span class="ss">:ok</span><span class="p">,</span> <span class="n">pid</span><span class="p">}</span> <span class="o">=</span> <span class="no">GenServer</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="no">Raising</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="p">{</span><span class="ss">:ok</span><span class="p">,</span> <span class="c1">#PID&lt;0.150.0&gt;}</span>
+
+<span class="n">iex</span><span class="o">&gt;</span> <span class="n">send</span><span class="p">(</span><span class="n">pid</span><span class="p">,</span> <span class="ss">:raising</span><span class="p">)</span>
+<span class="s2">":raising received, updating state to: 1"</span>
+<span class="ss">:raising</span>
+<span class="s2">"terminate/2 callback"</span>
+<span class="p">{</span><span class="ss">:reason</span><span class="p">,</span>
+ <span class="p">{</span> <span class="p">%</span><span class="no">RuntimeError</span><span class="p">{</span><span class="ss">message:</span> <span class="s2">"Raising!"</span><span class="p">},</span>
+  <span class="p">[</span>
+    <span class="p">{</span><span class="no">Raising</span><span class="p">,</span> <span class="ss">:handle_info</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="p">[</span><span class="ss">file:</span> <span class="s1">'raising.ex'</span><span class="p">,</span> <span class="ss">line:</span> <span class="mi">13</span><span class="p">]},</span>
+    <span class="p">{</span><span class="ss">:gen_server</span><span class="p">,</span> <span class="ss">:try_dispatch</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="p">[</span><span class="ss">file:</span> <span class="s1">'gen_server.erl'</span><span class="p">,</span> <span class="ss">line:</span> <span class="mi">680</span><span class="p">]},</span>
+    <span class="p">{</span><span class="ss">:gen_server</span><span class="p">,</span> <span class="ss">:handle_msg</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="p">[</span><span class="ss">file:</span> <span class="s1">'gen_server.erl'</span><span class="p">,</span> <span class="ss">line:</span> <span class="mi">756</span><span class="p">]},</span>
+    <span class="p">{</span><span class="ss">:proc_lib</span><span class="p">,</span> <span class="ss">:init_p_do_apply</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="p">[</span><span class="ss">file:</span> <span class="s1">'proc_lib.erl'</span><span class="p">,</span> <span class="ss">line:</span> <span class="mi">226</span><span class="p">]}</span>
+  <span class="p">]}}</span>
+<span class="p">{</span><span class="ss">:state</span><span class="p">,</span> <span class="mi">0</span><span class="p">}</span>
+<span class="c1">## Error log</span>
+<span class="sd">"""
+18:08:25.685 [error] GenServer #PID&lt;0.150.0&gt; terminating
+** (RuntimeError) Raising!
+    raising.ex:13: Raising.handle_info/2
+    (stdlib 3.13) gen_server.erl:680: :gen_server.try_dispatch/4
+    (stdlib 3.13) gen_server.erl:756: :gen_server.handle_msg/6
+    (stdlib 3.13) proc_lib.erl:226: :proc_lib.init_p_do_apply/3
+Last message: :raising
+State: 0
+"""</span>
+</code></pre></div></div>
+
+<h3 id="return-stop-in-a-callback">Return :stop in a callback</h3>
+
+<p>However, the most appropriate way to stop it, in most cases,
+is to return the tuple <code class="language-plaintext highlighter-rouge">{:stop, reason, state}</code> in almost any callback:</p>
+
+<div class="language-elixir highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">defmodule</span> <span class="no">Stop</span> <span class="k">do</span>
+  <span class="kn">use</span> <span class="no">GenServer</span>
+
+  <span class="nv">@impl</span> <span class="no">true</span>
+  <span class="k">def</span> <span class="n">init</span><span class="p">(</span><span class="n">state</span><span class="p">)</span> <span class="k">do</span>
+    <span class="p">{</span><span class="ss">:ok</span><span class="p">,</span> <span class="n">state</span><span class="p">}</span>
+  <span class="k">end</span>
+
+  <span class="nv">@impl</span> <span class="no">true</span>
+  <span class="k">def</span> <span class="n">handle_info</span><span class="p">({</span><span class="ss">:quit</span><span class="p">,</span> <span class="n">reason</span><span class="p">},</span> <span class="n">state</span><span class="p">)</span> <span class="k">do</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">state</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="no">IO</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="s2">":quit received, updating state to: </span><span class="si">#{</span><span class="n">state</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="p">{</span><span class="ss">:stop</span><span class="p">,</span> <span class="n">reason</span><span class="p">,</span> <span class="n">state</span><span class="p">}</span>
+  <span class="k">end</span>
+
+  <span class="nv">@impl</span> <span class="no">true</span>
+  <span class="k">def</span> <span class="n">terminate</span><span class="p">(</span><span class="n">reason</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span> <span class="k">do</span>
+    <span class="no">IO</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="s2">"terminate/2 callback"</span><span class="p">)</span>
+    <span class="no">IO</span><span class="o">.</span><span class="n">inspect</span><span class="p">({</span><span class="ss">:reason</span><span class="p">,</span> <span class="n">reason</span><span class="p">})</span>
+    <span class="no">IO</span><span class="o">.</span><span class="n">inspect</span><span class="p">({</span><span class="ss">:state</span><span class="p">,</span> <span class="n">state</span><span class="p">})</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<div class="language-elixir highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">iex</span><span class="o">&gt;</span> <span class="p">{</span><span class="ss">:ok</span><span class="p">,</span> <span class="n">pid</span><span class="p">}</span> <span class="o">=</span> <span class="no">GenServer</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="no">Stop</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="p">{</span><span class="ss">:ok</span><span class="p">,</span> <span class="c1">#PID&lt;0.160.0&gt;}</span>
+
+<span class="n">iex</span><span class="o">&gt;</span> <span class="n">send</span><span class="p">(</span><span class="n">pid</span><span class="p">,</span> <span class="p">{</span><span class="ss">:quit</span><span class="p">,</span> <span class="ss">:normal</span><span class="p">})</span>
+<span class="p">{</span><span class="ss">:quit</span><span class="p">,</span> <span class="ss">:normal</span><span class="p">}</span>
+<span class="s2">":quit received, updating state to: 1"</span>
+<span class="s2">"terminate/2 callback"</span>
+<span class="p">{</span><span class="ss">:reason</span><span class="p">,</span> <span class="ss">:normal</span><span class="p">}</span>
+<span class="p">{</span><span class="ss">:state</span><span class="p">,</span> <span class="mi">1</span><span class="p">}</span>
+</code></pre></div></div>
+
+<p>As we can see, the state can be updated this time before calling the callback.</p>
+
+<h3 id="kernelexit1">Kernel.exit/1</h3>
+
+<p>It has very similar behaviour to the previous one.
+The function sends an exit signal to the current process, in our case, to the GenServer:</p>
+
+<div class="language-elixir highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">defmodule</span> <span class="no">Exit</span> <span class="k">do</span>
+  <span class="kn">use</span> <span class="no">GenServer</span>
+
+  <span class="nv">@impl</span> <span class="no">true</span>
+  <span class="k">def</span> <span class="n">init</span><span class="p">(</span><span class="n">state</span><span class="p">)</span> <span class="k">do</span>
+    <span class="p">{</span><span class="ss">:ok</span><span class="p">,</span> <span class="n">state</span><span class="p">}</span>
+  <span class="k">end</span>
+
+  <span class="nv">@impl</span> <span class="no">true</span>
+  <span class="k">def</span> <span class="n">handle_info</span><span class="p">({</span><span class="ss">:exit</span><span class="p">,</span> <span class="n">reason</span><span class="p">},</span> <span class="n">_state</span><span class="p">)</span> <span class="k">do</span>
+    <span class="no">IO</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="s2">":exit received"</span><span class="p">)</span>
+    <span class="k">exit</span><span class="p">(</span><span class="n">reason</span><span class="p">)</span>
+  <span class="k">end</span>
+
+  <span class="nv">@impl</span> <span class="no">true</span>
+  <span class="k">def</span> <span class="n">terminate</span><span class="p">(</span><span class="n">reason</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span> <span class="k">do</span>
+    <span class="no">IO</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="s2">"terminate/2 callback"</span><span class="p">)</span>
+    <span class="no">IO</span><span class="o">.</span><span class="n">inspect</span><span class="p">({</span><span class="ss">:reason</span><span class="p">,</span> <span class="n">reason</span><span class="p">})</span>
+    <span class="no">IO</span><span class="o">.</span><span class="n">inspect</span><span class="p">({</span><span class="ss">:state</span><span class="p">,</span> <span class="n">state</span><span class="p">})</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<div class="language-elixir highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">iex</span><span class="o">&gt;</span> <span class="p">{</span><span class="ss">:ok</span><span class="p">,</span> <span class="n">pid</span><span class="p">}</span> <span class="o">=</span> <span class="no">GenServer</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="no">Exit</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="p">{</span><span class="ss">:ok</span><span class="p">,</span> <span class="c1">#PID&lt;0.192.0&gt;}</span>
+
+<span class="n">iex</span><span class="o">&gt;</span> <span class="n">send</span><span class="p">(</span><span class="n">pid</span><span class="p">,</span> <span class="p">{</span><span class="ss">:exit</span><span class="p">,</span> <span class="ss">:normal</span><span class="p">})</span>
+<span class="p">{</span><span class="ss">:exit</span><span class="p">,</span> <span class="ss">:normal</span><span class="p">}</span>
+<span class="s2">":exit received"</span>
+<span class="s2">"terminate/2 callback"</span>
+<span class="p">{</span><span class="ss">:reason</span><span class="p">,</span> <span class="ss">:normal</span><span class="p">}</span>
+<span class="p">{</span><span class="ss">:state</span><span class="p">,</span> <span class="mi">0</span><span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="important-note-about-the-reason">Important note about the “reason”</h2>
+
+<p>In our two last example we could manipulate the “reason” to stop a GenServer.
+This reason has an extra meaning for the OTP.
+There are three values considered “normal” reason values:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">:normal</code></li>
+  <li><code class="language-plaintext highlighter-rouge">:shutdown</code></li>
+  <li><code class="language-plaintext highlighter-rouge">{:shutdown, term}</code></li>
+</ul>
+
+<p>What happens when the reason is different from these three values? From the documentation:</p>
+
+<blockquote>
+  <p>Exiting with any other reason is considered abnormal and treated like a crash. This means the default supervisor behaviour kicks in, error reports are emitted, and so forth.</p>
+</blockquote>
+
+<p>For example, we can see that an error log is emitted with custom exit signal:</p>
+
+<div class="language-elixir highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">iex</span><span class="o">&gt;</span> <span class="p">{</span><span class="ss">:ok</span><span class="p">,</span> <span class="n">pid</span><span class="p">}</span> <span class="o">=</span> <span class="no">GenServer</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="no">Exit</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="p">{</span><span class="ss">:ok</span><span class="p">,</span> <span class="c1">#PID&lt;0.204.0&gt;}</span>
+
+<span class="n">iex</span><span class="o">&gt;</span> <span class="n">send</span><span class="p">(</span><span class="n">pid</span><span class="p">,</span> <span class="p">{</span><span class="ss">:exit</span><span class="p">,</span> <span class="ss">:my_own_reason</span><span class="p">})</span>
+<span class="p">{</span><span class="ss">:exit</span><span class="p">,</span> <span class="ss">:my_own_reason</span><span class="p">}</span>
+<span class="s2">":exit received"</span>
+<span class="s2">"terminate/2 callback"</span>
+<span class="p">{</span><span class="ss">:reason</span><span class="p">,</span> <span class="ss">:my_own_reason</span><span class="p">}</span>
+<span class="p">{</span><span class="ss">:state</span><span class="p">,</span> <span class="mi">0</span><span class="p">}</span>
+<span class="c1">## Error log</span>
+<span class="sd">"""
+18:34:29.527 [error] GenServer #PID&lt;0.204.0&gt; terminating
+** (stop) :my_own_reason
+    exit.ex:12: Exit.handle_info/2
+    (stdlib 3.13) gen_server.erl:680: :gen_server.try_dispatch/4
+    (stdlib 3.13) gen_server.erl:756: :gen_server.handle_msg/6
+    (stdlib 3.13) proc_lib.erl:226: :proc_lib.init_p_do_apply/3
+Last message: {:exit, :my_own_reason}
+State: 0
+"""</span>
+</code></pre></div></div>
+
+<p>Similar when we use <code class="language-plaintext highlighter-rouge">{:stop, :my_own_reason, state}</code>:</p>
+
+<div class="language-elixir highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">iex</span><span class="o">&gt;</span> <span class="p">{</span><span class="ss">:ok</span><span class="p">,</span> <span class="n">pid</span><span class="p">}</span> <span class="o">=</span> <span class="no">GenServer</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="no">Stop</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="p">{</span><span class="ss">:ok</span><span class="p">,</span> <span class="c1">#PID&lt;0.196.0&gt;}</span>
+
+<span class="n">iex</span><span class="o">&gt;</span> <span class="n">send</span><span class="p">(</span><span class="n">pid</span><span class="p">,</span> <span class="p">{</span><span class="ss">:quit</span><span class="p">,</span> <span class="ss">:my_own_reason</span><span class="p">})</span>
+<span class="p">{</span><span class="ss">:quit</span><span class="p">,</span> <span class="ss">:my_own_reason</span><span class="p">}</span>
+<span class="s2">":quit received, updating state to: 1"</span>
+<span class="s2">"terminate/2 callback"</span>
+<span class="p">{</span><span class="ss">:reason</span><span class="p">,</span> <span class="ss">:my_own_reason</span><span class="p">}</span>
+<span class="p">{</span><span class="ss">:state</span><span class="p">,</span> <span class="mi">1</span><span class="p">}</span>
+<span class="c1">## Error log</span>
+<span class="sd">"""
+18:31:02.909 [error] GenServer #PID&lt;0.196.0&gt; terminating
+** (stop) :my_own_reason
+Last message: {:quit, :my_own_reason}
+State: 1
+"""</span>
+</code></pre></div></div>
+
+<p>We can use the <code class="language-plaintext highlighter-rouge">{:shutdown, term}</code> to add a custom value to the reason without considering it a crash:</p>
+
+<div class="language-elixir highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">iex</span><span class="o">&gt;</span> <span class="p">{</span><span class="ss">:ok</span><span class="p">,</span> <span class="n">pid</span><span class="p">}</span> <span class="o">=</span> <span class="no">GenServer</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="no">Stop</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="p">{</span><span class="ss">:ok</span><span class="p">,</span> <span class="c1">#PID&lt;0.201.0&gt;}</span>
+
+<span class="n">iex</span><span class="o">&gt;</span> <span class="n">send</span><span class="p">(</span><span class="n">pid</span><span class="p">,</span> <span class="p">{</span><span class="ss">:quit</span><span class="p">,</span> <span class="p">{</span><span class="ss">:shutdown</span><span class="p">,</span> <span class="ss">:my_own_reason</span><span class="p">}})</span>
+<span class="p">{</span><span class="ss">:quit</span><span class="p">,</span> <span class="p">{</span><span class="ss">:shutdown</span><span class="p">,</span> <span class="ss">:my_own_reason</span><span class="p">}}</span>
+<span class="s2">":quit received, updating state to: 1"</span>
+<span class="s2">"terminate/2 callback"</span>
+<span class="p">{</span><span class="ss">:reason</span><span class="p">,</span> <span class="p">{</span><span class="ss">:shutdown</span><span class="p">,</span> <span class="ss">:my_own_reason</span><span class="p">}}</span>
+<span class="p">{</span><span class="ss">:state</span><span class="p">,</span> <span class="mi">1</span><span class="p">}</span>
+<span class="c1">## No error log</span>
+</code></pre></div></div>
+
+<h2 id="how-a-genserver-can-be-stopped-externally">How a GenServer can be stopped externally</h2>
+
+<p>We’ve already seen how a GenServer can stop itself.
+Now, we will see how other processes can do the same thing.</p>
+
+<h3 id="genserverstop3">GenServer.stop/3</h3>
+
+<p>This function receives the PID—or any value that can be considered a GenServer name—the reason to stop it and a timeout.
+As you can imagine due to the timeout parameter, this function is synchronous,
+it won’t continue until ensuring that the GenServer completely stops:</p>
+
+<div class="language-elixir highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">defmodule</span> <span class="no">GenServerStop</span> <span class="k">do</span>
+  <span class="kn">use</span> <span class="no">GenServer</span>
+
+  <span class="nv">@impl</span> <span class="no">true</span>
+  <span class="k">def</span> <span class="n">init</span><span class="p">(</span><span class="n">state</span><span class="p">)</span> <span class="k">do</span>
+    <span class="p">{</span><span class="ss">:ok</span><span class="p">,</span> <span class="n">state</span><span class="p">}</span>
+  <span class="k">end</span>
+
+  <span class="nv">@impl</span> <span class="no">true</span>
+  <span class="k">def</span> <span class="n">terminate</span><span class="p">(</span><span class="n">reason</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span> <span class="k">do</span>
+    <span class="no">IO</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="s2">"terminate/2 callback"</span><span class="p">)</span>
+    <span class="no">IO</span><span class="o">.</span><span class="n">inspect</span><span class="p">({</span><span class="ss">:reason</span><span class="p">,</span> <span class="n">reason</span><span class="p">})</span>
+    <span class="no">IO</span><span class="o">.</span><span class="n">inspect</span><span class="p">({</span><span class="ss">:state</span><span class="p">,</span> <span class="n">state</span><span class="p">})</span>
+    <span class="no">IO</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="s2">"sleep before terminating"</span><span class="p">)</span>
+    <span class="no">Process</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1_000</span><span class="p">)</span>
+    <span class="no">IO</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="s2">"really terminating"</span><span class="p">)</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<div class="language-elixir highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">iex</span><span class="o">&gt;</span> <span class="p">{</span><span class="ss">:ok</span><span class="p">,</span> <span class="n">pid</span><span class="p">}</span> <span class="o">=</span> <span class="no">GenServer</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="no">GenServerStop</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="p">{</span><span class="ss">:ok</span><span class="p">,</span> <span class="c1">#PID&lt;0.127.0&gt;}</span>
+<span class="n">iex</span><span class="o">&gt;</span> <span class="no">GenServer</span><span class="o">.</span><span class="n">stop</span><span class="p">(</span><span class="n">pid</span><span class="p">)</span>
+<span class="s2">"terminate/2 callback"</span>
+<span class="p">{</span><span class="ss">:reason</span><span class="p">,</span> <span class="ss">:normal</span><span class="p">}</span>
+<span class="p">{</span><span class="ss">:state</span><span class="p">,</span> <span class="mi">0</span><span class="p">}</span>
+<span class="s2">"sleep before terminating"</span>
+<span class="s2">"really terminating"</span>
+<span class="ss">:ok</span>
+</code></pre></div></div>
+
+<p>The default value for <code class="language-plaintext highlighter-rouge">reason</code> is <code class="language-plaintext highlighter-rouge">:normal</code> and for <code class="language-plaintext highlighter-rouge">timeout</code> is <code class="language-plaintext highlighter-rouge">5_000</code>.
+Again, if the reason is a custom one, it will be logged:</p>
+
+<div class="language-elixir highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">iex</span><span class="o">&gt;</span> <span class="p">{</span><span class="ss">:ok</span><span class="p">,</span> <span class="n">pid</span><span class="p">}</span> <span class="o">=</span> <span class="no">GenServer</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="no">GenServerStop</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="p">{</span><span class="ss">:ok</span><span class="p">,</span> <span class="c1">#PID&lt;0.131.0&gt;}</span>
+<span class="n">iex</span><span class="o">&gt;</span> <span class="no">GenServer</span><span class="o">.</span><span class="n">stop</span><span class="p">(</span><span class="n">pid</span><span class="p">,</span> <span class="ss">:abnormal</span><span class="p">)</span>
+<span class="s2">"terminate/2 callback"</span>
+<span class="p">{</span><span class="ss">:reason</span><span class="p">,</span> <span class="ss">:abnormal</span><span class="p">}</span>
+<span class="p">{</span><span class="ss">:state</span><span class="p">,</span> <span class="mi">0</span><span class="p">}</span>
+<span class="s2">"sleep before terminating"</span>
+<span class="s2">"really terminating"</span>
+
+<span class="c1"># Error log</span>
+<span class="sd">"""
+09:35:49.180 [error] GenServer #PID&lt;0.131.0&gt; terminating
+** (stop) :abnormal
+Last message: []
+State: 0
+"""</span>
+<span class="ss">:ok</span>
+</code></pre></div></div>
+
+<p>If we don’t give enough time to terminate, the <code class="language-plaintext highlighter-rouge">GenServer.stop/3</code> function won’t return,
+it will crash before returning. However, the <code class="language-plaintext highlighter-rouge">terminate/2</code> will continue finishing:</p>
+
+<div class="language-elixir highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">iex</span><span class="o">&gt;</span> <span class="p">{</span><span class="ss">:ok</span><span class="p">,</span> <span class="n">pid</span><span class="p">}</span> <span class="o">=</span> <span class="no">GenServer</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="no">GenServerStop</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="p">{</span><span class="ss">:ok</span><span class="p">,</span> <span class="c1">#PID&lt;0.135.0&gt;}</span>
+<span class="n">iex</span><span class="o">&gt;</span> <span class="no">GenServer</span><span class="o">.</span><span class="n">stop</span><span class="p">(</span><span class="n">pid</span><span class="p">,</span> <span class="ss">:small_timeout</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="s2">"terminate/2 callback"</span>
+<span class="p">{</span><span class="ss">:reason</span><span class="p">,</span> <span class="ss">:small_timeout</span><span class="p">}</span>
+<span class="p">{</span><span class="ss">:state</span><span class="p">,</span> <span class="mi">0</span><span class="p">}</span>
+<span class="s2">"sleep before terminating"</span>
+<span class="c1"># Our current iex process exit because timeout, Error log:</span>
+<span class="sd">"""
+** (exit) exited in: GenServer.stop(#PID&lt;0.135.0&gt;, :small_timeout, 100)
+    ** (EXIT) time out
+    (elixir 1.10.3) lib/gen_server.ex:981: GenServer.stop/3
+"""</span>
+<span class="c1"># The GenServer process finishes anyway some milliseconds later</span>
+<span class="s2">"really terminating"</span>
+<span class="c1"># Error log because is not a normal reason:</span>
+<span class="sd">"""
+09:38:39.020 [error] GenServer #PID&lt;0.135.0&gt; terminating
+** (stop) :small_timeout
+Last message: []
+State: 0
+"""</span>
+</code></pre></div></div>
+
+<h3 id="link-to-another-process">Link to another process</h3>
+
+<p>When two processes are linked, if one dies the other dies too.
+But how exactly does this process work?
+Let’s start with a simple example:</p>
+
+<div class="language-elixir highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">defmodule</span> <span class="no">Link</span> <span class="k">do</span>
+  <span class="kn">use</span> <span class="no">GenServer</span>
+
+  <span class="nv">@impl</span> <span class="no">true</span>
+  <span class="k">def</span> <span class="n">init</span><span class="p">(</span><span class="n">state</span><span class="p">)</span> <span class="k">do</span>
+    <span class="no">IO</span><span class="o">.</span><span class="n">inspect</span><span class="p">({</span><span class="ss">:init</span><span class="p">,</span> <span class="n">self</span><span class="p">()})</span>
+    <span class="p">{</span><span class="ss">:ok</span><span class="p">,</span> <span class="n">state</span><span class="p">}</span>
+  <span class="k">end</span>
+
+  <span class="nv">@impl</span> <span class="no">true</span>
+  <span class="k">def</span> <span class="n">handle_info</span><span class="p">({</span><span class="ss">:link</span><span class="p">,</span> <span class="n">link</span><span class="p">},</span> <span class="n">state</span><span class="p">)</span> <span class="k">do</span>
+    <span class="no">Process</span><span class="o">.</span><span class="n">link</span><span class="p">(</span><span class="n">link</span><span class="p">)</span>
+    <span class="p">{</span><span class="ss">:noreply</span><span class="p">,</span> <span class="n">state</span><span class="p">}</span>
+  <span class="k">end</span>
+
+  <span class="nv">@impl</span> <span class="no">true</span>
+  <span class="k">def</span> <span class="n">terminate</span><span class="p">(</span><span class="n">reason</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span> <span class="k">do</span>
+    <span class="no">IO</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="s2">"terminate/2 callback in pid </span><span class="si">#{</span><span class="n">inspect</span><span class="p">(</span><span class="n">self</span><span class="p">())</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="no">IO</span><span class="o">.</span><span class="n">inspect</span><span class="p">({</span><span class="ss">:reason</span><span class="p">,</span> <span class="n">reason</span><span class="p">})</span>
+    <span class="no">IO</span><span class="o">.</span><span class="n">inspect</span><span class="p">({</span><span class="ss">:state</span><span class="p">,</span> <span class="n">state</span><span class="p">})</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<div class="language-elixir highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">iex</span><span class="o">&gt;</span> <span class="p">{</span><span class="ss">:ok</span><span class="p">,</span> <span class="n">pid_1</span><span class="p">}</span> <span class="o">=</span> <span class="no">GenServer</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="no">Link</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="p">{</span><span class="ss">:init</span><span class="p">,</span> <span class="c1">#PID&lt;0.120.0&gt;}</span>
+<span class="p">{</span><span class="ss">:ok</span><span class="p">,</span> <span class="c1">#PID&lt;0.120.0&gt;}</span>
+<span class="n">iex</span><span class="o">&gt;</span> <span class="p">{</span><span class="ss">:ok</span><span class="p">,</span> <span class="n">pid_2</span><span class="p">}</span> <span class="o">=</span> <span class="no">GenServer</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="no">Link</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="p">{</span><span class="ss">:init</span><span class="p">,</span> <span class="c1">#PID&lt;0.122.0&gt;}</span>
+<span class="p">{</span><span class="ss">:ok</span><span class="p">,</span> <span class="c1">#PID&lt;0.122.0&gt;}</span>
+<span class="n">iex</span><span class="o">&gt;</span> <span class="n">send</span><span class="p">(</span><span class="n">pid_1</span><span class="p">,</span> <span class="p">{</span><span class="ss">:link</span><span class="p">,</span> <span class="n">pid_2</span><span class="p">})</span>
+<span class="p">{</span><span class="ss">:link</span><span class="p">,</span> <span class="c1">#PID&lt;0.122.0&gt;}</span>
+<span class="n">iex</span><span class="o">&gt;</span> <span class="no">GenServer</span><span class="o">.</span><span class="n">stop</span><span class="p">(</span><span class="n">pid_2</span><span class="p">,</span> <span class="ss">:my_own_reason</span><span class="p">)</span>
+<span class="n">terminate</span><span class="o">/</span><span class="mi">2</span> <span class="n">callback</span> <span class="ow">in</span> <span class="n">pid</span> <span class="c1">#PID&lt;0.122.0&gt;</span>
+<span class="p">{</span><span class="ss">:reason</span><span class="p">,</span> <span class="ss">:my_own_reason</span><span class="p">}</span>
+<span class="p">{</span><span class="ss">:state</span><span class="p">,</span> <span class="mi">0</span><span class="p">}</span>
+
+<span class="c1"># Error log from pid 2:</span>
+<span class="sd">"""
+18:57:10.499 [error] GenServer #PID&lt;0.122.0&gt; terminating
+** (stop) :my_own_reason
+Last message: []
+State: 0
+"""</span>
+<span class="ss">:ok</span>
+<span class="n">iex</span><span class="o">&gt;</span> <span class="no">Process</span><span class="o">.</span><span class="n">alive?</span><span class="p">(</span><span class="n">pid_1</span><span class="p">)</span>
+<span class="no">false</span>
+</code></pre></div></div>
+
+<p>We stopped the <code class="language-plaintext highlighter-rouge">pid_2</code> and we see it executes the <code class="language-plaintext highlighter-rouge">terminate/2</code> callback.
+The same is not true for the <code class="language-plaintext highlighter-rouge">pid_1</code>.
+The GenServer running with the <code class="language-plaintext highlighter-rouge">pid_1</code> died because it was linked to <code class="language-plaintext highlighter-rouge">pid_2</code>.
+Interestingly, the <code class="language-plaintext highlighter-rouge">terminate/2</code> callback has not been called at all for the <code class="language-plaintext highlighter-rouge">pid_1</code>.</p>
+
+<h4 id="trapping-exit-signals">Trapping exit signals</h4>
+
+<p>One way we can modify this default behaviour is trapping exit signals.
+When a process died, the linked processes receives a exit signal.
+There are two possibilities then:</p>
+
+<ul>
+  <li>The process doesn’t trap the exit signal, so it dies with the same reason.</li>
+  <li>The process traps the exit signal, so it is converted in a regular message.</li>
+</ul>
+
+<p>An example of the last case would be:</p>
+
+<div class="language-elixir highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">defmodule</span> <span class="no">TrapLink</span> <span class="k">do</span>
+  <span class="kn">use</span> <span class="no">GenServer</span>
+
+  <span class="nv">@impl</span> <span class="no">true</span>
+  <span class="k">def</span> <span class="n">init</span><span class="p">(</span><span class="n">state</span><span class="p">)</span> <span class="k">do</span>
+    <span class="c1"># Trap exits</span>
+    <span class="no">Process</span><span class="o">.</span><span class="n">flag</span><span class="p">(</span><span class="ss">:trap_exit</span><span class="p">,</span> <span class="no">true</span><span class="p">)</span>
+    <span class="p">{</span><span class="ss">:ok</span><span class="p">,</span> <span class="n">state</span><span class="p">}</span>
+  <span class="k">end</span>
+
+  <span class="nv">@impl</span> <span class="no">true</span>
+  <span class="k">def</span> <span class="n">handle_info</span><span class="p">({</span><span class="ss">:link</span><span class="p">,</span> <span class="n">link</span><span class="p">},</span> <span class="n">state</span><span class="p">)</span> <span class="k">do</span>
+    <span class="no">Process</span><span class="o">.</span><span class="n">link</span><span class="p">(</span><span class="n">link</span><span class="p">)</span>
+    <span class="p">{</span><span class="ss">:noreply</span><span class="p">,</span> <span class="n">state</span><span class="p">}</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="n">handle_info</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span> <span class="k">do</span>
+    <span class="no">IO</span><span class="o">.</span><span class="n">inspect</span><span class="p">({</span><span class="ss">:handle_info</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">state</span><span class="p">})</span>
+    <span class="p">{</span><span class="ss">:noreply</span><span class="p">,</span> <span class="n">state</span><span class="p">}</span>
+  <span class="k">end</span>
+
+  <span class="nv">@impl</span> <span class="no">true</span>
+  <span class="k">def</span> <span class="n">terminate</span><span class="p">(</span><span class="n">reason</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span> <span class="k">do</span>
+    <span class="no">IO</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="s2">"terminate/2 callback in pid </span><span class="si">#{</span><span class="n">inspect</span><span class="p">(</span><span class="n">self</span><span class="p">())</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="no">IO</span><span class="o">.</span><span class="n">inspect</span><span class="p">({</span><span class="ss">:reason</span><span class="p">,</span> <span class="n">reason</span><span class="p">})</span>
+    <span class="no">IO</span><span class="o">.</span><span class="n">inspect</span><span class="p">({</span><span class="ss">:state</span><span class="p">,</span> <span class="n">state</span><span class="p">})</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<div class="language-elixir highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">iex</span><span class="o">&gt;</span> <span class="p">{</span><span class="ss">:ok</span><span class="p">,</span> <span class="n">pid_1</span><span class="p">}</span> <span class="o">=</span> <span class="no">GenServer</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="no">TrapLink</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="p">{</span><span class="ss">:ok</span><span class="p">,</span> <span class="c1">#PID&lt;0.187.0&gt;}</span>
+<span class="n">iex</span><span class="o">&gt;</span> <span class="p">{</span><span class="ss">:ok</span><span class="p">,</span> <span class="n">pid_2</span><span class="p">}</span> <span class="o">=</span> <span class="no">GenServer</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="no">TrapLink</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="p">{</span><span class="ss">:ok</span><span class="p">,</span> <span class="c1">#PID&lt;0.189.0&gt;}</span>
+<span class="n">iex</span><span class="o">&gt;</span> <span class="n">send</span><span class="p">(</span><span class="n">pid_1</span><span class="p">,</span> <span class="p">{</span><span class="ss">:link</span><span class="p">,</span> <span class="n">pid_2</span><span class="p">})</span>
+<span class="p">{</span><span class="ss">:link</span><span class="p">,</span> <span class="c1">#PID&lt;0.189.0&gt;}</span>
+<span class="n">iex</span><span class="o">&gt;</span> <span class="no">GenServer</span><span class="o">.</span><span class="n">stop</span><span class="p">(</span><span class="n">pid_2</span><span class="p">,</span> <span class="ss">:normal</span><span class="p">)</span>
+<span class="s2">"terminate/2 callback in pid #PID&lt;0.189.0&gt;"</span>
+<span class="p">{</span><span class="ss">:reason</span><span class="p">,</span> <span class="ss">:normal</span><span class="p">}</span>
+<span class="p">{</span><span class="ss">:state</span><span class="p">,</span> <span class="mi">0</span><span class="p">}</span>
+<span class="c1"># This message is received by the pid_1</span>
+<span class="p">{</span><span class="ss">:handle_info</span><span class="p">,</span> <span class="p">{</span><span class="ss">:EXIT</span><span class="p">,</span> <span class="c1">#PID&lt;0.189.0&gt;, :normal}, 0}</span>
+<span class="ss">:ok</span>
+<span class="n">iex</span><span class="o">&gt;</span> <span class="no">Process</span><span class="o">.</span><span class="n">alive?</span><span class="p">(</span><span class="n">pid_1</span><span class="p">)</span>
+<span class="no">true</span>
+</code></pre></div></div>
+
+<p>So the GenServer running in the <code class="language-plaintext highlighter-rouge">pid_1</code> survived this time.
+Because it didn’t die so the <code class="language-plaintext highlighter-rouge">terminate/2</code> callback it wasn’t called either.
+Instead, it received the <code class="language-plaintext highlighter-rouge">{:EXIT, #PID&lt;0.189.0&gt;, :normal}</code> message in the <code class="language-plaintext highlighter-rouge">handle_info/2</code> callback.
+The same behaviour happens with not “normal” reasons:</p>
+
+<div class="language-elixir highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">iex</span><span class="o">&gt;</span> <span class="p">{</span><span class="ss">:ok</span><span class="p">,</span> <span class="n">pid_1</span><span class="p">}</span> <span class="o">=</span> <span class="no">GenServer</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="no">TrapLink</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="p">{</span><span class="ss">:ok</span><span class="p">,</span> <span class="c1">#PID&lt;0.198.0&gt;}</span>
+<span class="n">iex</span><span class="o">&gt;</span> <span class="p">{</span><span class="ss">:ok</span><span class="p">,</span> <span class="n">pid_2</span><span class="p">}</span> <span class="o">=</span> <span class="no">GenServer</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="no">TrapLink</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="p">{</span><span class="ss">:ok</span><span class="p">,</span> <span class="c1">#PID&lt;0.200.0&gt;}</span>
+<span class="n">iex</span><span class="o">&gt;</span> <span class="n">send</span><span class="p">(</span><span class="n">pid_1</span><span class="p">,</span> <span class="p">{</span><span class="ss">:link</span><span class="p">,</span> <span class="n">pid_2</span><span class="p">})</span>
+<span class="p">{</span><span class="ss">:link</span><span class="p">,</span> <span class="c1">#PID&lt;0.200.0&gt;}</span>
+<span class="n">iex</span><span class="o">&gt;</span> <span class="no">GenServer</span><span class="o">.</span><span class="n">stop</span><span class="p">(</span><span class="n">pid_2</span><span class="p">,</span> <span class="ss">:abnormal</span><span class="p">)</span>
+<span class="s2">"terminate/2 callback in pid #PID&lt;0.200.0&gt;"</span>
+<span class="p">{</span><span class="ss">:reason</span><span class="p">,</span> <span class="ss">:abnormal</span><span class="p">}</span>
+<span class="p">{</span><span class="ss">:state</span><span class="p">,</span> <span class="mi">0</span><span class="p">}</span>
+
+<span class="c1"># Error log from pid_2:</span>
+<span class="sd">"""
+19:28:14.982 [error] GenServer #PID&lt;0.200.0&gt; terminating
+** (stop) :abnormal
+Last message: []
+State: 0
+"""</span>
+<span class="c1"># This message is received by the pid_1</span>
+<span class="p">{</span><span class="ss">:handle_info</span><span class="p">,</span> <span class="p">{</span><span class="ss">:EXIT</span><span class="p">,</span> <span class="c1">#PID&lt;0.200.0&gt;, :abnormal}, 0}</span>
+<span class="ss">:ok</span>
+</code></pre></div></div>
+
+<p>Of course, in the <code class="language-plaintext highlighter-rouge">handle_info/2</code> callback,
+we could have decided to stop the GenServer using one of the different methods we previously saw.
+The main point, however, it’s that <strong>the GenServer doesn’t die directly if it traps exit signals when a linked process dies</strong>.
+We should do this manually.</p>
+
+<h3 id="processexit2">Process.exit/2</h3>
+
+<p>We learned about the exit signals.
+Any process can send an exit signal to any other process.
+To do it we can use the <code class="language-plaintext highlighter-rouge">Process.exit/2</code> function.
+As in the previous example,
+the consequences of calling this function will depend on whether or not the signals are trapped:</p>
+
+<div class="language-elixir highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">defmodule</span> <span class="no">ExternalExit</span> <span class="k">do</span>
+  <span class="kn">use</span> <span class="no">GenServer</span>
+
+  <span class="nv">@impl</span> <span class="no">true</span>
+  <span class="k">def</span> <span class="n">init</span><span class="p">(</span><span class="n">state</span><span class="p">)</span> <span class="k">do</span>
+    <span class="p">{</span><span class="ss">:ok</span><span class="p">,</span> <span class="n">state</span><span class="p">}</span>
+  <span class="k">end</span>
+
+  <span class="nv">@impl</span> <span class="no">true</span>
+  <span class="k">def</span> <span class="n">handle_info</span><span class="p">(</span><span class="ss">:trap</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span> <span class="k">do</span>
+    <span class="no">Process</span><span class="o">.</span><span class="n">flag</span><span class="p">(</span><span class="ss">:trap_exit</span><span class="p">,</span> <span class="no">true</span><span class="p">)</span>
+    <span class="p">{</span><span class="ss">:noreply</span><span class="p">,</span> <span class="n">state</span><span class="p">}</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="n">handle_info</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span> <span class="k">do</span>
+    <span class="no">IO</span><span class="o">.</span><span class="n">inspect</span><span class="p">({</span><span class="ss">:info</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">state</span><span class="p">})</span>
+    <span class="p">{</span><span class="ss">:noreply</span><span class="p">,</span> <span class="n">state</span><span class="p">}</span>
+  <span class="k">end</span>
+
+  <span class="nv">@impl</span> <span class="no">true</span>
+  <span class="k">def</span> <span class="n">terminate</span><span class="p">(</span><span class="n">reason</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span> <span class="k">do</span>
+    <span class="no">IO</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="s2">"terminate/2 callback"</span><span class="p">)</span>
+    <span class="no">IO</span><span class="o">.</span><span class="n">inspect</span><span class="p">({</span><span class="ss">:reason</span><span class="p">,</span> <span class="n">reason</span><span class="p">})</span>
+    <span class="no">IO</span><span class="o">.</span><span class="n">inspect</span><span class="p">({</span><span class="ss">:state</span><span class="p">,</span> <span class="n">state</span><span class="p">})</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+
+</code></pre></div></div>
+
+<div class="language-elixir highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">iex</span><span class="o">&gt;</span> <span class="p">{</span><span class="ss">:ok</span><span class="p">,</span> <span class="n">pid</span><span class="p">}</span> <span class="o">=</span> <span class="no">GenServer</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="no">ExternalExit</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="p">{</span><span class="ss">:ok</span><span class="p">,</span> <span class="c1">#PID&lt;0.156.0&gt;}</span>
+<span class="n">iex</span><span class="o">&gt;</span> <span class="no">Process</span><span class="o">.</span><span class="k">exit</span><span class="p">(</span><span class="n">pid</span><span class="p">,</span> <span class="ss">:abnormal</span><span class="p">)</span>
+<span class="no">true</span>
+<span class="n">iex</span><span class="o">&gt;</span> <span class="no">Process</span><span class="o">.</span><span class="n">alive?</span><span class="p">(</span><span class="n">pid</span><span class="p">)</span>
+<span class="no">false</span>
+<span class="n">iex</span><span class="o">&gt;</span> <span class="p">{</span><span class="ss">:ok</span><span class="p">,</span> <span class="n">pid</span><span class="p">}</span> <span class="o">=</span> <span class="no">GenServer</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="no">ExternalExit</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="p">{</span><span class="ss">:ok</span><span class="p">,</span> <span class="c1">#PID&lt;0.160.0&gt;}</span>
+<span class="n">iex</span><span class="o">&gt;</span> <span class="no">Process</span><span class="o">.</span><span class="k">exit</span><span class="p">(</span><span class="n">pid</span><span class="p">,</span> <span class="ss">:shutdown</span><span class="p">)</span>
+<span class="no">true</span>
+<span class="n">iex</span><span class="o">&gt;</span> <span class="no">Process</span><span class="o">.</span><span class="n">alive?</span><span class="p">(</span><span class="n">pid</span><span class="p">)</span>
+<span class="no">false</span>
+</code></pre></div></div>
+
+<p>And again, the <strong>GenServer doesn’t execute the <code class="language-plaintext highlighter-rouge">terminate/2</code> callback with an exit signal</strong>.
+It dies as soon as the signal is received.</p>
+
+<p>On the other side, when the signals are trapped,
+it doesn’t die unless we manually want it:</p>
+
+<div class="language-elixir highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">iex</span><span class="o">&gt;</span> <span class="p">{</span><span class="ss">:ok</span><span class="p">,</span> <span class="n">pid</span><span class="p">}</span> <span class="o">=</span> <span class="no">GenServer</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="no">ExternalExit</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="p">{</span><span class="ss">:ok</span><span class="p">,</span> <span class="c1">#PID&lt;0.164.0&gt;}</span>
+<span class="n">iex</span><span class="o">&gt;</span> <span class="n">send</span><span class="p">(</span><span class="n">pid</span><span class="p">,</span> <span class="ss">:trap</span><span class="p">)</span>
+<span class="ss">:trap</span>
+<span class="n">iex</span><span class="o">&gt;</span> <span class="no">Process</span><span class="o">.</span><span class="k">exit</span><span class="p">(</span><span class="n">pid</span><span class="p">,</span> <span class="ss">:abnormal</span><span class="p">)</span>
+<span class="p">{</span><span class="ss">:info</span><span class="p">,</span> <span class="p">{</span><span class="ss">:EXIT</span><span class="p">,</span> <span class="c1">#PID&lt;0.111.0&gt;, :abnormal}, 0}</span>
+<span class="no">true</span>
+<span class="n">iex</span><span class="o">&gt;</span> <span class="no">Process</span><span class="o">.</span><span class="n">alive?</span><span class="p">(</span><span class="n">pid</span><span class="p">)</span>
+<span class="no">true</span>
+</code></pre></div></div>
+
+<p>When using the function <code class="language-plaintext highlighter-rouge">Process.exit/2</code>, there are two exceptions to the previous behaviour.
+First, when we use <code class="language-plaintext highlighter-rouge">:normal</code> reason.
+For this case, the documentation says:</p>
+
+<blockquote>
+  <p>If reason is the atom :normal, pid will not exit (unless pid is the calling process, in which case it will exit with the reason :normal). If it is trapping exits, the exit signal is transformed into a message {:EXIT, from, :normal} and delivered to its message queue.</p>
+</blockquote>
+
+<div class="language-elixir highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">iex</span><span class="o">&gt;</span> <span class="p">{</span><span class="ss">:ok</span><span class="p">,</span> <span class="n">pid</span><span class="p">}</span> <span class="o">=</span> <span class="no">GenServer</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="no">ExternalExit</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="p">{</span><span class="ss">:ok</span><span class="p">,</span> <span class="c1">#PID&lt;0.169.0&gt;}</span>
+<span class="n">iex</span><span class="o">&gt;</span> <span class="no">Process</span><span class="o">.</span><span class="k">exit</span><span class="p">(</span><span class="n">pid</span><span class="p">,</span> <span class="ss">:normal</span><span class="p">)</span>
+<span class="no">true</span>
+<span class="n">iex</span><span class="o">&gt;</span> <span class="no">Process</span><span class="o">.</span><span class="n">alive?</span><span class="p">(</span><span class="n">pid</span><span class="p">)</span>
+<span class="no">true</span>
+<span class="n">iex</span><span class="o">&gt;</span> <span class="n">send</span><span class="p">(</span><span class="n">pid</span><span class="p">,</span> <span class="ss">:trap</span><span class="p">)</span>
+<span class="ss">:trap</span>
+<span class="n">iex</span><span class="o">&gt;</span> <span class="no">Process</span><span class="o">.</span><span class="k">exit</span><span class="p">(</span><span class="n">pid</span><span class="p">,</span> <span class="ss">:normal</span><span class="p">)</span>
+<span class="p">{</span><span class="ss">:info</span><span class="p">,</span> <span class="p">{</span><span class="ss">:EXIT</span><span class="p">,</span> <span class="c1">#PID&lt;0.111.0&gt;, :normal}, 0}</span>
+<span class="no">true</span>
+<span class="n">iex</span><span class="o">&gt;</span> <span class="no">Process</span><span class="o">.</span><span class="n">alive?</span><span class="p">(</span><span class="n">pid</span><span class="p">)</span>
+<span class="no">true</span>
+</code></pre></div></div>
+
+<p>We can see the process didn’t die, even when it wasn’t trapping the exit signals!</p>
+
+<p>The other exception is when we use with the <code class="language-plaintext highlighter-rouge">:kill</code> reason:</p>
+
+<blockquote>
+  <p>If reason is the atom :kill, that is if Process.exit(pid, :kill) is called, an untrappable exit signal is sent to pid which will unconditionally exit with reason :killed.</p>
+</blockquote>
+
+<div class="language-elixir highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">iex</span><span class="o">&gt;</span> <span class="p">{</span><span class="ss">:ok</span><span class="p">,</span> <span class="n">pid</span><span class="p">}</span> <span class="o">=</span> <span class="no">GenServer</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="no">ExternalExit</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="p">{</span><span class="ss">:ok</span><span class="p">,</span> <span class="c1">#PID&lt;0.185.0&gt;}</span>
+<span class="n">iex</span><span class="o">&gt;</span> <span class="n">send</span><span class="p">(</span><span class="n">pid</span><span class="p">,</span> <span class="ss">:trap</span><span class="p">)</span>
+<span class="ss">:trap</span>
+<span class="n">iex</span><span class="o">&gt;</span> <span class="no">Process</span><span class="o">.</span><span class="k">exit</span><span class="p">(</span><span class="n">pid</span><span class="p">,</span> <span class="ss">:kill</span><span class="p">)</span>
+<span class="no">true</span>
+<span class="n">iex</span><span class="o">&gt;</span> <span class="no">Process</span><span class="o">.</span><span class="n">alive?</span><span class="p">(</span><span class="n">pid</span><span class="p">)</span>
+<span class="no">false</span>
+</code></pre></div></div>
+
+<p>We couldn’t trap the <code class="language-plaintext highlighter-rouge">:kill</code> signal, we sent the message: “You must die now!” :)</p>
+
+<h3 id="supervisor-stops-it">Supervisor stops it</h3>
+
+<p>In a regular application, a GenServer is usually supervised by a Supervisor.
+The Supervisor is in charge of stopping its GenServer children in the shutdown process.
+When the Supervisor wants to stop a child, it sends an exit signal too,
+in a very similar way to the previous example did.</p>
+
+<p>We will use <code class="language-plaintext highlighter-rouge">Supervisor.stop/3</code>, analogous to <code class="language-plaintext highlighter-rouge">GenServer.stop/3</code> but for Supervisors:</p>
+
+<div class="language-elixir highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">defmodule</span> <span class="no">ParentStop</span> <span class="k">do</span>
+  <span class="kn">use</span> <span class="no">GenServer</span>
+
+  <span class="k">def</span> <span class="n">start_link</span><span class="p">(</span><span class="n">_</span><span class="p">)</span> <span class="k">do</span>
+    <span class="no">GenServer</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="bp">__MODULE__</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+  <span class="k">end</span>
+
+  <span class="nv">@impl</span> <span class="no">true</span>
+  <span class="k">def</span> <span class="n">init</span><span class="p">(</span><span class="n">state</span><span class="p">)</span> <span class="k">do</span>
+    <span class="p">{</span><span class="ss">:ok</span><span class="p">,</span> <span class="n">state</span><span class="p">}</span>
+  <span class="k">end</span>
+
+  <span class="nv">@impl</span> <span class="no">true</span>
+  <span class="k">def</span> <span class="n">handle_info</span><span class="p">(</span><span class="ss">:trap</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span> <span class="k">do</span>
+    <span class="no">Process</span><span class="o">.</span><span class="n">flag</span><span class="p">(</span><span class="ss">:trap_exit</span><span class="p">,</span> <span class="no">true</span><span class="p">)</span>
+    <span class="p">{</span><span class="ss">:noreply</span><span class="p">,</span> <span class="n">state</span><span class="p">}</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="n">handle_info</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span> <span class="k">do</span>
+    <span class="no">IO</span><span class="o">.</span><span class="n">inspect</span><span class="p">({</span><span class="ss">:info</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">state</span><span class="p">})</span>
+    <span class="p">{</span><span class="ss">:noreply</span><span class="p">,</span> <span class="n">state</span><span class="p">}</span>
+  <span class="k">end</span>
+
+  <span class="nv">@impl</span> <span class="no">true</span>
+  <span class="k">def</span> <span class="n">terminate</span><span class="p">(</span><span class="n">reason</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span> <span class="k">do</span>
+    <span class="no">IO</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="s2">"terminate/2 callback"</span><span class="p">)</span>
+    <span class="no">IO</span><span class="o">.</span><span class="n">inspect</span><span class="p">({</span><span class="ss">:reason</span><span class="p">,</span> <span class="n">reason</span><span class="p">})</span>
+    <span class="no">IO</span><span class="o">.</span><span class="n">inspect</span><span class="p">({</span><span class="ss">:state</span><span class="p">,</span> <span class="n">state</span><span class="p">})</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<div class="language-elixir highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">iex</span><span class="o">&gt;</span> <span class="p">{</span><span class="ss">:ok</span><span class="p">,</span> <span class="n">pid</span><span class="p">}</span> <span class="o">=</span> <span class="no">Supervisor</span><span class="o">.</span><span class="n">start_link</span><span class="p">([</span><span class="no">ParentStop</span><span class="p">],</span> <span class="ss">strategy:</span> <span class="ss">:one_for_one</span><span class="p">)</span>
+<span class="p">{</span><span class="ss">:ok</span><span class="p">,</span> <span class="c1">#PID&lt;0.120.0&gt;}</span>
+<span class="n">iex</span><span class="o">&gt;</span> <span class="no">Supervisor</span><span class="o">.</span><span class="n">stop</span><span class="p">(</span><span class="n">pid</span><span class="p">,</span> <span class="ss">:normal</span><span class="p">,</span> <span class="mi">5_000</span><span class="p">)</span>
+<span class="ss">:ok</span>
+</code></pre></div></div>
+
+<p>In this case, the <code class="language-plaintext highlighter-rouge">terminate/2</code> callback is not called.
+Let’s try with another reason:</p>
+
+<div class="language-elixir highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">iex</span><span class="o">&gt;</span> <span class="p">{</span><span class="ss">:ok</span><span class="p">,</span> <span class="n">pid</span><span class="p">}</span> <span class="o">=</span> <span class="no">Supervisor</span><span class="o">.</span><span class="n">start_link</span><span class="p">([</span><span class="no">ParentStop</span><span class="p">],</span> <span class="ss">strategy:</span> <span class="ss">:one_for_one</span><span class="p">)</span>
+<span class="p">{</span><span class="ss">:ok</span><span class="p">,</span> <span class="c1">#PID&lt;0.131.0&gt;}</span>
+<span class="n">iex</span><span class="o">&gt;</span> <span class="no">Supervisor</span><span class="o">.</span><span class="n">stop</span><span class="p">(</span><span class="n">pid</span><span class="p">,</span> <span class="ss">:abnormal</span><span class="p">,</span> <span class="mi">5_000</span><span class="p">)</span>
+
+<span class="c1"># Error log from the GenServer:</span>
+<span class="sd">"""
+19:57:36.026 [error] GenServer #PID&lt;0.131.0&gt; terminating
+** (stop) :abnormal
+Last message: []
+State: {:state, {#PID&lt;0.131.0&gt;, Supervisor.Default}, :one_for_one, {[ParentStop],
+%{ParentStop =&gt; {:child, #PID&lt;0.132.0&gt;, ParentStop,
+{ParentStop, :start_link, [[]]}, :permanent, 5000, :worker, [ParentStop]}}},
+:undefined, 3, 5, [], 0, Supervisor.Default, {:ok, { %{intensity: 3, period: 5, strategy: :one_for_one},
+[%{id: ParentStop, start: {ParentStop, :start_link, [[]]}}]}}}
+"""</span>
+
+<span class="c1"># The iex process dies too because it was linked to the Supervisor which dies with :abnormal reason:</span>
+<span class="sd">"""
+** (EXIT from #PID&lt;0.129.0&gt;) shell process exited with reason: :abnormal
+"""</span>
+</code></pre></div></div>
+
+<p>Same behaviour! Definitely, <strong>when an exit signal is received on a GenServer,
+it never runs <code class="language-plaintext highlighter-rouge">terminate/2</code></strong>.</p>
+
+<p>In the next example we will trap exit signals to change the behaviour:</p>
+
+<div class="language-elixir highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">iex</span><span class="o">&gt;</span> <span class="p">{</span><span class="ss">:ok</span><span class="p">,</span> <span class="n">pid</span><span class="p">}</span> <span class="o">=</span> <span class="no">Supervisor</span><span class="o">.</span><span class="n">start_link</span><span class="p">([</span><span class="no">TrapParentStop</span><span class="p">],</span> <span class="ss">strategy:</span> <span class="ss">:one_for_one</span><span class="p">)</span>
+<span class="p">{</span><span class="ss">:ok</span><span class="p">,</span> <span class="c1">#PID&lt;0.149.0&gt;}</span>
+<span class="n">iex</span><span class="o">&gt;</span> <span class="no">Supervisor</span><span class="o">.</span><span class="n">stop</span><span class="p">(</span><span class="n">pid</span><span class="p">,</span> <span class="ss">:normal</span><span class="p">,</span> <span class="mi">5_000</span><span class="p">)</span>
+<span class="p">{</span><span class="ss">:info</span><span class="p">,</span> <span class="p">{</span><span class="ss">:EXIT</span><span class="p">,</span> <span class="c1">#PID&lt;0.149.0&gt;, :shutdown}, 0}</span>
+
+<span class="c1"># Error log after 5 seconds:</span>
+<span class="sd">"""
+** (exit) exited in: GenServer.stop(#PID&lt;0.149.0&gt;, :normal, 5000)
+    ** (EXIT) time out
+    (elixir 1.10.3) lib/gen_server.ex:981: GenServer.stop/3
+"""</span>
+</code></pre></div></div>
+
+<p>Well, this time we received the exit signal. We had the chance to react in the <code class="language-plaintext highlighter-rouge">handle_info/2</code> callback.
+Although, we decided that the GenServer should continue returning <code class="language-plaintext highlighter-rouge">{:noreply, state}</code>.
+After the five seconds of timeout, the Supervisor killed our GenServer because it didn’t kill itself.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>A GenServer has 100 different ways to die.
+We didn’t explore all of them, but the most common ones.
+Try to use the one that best suits your situation.</p>
+
+<p>As the last recommendation, don’t blindly trust the <code class="language-plaintext highlighter-rouge">terminate/2</code> callback, as it doesn’t always run.
+If you really need to execute code when a GenServer dies, it is best to create another linked process that captures the exit signals.
+The code would be very similar to our “Link process” example.</p>
+
+<p>Happy coding!</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="/tags/elixir" class="page__taxonomy-item" rel="tag">Elixir</a>
+    
+    </span>
+  </p>
+
+
+
+
+        
+          <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Updated:</strong> <time datetime="2020-08-23">August 23, 2020</time></p>
+        
+      </footer>
+
+      <section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?via=alexcasdev&text=Why+and+how+a+GenServer+stops%3F%20https%3A%2F%2Falexcastano.com%2Fhow-to-stop-a-genserver-in-elixir%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Falexcastano.com%2Fhow-to-stop-a-genserver-in-elixir%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Falexcastano.com%2Fhow-to-stop-a-genserver-in-elixir%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/what-is-activity-pub/" class="pagination--pager" title="What is ActivityPub?
+">Previous</a>
+    
+    
+      <a href="#" class="pagination--pager disabled">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">Leave a Comment</h4>
+      <section id="disqus_thread"></section>
+    
+</div>
+
+    
+  </article>
+
+  
+
+  
+  
+    
+    
+    
+        
+    
+    
+  
+    
+    
+        
+    
+    
+  
+    
+    
+        
+    
+    
+  
+    
+    
+        
+    
+    
+  
+    
+    
+        
+    
+    
+  
+    
+    
+        
+    
+    
+  
+    
+    
+        
+    
+    
+  
+    
+    
+        
+    
+    
+  
+  
+
+
+
+</div>
+
+    </div>
+
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        
+  <img src="https://data.alexcastano.com/img.gif" alt="img">
+
+
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+
+    
+
+    <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2020 Alex Castaño. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+
+
+
+  <script>
+  window.ga=function(){ga.q.push(arguments)};ga.q=[];ga.l=+new Date;
+  ga('create','UA-65462222-1','auto');
+  ga('set', 'anonymizeIp', false);
+  ga('send','pageview')
+</script>
+<script src="https://www.google-analytics.com/analytics.js" async></script>
+
+
+
+
+
+
+    
+  <script>
+    var disqus_config = function () {
+      this.page.url = "https://alexcastano.com/how-to-stop-a-genserver-in-elixir/";  /* Replace PAGE_URL with your page's canonical URL variable */
+      this.page.identifier = "/how-to-stop-a-genserver-in-elixir"; /* Replace PAGE_IDENTIFIER with your page's unique identifier variable */
+    };
+    (function() { /* DON'T EDIT BELOW THIS LINE */
+      var d = document, s = d.createElement('script');
+      s.src = 'https://alexcastano.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+  
+
+
+
+
+
+  </body>
+</html>
